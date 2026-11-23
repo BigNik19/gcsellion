@@ -539,6 +539,120 @@ RAW.push(
 ['8','8.1–8.18',0,'Name a word used in the Astrophysics topic',W('star,planet,sun,moon,galaxy,universe,orbit','solar system,milky way,comet,satellite,gravity,big bang,red shift,black hole','gravitational field strength,orbital speed,red giant,white dwarf,supernova,neutron star,nebula,main sequence,protostar,hr diagram|hertzsprung russell,absolute magnitude,cmb|cosmic microwave background','elliptical orbit,red supergiant,black dwarf,doppler effect,expanding universe,wavelength,light year,fusion','exoplanet,dark matter,dark energy,quasar,pulsar,hubble’s law,parallax','event horizon,schwarzschild radius,chandrasekhar limit,cepheid variable,hubble constant')]
 );
 
+// Extra answers appended to existing Physics prompts (duplicates are ignored at build time)
+const PHYS_EXTRA={
+'Name a vector quantity':W('','','','drag force,lift force,magnetic force on a wire,electrostatic force,buoyant force','weight force,recoil,angular velocity,wind velocity,current density','electric dipole moment,poynting vector,momentum transfer,gravitational force,vorticity,magnetic dipole moment,linear momentum,relative velocity,orbital velocity'),
+'Name a scalar quantity':W('','','','work,speed of light,gravitational potential energy,elastic potential energy,activity,count rate,refractive index','pressure difference,luminosity,absolute magnitude,critical angle,amount of substance,electric charge,period,distance travelled','entropy,viscosity,magnification,temperature difference,heat capacity,electric potential,magnetic flux,specific latent heat,surface tension'),
+'Name a type of force':W('','','','reaction force,electric force,magnetic attraction,friction force,gravitational attraction','centripetal force,tidal force,van der waals force,lorentz force,coriolis force,impulse force','electroweak force,capillary force,casimir force,buoyant force,spring force,normal reaction')
+ .replace('normal reaction:6',''),
+'Name a factor that increases a car’s stopping distance':W('','','','talking to passengers,eating while driving,sat nav distraction,roadworks,poor tyre grip','heavy goods vehicle,motorway speed,engine braking off,diesel spill,flooded road,frost','pedestrians distracting,sun in eyes,windscreen fogged up,brake fade,wet leaves,air in brake fluid'),
+'Name a quantity that appears in a Topic 1 equation':W('','','','work done,gravitational potential energy,kinetic energy,power','height,resultant moment,impulse,force constant','orbital speed,radius,period of orbit,deceleration,displacement')
+ .replace('displacement:6',''),
+'Name a safety feature that works by making a collision last longer':W('','','','motorcycle leathers|leathers,climbing rope|dynamic rope,goalkeeper gloves,ski helmet,hockey helmet,foam pit','cushioned floor|soft play mat,elastic bungee cord,shock absorbers,bubble wrap,sand pit (long jump)|sand pit,landing on grass','energy absorbing barriers,impact attenuator,arrester bed|runaway truck ramp,pole vault landing mat,cycle lane bollards that bend'),
+'Name an effect a force can have on an object':W('','','','squash it,stretch it,make it accelerate,make it decelerate,crush it,dent it','compress it,deform it permanently,make it float,lift it,make it orbit','make it rotate faster,change its momentum,change its kinetic energy,make it oscillate,tear it,shear it'),
+'Name an electrical safety feature':W('','','','fuse in the plug,earth pin,circuit breaker in the fuse box,consumer unit|fuse box,switch on socket,shuttered sockets','socket safety cover,isolator switch,appliance thermal cutout|thermal fuse,safety glasses for electricians,insulated screwdriver,mcb|miniature circuit breaker','arc fault detector,equipotential bonding,pat testing,lockout tagout,ground fault interrupter,surge arrester'),
+'Name a unit from Topic 2 (Electricity)':W('','','','kilowatt hour,ampere hour|amp hour|mah|milliamp hour','megawatt,gigawatt,microamp,millivolt,kilovolt,megaohm','volt ampere,abampere,statcoulomb,faraday (charge)|faraday'),
+'Name a component you could put in a circuit':W('','','','cell holder|battery holder,crocodile clip,connecting lead|leads,ammeter shunt,bulb holder','light sensor,heating coil,ldr,thermistor,solenoid,relay switch','optocoupler,thyristor,varistor,triac,photodiode,integrated circuit|microchip,555 timer,arduino'),
+'Name a device that uses the heating effect of current':W('','','','towel rail|heated towel rail,storage heater,electric hob,panini press,electric oven,coffee machine','hot water bottle (electric),plate warmer,deep fat fryer,electric kettle,clothes iron,popcorn maker,sous vide','heat gun,electric kiln,pizza oven,nail lamp (heat),car cigarette lighter,electric frying pan,bread maker,vaporiser'),
+'Name a use or a danger of electrostatic charge':W('','','','sparks when refuelling,dust sticking to tv,clothes clinging in the dryer,hair sticking to a comb,shocks from car doors|car door shock','electrostatic spray painting,fingerprint powder,photocopier toner,lightning strikes,static on trampolines','electrostatic loudspeaker,ion thruster,cloud seeding,electrostatic air filter,electret microphone,sparks igniting grain dust,static damage to computer chips'),
+'Name a quantity in a Topic 2 equation':W('','','','energy transferred,electrical power,current squared,time in seconds,coulombs','work done,voltage across a resistor,total resistance,current through a component','resistivity,conductance,electromotive force,internal resistance'),
+'Name a part of the electromagnetic spectrum':W('','','','visible,radio,x ray,gamma radiation,infra red','long wave radio,medium wave,uhf|vhf,millimetre waves,soft x rays,hard x rays','extreme ultraviolet,microwave background,radar waves,submillimetre waves,cosmic gamma rays'),
+'Name a use of electromagnetic radiation':W('','','','tv remote,wifi router,airport body scanners,bone x ray,tanning beds,sun cream testing','car parking sensors (radar),speed guns,baggage scanners,food sterilisation,cancer radiotherapy,uv nail lamps','pet scan,ct scanner,gamma sterilisation of surgical tools,radio astronomy,lidar,fibre broadband,space telescopes,mri (radio waves),dental x rays'),
+'Name a hazard of electromagnetic radiation':W('','','','sunburn,eye damage from uv,skin cancer from uv,burns from microwaves,cancer from x rays','cell damage from gamma,mutations from ionising radiation,cataracts from uv,overheating of body tissue','radiation burns,leukaemia,premature ageing,photokeratitis|snow blindness,retinal damage from lasers,radiation sickness'),
+'Name a term used to describe waves':W('','','','time period,wave speed,energy transfer,vibration direction,oscillation,frequency in hertz','refraction,reflection,diffraction,absorption,transmission,peak','wave equation,phase difference,coherence,superposition,standing wave,harmonic,fundamental frequency,polarisation,intensity'),
+'Name an example of a wave':W('','','','sound wave,light wave,water ripple,radio wave,microwave,x ray','infrared wave,ultraviolet wave,gamma ray,earthquake wave,tsunami,seismic p wave,seismic s wave','plasma wave,shockwave,alfven wave,matter wave,de broglie wave,phonon,surface wave,love wave,rayleigh wave'),
+'Name a use of total internal reflection':W('','','','fibre optic broadband,endoscope for keyhole surgery,bicycle reflectors,road cat’s eyes','fibre optic christmas tree,fibre optic lamp,optical fibre sensors,periscope prisms,binocular prisms','gemstone cutting,light guide in phone screens,fibre lasers,diamond brilliance,rainbow (partly)'),
+'Name an energy store':W('','','','kinetic energy,gravitational potential energy,chemical energy,thermal energy,elastic potential energy,nuclear energy','magnetic energy,electrostatic energy','vibrational energy,rotational kinetic energy,binding energy,dark energy'),
+'Name an energy resource used to generate electricity':W('','','','solar power,wind power,coal power,gas power,nuclear power,hydroelectric power,tidal power,wave power,geothermal power,biomass,biofuel','oil,peat,wood,waste|rubbish,methane from landfill,ocean currents','fusion,space based solar power,salinity gradient,ocean thermal energy conversion,hydrogen fuel cell,thorium reactor'),
+'Name a way to reduce heat loss from a house':W('','','','roof insulation,wall insulation,draught proofing doors,heavy curtains,double glazed windows','foam insulation,solid wall insulation,thermal curtains,closing curtains at night,letterbox brush,chimney cap','passive house design,heat pump,triple glazing,thermal mass,green roof,smart heating controls'),
+'Name something in everyday life explained by convection':W('','','','heater near the floor,boiling kettle,air conditioner near ceiling,hot air rising,sea breezes','fridge cooling (top to bottom),lava lamp,radiator heating a room,thunderclouds,smoke rising from chimney','ocean currents,mantle convection,birds soaring on thermals,heat in the sun’s outer layer,cooking pasta water'),
+'Name a change of state':W('','','','melting,freezing,boiling,evaporating,condensing,subliming','solidifying,liquefying,depositing','vaporising,ionising,recombination'),
+'Name a quantity in a Topic 5 equation':W('','','','mass,volume,density,pressure,force,area','height,depth,temperature change,specific heat capacity,energy transferred','absolute temperature,kelvin temperature,initial pressure,final volume,gas constant'),
+'Name a word or phrase that describes particles in a solid, liquid or gas':W('','','','vibrate in fixed positions,move randomly,spread out,move quickly,close together','regular arrangement,irregular arrangement,collide with walls,high kinetic energy,low kinetic energy','strong forces between particles,weak forces between particles,free to move,compressible,incompressible,fixed shape,take shape of container,fills the container'),
+'Name a magnetic material':W('','','','iron filings,steel paperclip|paperclip,nickel coin,cobalt alloy,steel can','neodymium magnet,ferrite magnet,alnico magnet,magnetite','samarium cobalt,permalloy,mu metal,gadolinium,dysprosium,chromium dioxide'),
+'Name a device that uses electromagnetism':W('','','','electric motor,electromagnet,loudspeaker,generator,transformer,electric bell,doorbell','maglev train,mri scanner,relay,circuit breaker,induction hob,microphone,headphones,wind turbine generator','particle accelerator,cyclotron,hard disk drive,electric guitar pickup,magnetic levitation,railgun,coilgun,stepper motor,solenoid valve'),
+'Name a way to increase the voltage induced in a coil':W('','','','move the magnet faster,use a stronger magnet,use more turns of wire,add an iron core','spin the coil faster,increase the speed of rotation,use a stronger electromagnet','increase the area of the coil,reduce the distance between magnet and coil,use a soft iron core,increase the rate of change of magnetic field'),
+'Name a source of background radiation':W('','','','rocks,radon gas,cosmic rays,food,medical x rays,nuclear power','building materials,granite,soil,air travel,nuclear accidents','potassium 40,carbon 14,radon in basements,brazil nuts,smoke detectors,thorium in soil,cosmic rays at high altitude'),
+'Name a use of radioactivity':W('','','','smoke detector,radiotherapy,carbon dating,medical tracers,sterilising equipment','killing cancer cells,detecting leaks,measuring paper thickness,food irradiation,nuclear power,dating rocks','gamma knife surgery,pet scans,nuclear batteries,space probe power,sterile insect technique,industrial radiography,thyroid treatment'),
+'Name a type of nuclear radiation or a particle a nucleus can emit':W('','','','alpha particle,beta particle,gamma ray,neutron','electron,helium nucleus,photon','positron,proton,neutrino,antineutrino,daughter nucleus'),
+'Name a particle found inside an atom':W('','','','proton,neutron,electron','nucleon','quark,up quark,down quark,gluon'),
+'Name a part of a nuclear reactor or power station':W('','','','control rods,fuel rods,moderator,coolant,shielding,turbine','generator,reactor core,cooling tower,boiler,steam','pressure vessel,heat exchanger,containment building,spent fuel pool,condenser,neutron reflector'),
+'Name a stage in the life cycle of a star':W('','','','nebula,protostar,main sequence,red giant,white dwarf','red supergiant,supernova,neutron star,black hole,black dwarf','planetary nebula,brown dwarf,pulsar,magnetar,hypernova,blue giant,t tauri,wolf rayet'),
+'Name something that orbits in space':W('','','','the moon,satellites,planets,comets,asteroids,space station','dwarf planets,space debris,space telescopes','exoplanets,binary stars,moons of jupiter,moons of saturn,trojan asteroids,kuiper belt objects,the sun around the galaxy'),
+'Name something linked to the evidence for the Big Bang':W('','','','red shift,cosmic microwave background radiation,expanding universe,galaxies moving apart','hubble law,doppler effect,age of the universe','helium abundance,olbers paradox,dark energy,accelerating expansion'),
+'Name a colour a star can be':W('','','','red,orange,yellow,white,blue','blue white,yellow white,red orange','violet (hottest)|violet,brown (brown dwarf)|brown,magenta'),
+'Name something that can reach terminal velocity':W('','','','skydiver,raindrop,parachutist,feather','falling leaf,hailstone,ball bearing in oil,paper cone','sycamore seed,dandelion seed,base jumper,wingsuit flyer,meteorite,falling cat,falling squirrel,cyclist downhill'),
+'Name a way to reduce friction':W('','','','lubrication,oil,grease,wax,polishing','ball bearings,rollers,streamlining,water','graphite,talc,teflon,air cushion,magnetic levitation,silicone spray,soap,ptfe tape'),
+'Name something that uses the principle of moments':W('','','','see saw,spanner,door handle,crowbar,wheelbarrow','scissors,pliers,bottle opener,nutcracker,crane','tweezers,tongs,oars,steering wheel,jaw,forearm,golf club,tennis racket,fishing rod,stapler,can opener,nail clippers'),
+'Name something that stretches elastically':W('','','','spring,rubber band,elastic band,bungee cord','trampoline,balloon,slingshot,catapult,bow','tendon,ligament,muscle,hair,spider silk,lycra,elastic waistband,tennis racket strings,guitar string,mattress spring,car suspension spring,pogo stick'),
+'Name something that increases air resistance':W('','','','speed,surface area,parachute,shape','not streamlined,umbrella,flaps,air brakes','spoiler,open window,roof box,wingsuit,drogue chute,baggy clothes,upright cycling position,dense air,flag'),
+'Name a piece of measuring equipment used in physics practicals':W('','','','metre rule,stopwatch,thermometer,ammeter,voltmeter,balance','measuring cylinder,protractor,newton meter,light gate,oscilloscope,geiger counter,multimeter,ray box','vernier calipers,micrometer screw gauge,data logger,ticker timer,signal generator,eureka can,plotting compass,joulemeter,manometer,thermocouple,set square,spring balance'),
+'Name a variable you might control in a physics experiment':W('','','','temperature,mass,volume,length,time,distance','height,current,voltage,surface area,material,thickness','angle,light intensity,wavelength,frequency,concentration,number of turns,air pressure,humidity,wire diameter,starting temperature'),
+'Name a way to make a measurement more accurate or reliable':W('','','','repeat readings,take an average,read at eye level','use a more precise instrument,use light gates,control variables','calibrate equipment,remove anomalies,time ten oscillations,zero the balance,use a data logger,increase the range of readings,use a fiducial marker'),
+'Name an SI base unit':W('','','','metre,kilogram,second','ampere,kelvin','mole,candela'),
+'Name a unit of energy':W('','','','joule,kilojoule,megajoule,kilowatt hour','calorie,kilocalorie,electronvolt','british thermal unit,therm,erg,foot pound,gigajoule,terajoule,quad'),
+'Name a unit of pressure':W('','','','pascal,kilopascal,newton per square metre','atmosphere,bar,millibar,mmhg','psi,torr,hectopascal,inches of mercury,megapascal,gigapascal'),
+'Name a unit of length':W('','','','metre,centimetre,millimetre,kilometre','mile,inch,foot,yard,nanometre,micrometre','light year,astronomical unit,parsec,angstrom,fathom,furlong,chain,league,hand,cubit,rod,fermi,planck length'),
+'Name a unit of time':W('','','','second,minute,hour,day','week,month,year,millisecond','decade,century,millennium,microsecond,nanosecond,picosecond,fortnight,aeon,jiffy,planck time,sidereal day'),
+'Name a prefix used with units':W('','','','kilo,milli,mega,centi','micro,giga,nano','tera,pico,deci,deca,hecto,femto,peta,exa,atto,zetta,yotta,zepto,yocto,ronna,quetta,ronto,quecto'),
+'Name a unit named after a scientist':W('','','','newton,watt,joule,volt,ampere,ohm','kelvin,hertz,pascal,coulomb,becquerel,tesla','farad,henry,weber,siemens,gray,sievert,celsius,fahrenheit,angstrom,curie,gauss,roentgen,debye,oersted,maxwell'),
+'Name a famous physicist':W('','','','einstein,newton,hawking,galileo,curie,tesla','faraday,rutherford,bohr,maxwell,feynman,planck','schrodinger,heisenberg,dirac,fermi,higgs,oppenheimer,meitner,noether,pauli,bose,hubble,kepler,copernicus,archimedes,hooke,ohm,volta,ampere,joule,kelvin,becquerel,chadwick,thomson,boyle,pascal,hertz,geiger,doppler,huygens,coulomb,cavendish,oersted,kirchhoff,boltzmann,lorentz,mach,raman,bell burnell,penrose,sagan,tyson,cox,wu,millikan,compton,de broglie,born,yukawa,salam,weinberg,gell mann,hertzsprung,chandrasekhar,lemaitre,gamow,rubin'),
+'Name a model of the atom or an experiment that changed it':W('','','','plum pudding model,nuclear model,bohr model,gold foil experiment','solid sphere model,discovery of the electron,discovery of the neutron','quantum model,electron cloud,millikan oil drop,cathode ray tube,standard model,quark model,rutherford scattering'),
+'Name a material that conducts electricity':W('','','','copper,silver,gold,aluminium,iron,steel','graphite,salt water,brass,tin,lead,zinc','platinum,tungsten,nickel,mercury,graphene,carbon fibre,lemon juice,plasma,nichrome,titanium,chromium,magnesium,sodium,potassium,lithium'),
+'Name an electrical insulator':W('','','','plastic,rubber,wood,glass','air,paper,ceramic,pvc,porcelain','nylon,cotton,wool,polystyrene,polythene,cardboard,oil,silicone,pure water,vacuum,diamond,mica,teflon,bakelite,fibreglass,sand,stone,wax,cork,leather'),
+'Name a source of direct current (d.c.)':W('','','','battery,cell,solar cell,car battery','power pack,phone charger,laptop battery,power bank','fuel cell,lemon battery,rectifier,thermocouple,capacitor,dynamo with rectifier,bike light battery,watch battery,usb port'),
+'Name an animal or device that uses echoes or ultrasound':W('','','','bat,dolphin,sonar,ultrasound scan','whale,submarine,echo sounder,parking sensors','porpoise,shrew,oilbird,swiftlet,depth finder,fish finder,ultrasonic cleaner,kidney stone breaking,medical imaging,blind echolocation,ultrasonic distance sensor'),
+'Name something explained by refraction':W('','','','rainbow,glasses,lenses,bent straw,pool looks shallow','prism,magnifying glass,camera,eye,microscope,telescope','mirage,heat haze,twinkling stars,diamond sparkle,sun after sunset,moon halo,fata morgana,contact lenses,projector'),
+'Name a good thermal insulator':W('','','','polystyrene,wool,air,foam,plastic','fibreglass,feathers,down,wood,fur,cotton,cardboard,rubber','vacuum,fleece,cork,rockwool,paper,snow,igloo,aerogel,straw,glass wool,sheep wool,neoprene,thermal blanket,space blanket'),
+'Name a factor that affects how fast an object loses heat':W('','','','temperature difference,surface area,insulation','colour,material,thickness,shiny surface','wind,draught,volume,lid,evaporation,humidity,surface to volume ratio,contact with surfaces'),
+'Name a device that transfers electrical energy to kinetic energy':W('','','','fan,motor,drill,blender,vacuum cleaner','washing machine,electric car,electric toothbrush,food mixer,train,e scooter','lift,escalator,hair dryer,printer,loudspeaker,electric razor,drone,treadmill,robot vacuum,electric bike,conveyor belt,tram,electric wheelchair'),
+'Name something that floats on water':W('','','','wood,ice,boat,oil,iceberg','cork,polystyrene,plastic bottle,rubber duck,leaf','apple,sponge,balsa wood,pumice,coconut,candle wax,human body,rotten egg,foil boat,orange,lifejacket,buoy,ping pong ball,beach ball,surfboard'),
+'Name a factor that affects pressure':W('','','','force,area,depth,density,temperature,volume','altitude,gravitational field strength,number of particles','speed of particles,weight,height of liquid,amount of gas'),
+'Name something that has a magnetic field':W('','','','magnet,earth,electromagnet,fridge magnet,compass','wire carrying current,solenoid,coil,motor,sun','mri scanner,loudspeaker,jupiter,neutron star,magnetar,galaxy,hard drive,saturn,uranus,neptune,moon rocks'),
+'Name a way to protect yourself from ionising radiation':W('','','','lead apron,distance,shielding,less time','tongs,gloves,lead box,film badge,concrete','dosimeter,ventilation,face mask,iodine tablets,hazmat suit,lead glass,thick water'),
+'Name a detector of radiation':W('','','','geiger muller tube,geiger counter,photographic film','film badge,dosimeter,cloud chamber','spark counter,scintillator,ionisation chamber,bubble chamber,electroscope,smoke detector,semiconductor detector'),
+'Name a radioactive element or isotope':W('','','','uranium,plutonium,radium','polonium,radon,carbon 14,iodine 131,americium,cobalt 60','caesium 137,strontium 90,thorium,tritium,technetium 99m,potassium 40,francium,californium,curium,actinium,einsteinium,protactinium,neptunium,astatine,radon 222,uranium 235,uranium 238,plutonium 239'),
+'Name a planet in our Solar System':W('earth,mars,jupiter','saturn,venus,mercury','uranus,neptune'),
+'Name something found in deep space beyond our Solar System':W('','','','galaxy,star,black hole,nebula','andromeda,exoplanet,quasar,pulsar','orion nebula,crab nebula,pillars of creation,magellanic clouds,proxima centauri,betelgeuse,sirius,dark matter,cosmic web,supernova remnant,globular cluster,star cluster,interstellar dust,polaris,vega,rigel,alpha centauri'),
+'Name a use of artificial satellites':W('','','','communications,gps,weather,tv','phone calls,spying,mapping,astronomy,internet','climate monitoring,disaster monitoring,crop monitoring,search and rescue,timing signals,space research,ocean monitoring,air pollution monitoring,wildfire detection'),
+'Name a device that sends or receives electromagnetic waves':W('','','','phone,radio,tv,microwave oven,remote control','wifi router,satellite dish,x ray machine,bluetooth headphones,radar','baby monitor,walkie talkie,thermal camera,gps receiver,car key fob,radio telescope,rfid tag,smartwatch,laptop,games controller,contactless card reader,smart speaker'),
+'Name a fact about nuclear fission or fusion':W('','','','splitting nuclei,joining nuclei,releases energy,chain reaction','uranium 235,neutrons,powers the sun,hydrogen,helium','high temperature,daughter nuclei,control rods,moderator,critical mass,deuterium,tritium,tokamak,e=mc2,mass defect,atomic bomb,hydrogen bomb,iter'),
+'Name something that shows Newton’s third law':W('','','','rocket,swimming,walking,gun recoil','balloon rocket,rowing,jet engine,skateboard push','squid,octopus,bird flying,fire hose,astronaut pushing off,jumping off a boat,sitting on a chair,leaning on a wall,cannon recoil,helicopter rotor,hose kickback'),
+'Name something wired in parallel at home':W('','','','lights,plug sockets,appliances','ring main,fairy lights','car headlights,cooker circuit,shower circuit'),
+};
+// New Physics prompts
+RAW.push(
+['1','1.3–1.10',0,'Name something you can find from a motion graph',W('speed,acceleration,distance,velocity','gradient,area under the graph,stationary|stopped,constant speed','deceleration,displacement,total distance,average speed,instantaneous speed','changing acceleration,direction change,curve meaning acceleration','jerk,rate of change of acceleration','tangent gradient,integration')],
+['1','1.4–1.10',0,'Name something that moves at a constant speed',W('car on cruise control,escalator','conveyor belt,moving walkway|travelator,lift','clock hands,satellite in orbit,earth spinning,light in a vacuum','record player|turntable,ceiling fan,windmill blades,merry go round','light,radio waves,sound in air,ferris wheel','glacier,tectonic plates,cruise ship')],
+['1','1.19–1.21',0,'Name a reason thinking distance increases','tiredness|tired:1;alcohol|drink driving:1;drugs:1;speed|faster:1;distractions|phone:2;medication:3;age|older driver:4;poor concentration:3;loud music:4;eating while driving:4;illness:5;stress:5;passengers distracting:4;caffeine crash:6','wet road|icy road|worn tyres|worn brakes=That affects braking distance, not thinking distance.'],
+['1','1.13–1.17',0,'Name a sport where Newton’s laws are easy to see',W('football,rugby,tennis','basketball,cricket,golf,hockey,athletics','skiing,swimming,rowing,cycling,ice skating,snooker,pool','curling,skydiving,shot put,javelin,bowling,boxing','bobsleigh,luge,long jump,pole vault,diving,archery','snowboarding,trampolining,water polo,hammer throw,discus,parkour')],
+['1','1.30–1.33',1,'Name a lever or a part of one','pivot|fulcrum:1;load:1;effort:1;see saw:2;crowbar:2;spanner:2;wheelbarrow:3;scissors:3;moment:3;first class lever:5;second class lever:5;third class lever:5;mechanical advantage:5;forearm:5;tweezers:4',''],
+['2','2.6–2.12',0,'Name a symbol you’d draw in a circuit diagram',W('cell,battery,lamp|bulb,switch,resistor','ammeter,voltmeter,diode,fuse,motor','led,ldr,thermistor,variable resistor,power supply,buzzer','open switch,closed switch,junction|dot,earth symbol,heater','capacitor,transistor,microphone,loudspeaker,relay,transformer','inductor,op amp,logic gate,zener diode,photodiode')],
+['2','2.3–2.5',0,'Name something that uses a lot of electrical power at home',W('kettle,oven,electric shower','washing machine,tumble dryer,dishwasher,heater,hob','fridge freezer,hair dryer,iron,microwave,air conditioner','electric car charger,immersion heater,storage heater,toaster,games console','hot tub,electric underfloor heating,sauna,pool pump','heat pump,induction hob,3d printer,crypto mining rig')],
+['2','2.2–2.5',0,'Name a wire or colour in a UK three-pin plug','live wire|live:1;neutral wire|neutral:1;earth wire|earth:1;brown (live)|brown:2;blue (neutral)|blue:2;green and yellow (earth)|green and yellow|green yellow:2;fuse:2;cable grip:3;earth pin:4;insulation:3;brass pins:5;13 amp fuse|13a:4;3 amp fuse|3a:5;5 amp fuse:5','red|black=Red and black were the old UK wire colours, replaced by brown and blue in 2004.'],
+['3','3.24–3.29',1,'Name something that makes sound',W('guitar,drum,speaker,voice,piano','violin,trumpet,flute,whistle,alarm,bell,phone','tuning fork,vocal cords,saxophone,clarinet,cello,harp,xylophone','siren,thunder,engine,clapping,microphone feedback,wind chimes','didgeridoo,theremin,bagpipes,organ pipes,cicada,tuning fork on table','synthesiser,sonic boom,glass harmonica,singing bowl,kazoo')],
+['3','3.24',1,'Name an animal that hears outside the human range',W('dog,bat','cat,dolphin,elephant,whale','mouse,rat,moth,owl','pigeon,horse,cow,giraffe,rhino','beluga whale,porpoise,greater wax moth,mole rat','katydid,cockroach,frog,octopus')],
+['3','3.14–3.22',0,'Name a word to do with light or optics','lens:1;mirror:1;reflection:1;refraction:1;prism:2;rainbow:2;spectrum:2;normal:2;angle of incidence:3;angle of reflection:3;angle of refraction:3;critical angle:3;total internal reflection:3;refractive index:3;focal length:4;converging lens|convex lens:4;diverging lens|concave lens:4;real image:4;virtual image:4;focal point|focus:4;dispersion:4;ray diagram:3;magnification:4;diffraction:5;polarisation:5;interference:5;laser:5;photon:5;wavefront:4;optical fibre:3',''],
+['3','3.10–3.13',0,'Name a source of a type of electromagnetic radiation',W('sun,light bulb,tv transmitter,microwave oven','x ray machine,radio mast,phone,wifi router','radioactive substances,stars,fire,heater,uv lamp','lightning,black light,laser,thermal camera body heat|human body','supernova,neutron star,quasar,cosmic microwave background','gamma ray burst,synchrotron,pulsar,black hole accretion disc')],
+['4','4.4–4.5',0,'Name a way energy is wasted in a device',W('heat,sound','light,friction','vibration,thermal energy to surroundings','air resistance,noise from motor','electrical resistance in wires,eddy currents','hysteresis,electromagnetic radiation')],
+['4','4.11–4.17',0,'Name an example of work being done',W('lifting a box,pushing a trolley,climbing stairs','kicking a ball,pulling a sledge,riding a bike,braking','stretching a spring,lifting weights,throwing a ball,pushing a car','a motor lifting a lift,a crane lifting,a rocket launching','friction slowing a car,gravity pulling a falling object,a charge moving through a circuit','compressing a gas,a magnet attracting iron')],
+['4','4.18–4.19',1,'Name an advantage or disadvantage of an energy resource','renewable:1;non renewable:1;pollution:1;carbon dioxide|greenhouse gases:1;cheap:2;expensive:2;reliable:2;unreliable:2;intermittent|depends on weather:3;radioactive waste:3;acid rain:3;visual pollution|ugly:3;noise:3;floods valleys:4;harms wildlife:4;high start up cost:4;long lifespan:4;low running costs:4;limited locations:4;meltdown risk:5;quick start up:5;energy security:5;land use:5;decommissioning cost:6',''],
+['5','5.15–5.22',0,'Name a word about gases and the kinetic theory','pressure:1;temperature:1;volume:1;particles:1;collisions:2;kinetic energy:2;absolute zero:2;kelvin:2;random motion:3;boyle’s law|boyles law:4;pressure law:4;charles’s law:5;ideal gas:5;speed of particles:3;container walls:3;force:2;compress:3;expand:3;-273°c|minus 273:4;average kinetic energy:4;brownian motion:5;mean free path:6;avogadro:6',''],
+['5','5.3–5.7',0,'Name something that is very dense or not dense at all',W('lead,gold,feather,air','iron,steel,polystyrene,helium,cork','osmium,mercury,platinum,balloon,foam','tungsten,uranium,neutron star,balsa wood,styrofoam','iridium,black hole,white dwarf,aerogel,hydrogen','metallic hydrogen,interstellar space,graphene aerogel')],
+['5','5.8–5.14',1,'Name something with a high or low specific heat capacity',W('water,metal,copper','oil,sand,iron,aluminium','ocean,concrete,brick,air,lead','hot water bottle,storage heater bricks,saucepan base,radiator fluid','ammonia,hydrogen,mercury,gold,granite','lithium,helium,ethanol,wood')],
+['6','6.2–6.7',0,'Name something that is attracted to a magnet','iron:1;steel:1;nickel:2;cobalt:2;paperclips:2;nails:2;iron filings:2;another magnet:2;steel cans|tin cans:3;fridge door:3;screws:3;compass needle:3;pins:3;cars|steel car body:4;scissors:4;keys (some):5;magnetite:5;neodymium:5;liquid oxygen:6;gadolinium (cold):6','aluminium|copper|gold|silver|plastic|wood=That isn’t attracted to a magnet.'],
+['6','6.17–6.20',1,'Name a fact about transformers',W('step up,step down,coil,iron core','primary coil,secondary coil,turns ratio,alternating current','national grid,voltage,mutual induction,laminated core,100% efficient','power in equals power out,reduces current,reduces energy loss,phone charger,pylons','eddy currents,hysteresis,isolation transformer,substation','vp/vs = np/ns,leakage flux,tesla coil')],
+['7','7.4–7.8',0,'Name a property of alpha, beta or gamma radiation','ionising:1;penetrating:1;stopped by paper:1;stopped by aluminium:2;stopped by lead:2;positive charge|positive:2;negative charge|negative:2;no charge|neutral:2;helium nucleus:3;high speed electron:3;electromagnetic wave:3;random:3;deflected by magnetic field:4;range in air:4;mass number goes down by 4:4;atomic number goes up by 1:4;no change in mass number:5;emitted from the nucleus:4;very ionising:3;weakly ionising:3',''],
+['7','7.11–7.13',0,'Name a word about radioactive decay and half-life','half life:1;activity:1;becquerel:1;decay:1;random:2;count rate:2;unstable:2;nucleus:2;isotope:2;geiger counter:3;background radiation:3;exponential:4;decay curve:4;daughter nucleus:4;parent nucleus:4;spontaneous:4;decay constant:6;carbon dating:4;radioactive waste:4;emission:3',''],
+['8','8.3–8.6',0,'Name a word about orbits and gravity','gravity:1;orbit:1;satellite:1;planet:1;moon:2;gravitational field strength:2;elliptical:3;circular orbit:2;orbital speed:3;period:3;radius:3;comet:2;centripetal force:4;geostationary:4;polar orbit:5;low earth orbit:5;escape velocity:5;kepler’s laws:6;weightlessness:5;freefall:5;v=2πr/t|2 pi r over t:4',''],
+['8','8.11–8.12',1,'Name a feature of the Hertzsprung–Russell diagram','main sequence:1;red giants:1;white dwarfs:1;temperature:2;absolute magnitude:2;luminosity:2;supergiants:3;hot stars on the left:3;colour:3;spectral class:5;the sun:3;brightness:2;red dwarfs:4;blue giants:4;logarithmic scale:5;obafgkm:6',''],
+['H','History of physics',0,'Name a famous physics discovery or invention',W('gravity,electricity,light bulb,telephone','x rays,radioactivity,the electron,relativity,telescope','radio,transistor,laser,nuclear fission,the neutron,the nucleus','quantum theory,the higgs boson,dna structure (x ray),gravitational waves,cosmic microwave background','black holes,the photon,superconductivity,pulsars,the muon,antimatter','the neutrino,quarks,dark energy,exoplanets,graphene')],
+['H','History of physics',0,'Name a famous physics experiment or observatory','gold foil experiment|geiger marsden:1;double slit experiment:2;large hadron collider|lhc|cern:1;millikan oil drop:3;michelson morley:4;cavendish experiment:4;galileo’s tower of pisa|leaning tower:2;newton’s prism:3;franklin’s kite:3;hubble space telescope:2;james webb telescope|jwst:2;jodrell bank:4;ligo:5;iter:5;super kamiokande:6;stern gerlach:6;foucault pendulum:5;cathode ray tube:4;cloud chamber:4',''],
+['U','Units',0,'Name a unit of speed or acceleration','metres per second|m/s:1;kilometres per hour|km/h:1;miles per hour|mph:1;metres per second squared|m/s2:2;knots:3;g force|g:3;mach:4;feet per second:4;light speed|c:5;centimetres per second:4;kilometres per second:4;furlongs per fortnight:6',''],
+['U','Units',0,'Name a unit of mass or weight','kilogram|kg:1;gram|g:1;tonne:2;newton:3;pound|lb:2;ounce|oz:2;stone:2;milligram:3;microgram:4;atomic mass unit|amu:5;carat:5;solar mass:5;slug:6;grain:6;dalton:6','litre=A litre measures volume, not mass.'],
+['P','Practical skills',0,'Name a hazard or safety precaution in a physics practical',W('wear goggles,hot water burns,don’t touch hot objects','tie hair back,electric shock,keep water away from electrics,falling masses,stand up','use a sand tray,switch off when not in use,low voltage,laser safety,radioactive sources with tongs','heat proof mat,don’t look into the laser,clamp the stand,cushion for falling masses,report breakages','risk assessment,lead shielding,limit exposure time,ear protection,fume cupboard','emergency stop button,lab coat,eye wash station,first aid kit')]
+);
+
 {
 // ---------- pixel sprites ----------
 const PAL={K:'#10131f',R:'#e8495f',r:'#b52d45',L:'#ff8a8f',Y:'#ffd36b',P:'#c73a52',S:'#4a3352',W:'#fffbe6',B:'#5fd8ff',b:'#2d7fa8',G:'#8a95b4',g:'#b6f36b',X:'#ff4f7a',V:'#c79bff',O:'#ff9a3c',N:'#8b5a2b'};
@@ -607,10 +721,11 @@ const US=[[/iz/g,'is'],[/yz/g,'ys'],[/fiber/g,'fibre'],[/meter/g,'metre'],[/colo
 const sing=w=>w.length>4&&w.endsWith('ies')?w.slice(0,-3)+'y':/(ches|shes|sses|xes)$/.test(w)?w.slice(0,-2):w.length>3&&w.endsWith('s')&&!/(ss|us|is)$/.test(w)?w.slice(0,-1):w;
 const norm=s=>{let t=String(s).toLowerCase().replace(/['’`]/g,'').replace(/²/g,'2').replace(/[^a-z0-9\/ ]+/g,' ').replace(/\b(a|an|the)\b(?=.)/g,' ').replace(/\s+/g,' ').trim();for(const [a,b] of US)t=t.replace(a,b);return t.split(' ').map(sing).join(' ')};
 const build=raw=>raw.map((r,i)=>({id:i,t:String(r[0]),spec:r[1],p2:!!r[2],q:r[3],
- a:r[4].split(';').filter(Boolean).map(x=>{const k=x.lastIndexOf(':');const names=x.slice(0,k).split('|');return{name:names[0],tier:+x.slice(k+1),al:names.map(norm).filter(Boolean)}}).filter(a=>a.tier>=1&&a.tier<=6),
+ a:(()=>{const seen=new Set();return r[4].split(';').filter(Boolean).map(x=>{const k=x.lastIndexOf(':');const names=x.slice(0,k).split('|');return{name:names[0],tier:+x.slice(k+1),al:names.map(norm).filter(Boolean)}}).filter(a=>{if(!(a.tier>=1&&a.tier<=6)||!a.al.length||a.al.some(x=>seen.has(x)))return false;a.al.forEach(x=>seen.add(x));return true})})(),
  x:r[5]?r[5].split(';').filter(Boolean).map(x=>{const k=x.indexOf('=');return{al:x.slice(0,k).split('|').map(norm),note:x.slice(k+1)}}):[]}));
+if(typeof PHYS_EXTRA!=='undefined')for(const r of RAW)if(PHYS_EXTRA[r[3]])r[4]+=';'+PHYS_EXTRA[r[3]];
 for(const k in SUBJ)SUBJ[k].P=build(SUBJ[k].raw);
-for(const k in SUBJ){const S0=SUBJ[k],m=new Map();S0.P.filter(p=>/^Name a word used in/.test(p.q)).forEach(p=>p.a.forEach(x=>{const e=m.get(x.al[0]);if(!e||x.tier<e.tier)m.set(x.al[0],x)}));S0.packs.Z='Whole-spec mix';S0.P.push({id:S0.P.length,t:'Z',spec:'whole spec',p2:false,q:`Name any word from the ${S0.n} spec`,a:[...m.values()],x:[]})}
+for(const k in SUBJ){const S0=SUBJ[k],m=new Map();S0.P.forEach(p=>p.a.forEach(x=>{const e=m.get(x.al[0]);if(!e||x.tier<e.tier)m.set(x.al[0],x)}));S0.packs.Z='Whole-spec mix';S0.P.push({id:S0.P.length,t:'Z',spec:'whole spec',p2:false,q:`Name any word from the ${S0.n} spec`,a:[...m.values()],x:[]})}
 const lev=(a,b)=>{const m=a.length,n=b.length,d=[];for(let i=0;i<=m;i++){d[i]=[i];for(let j=1;j<=n;j++)d[i][j]=i?0:j}for(let i=1;i<=m;i++)for(let j=1;j<=n;j++){const c=a[i-1]===b[j-1]?0:1;d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+c);if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1)}return d[m][n]};
 const hit=(n,al,fz)=>{const ns=n.replace(/ /g,''),as=al.replace(/ /g,'');if(ns===as)return 3;if(al.length>=4&&(' '+n+' ').includes(' '+al+' '))return 2;
  if(fz&&as.length>=5&&ns[0]===as[0]&&Math.abs(ns.length-as.length)<=2&&lev(ns,as)<=(as.length>=9?2:1))return 1;return 0};
@@ -631,8 +746,11 @@ for(const k in SUBJ)store.subj[k]=Object.assign(blank(),store.subj[k]||{});
 if(!SUBJ[store.subject])store.subject='physics';
 const saveLocal=()=>{try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}};
 // ---------- helpers ----------
-const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
-const dayNo=()=>Math.max(1,Math.floor((new Date().setHours(0,0,0,0)-LAUNCH)/864e5)+1);
+const UKFMT=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'});
+// The daily pack changes at 00:01 UK time
+const today=()=>UKFMT.format(new Date(Date.now()-60000));
+const shiftDay=(key,n)=>{const d=new Date(key+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)};
+const dayNo=()=>Math.max(1,Math.round((Date.parse(today()+'T12:00:00Z')-Date.parse('2026-11-23T12:00:00Z'))/864e5)+1);
 const rng=seed=>{let h=1779033703^seed.length;for(let i=0;i<seed.length;i++){h=Math.imul(h^seed.charCodeAt(i),3432918353);h=h<<13|h>>>19}return()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);h^=h>>>16;return(h>>>0)/4294967296}};
 const shuffle=(arr,r=Math.random)=>{const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const S=()=>SUBJ[store.subject];
@@ -648,6 +766,53 @@ const stage=document.getElementById('stage');
 document.getElementById('logoBag').innerHTML=spr(BAG);
 const tierRows=()=>TIERS.slice(1).map(t=>`<div class="trow" style="--c:${t.c}">${spr(ICON[t.i])}<span class="pts">${t.p} PTS</span><span class="txt"><b>${t.n}.</b> ${t.d}</span></div>`).join('');
 const specTxt=p=>`${S().lab.toUpperCase()} ${p.spec}`;
+// ---------- username filter (mirrored in Supabase so it can't be skipped) ----------
+const UF={
+ subs:['fuck','fuk','fck','fcuk','phuck','shit','shyt','cunt','kunt','nigg','niga','nigr','negro','fagg','wank','bollock','bitch','biatch','bastard','pussy','pussi','porn','penis','vagina','vulva','slut','whore','twat','bellend','nazi','hitler','retard','spastic','dildo','jizz','orgasm','hentai','molest','incest','rapist','raping','killyourself','suicide','cocaine','boobs','boobies','milf','horny','naked','testicle','ballsack','nutsack','paedo','pedophile','tranny','kike','wetback','gook','beaner','raghead','towelhead','chinky','kkk','jihad','terrorist','stfu','gtfo','motherf','cocksuck','blowjob','handjob','rimjob','cumshot','bukkake','queef','smegma','titties','tittie','bondage','fetish','sexy','xxx','onlyfans','wanker','tosser','minge','skank','incel','swastika','heil','genocide','scrotum','erection','ejaculat','masturb','arsehole','asshole','dumbass','badass','jackass','piss','knobhead','dickhead','fuckwit','bawbag','sperm','condom','viagra','hooker','stripper','threesome','pornhub','nsfw','lolita'],
+ toks:['ass','arse','anal','anus','cum','sex','tit','tits','dick','cock','prick','knob','rape','raped','homo','coon','spic','paki','kys','kms','weed','nude','nudes','semen','pedo','nonce','slag','thot','hoe','hoes','clit','cuck','gimp','heroin','lsd','meth','boob','lesbo','dyke','fag','fags','jap','nig','nog','wop','tard','spaz','spak','isis','fap','crackhead','druggie','stoner','kill','die','dead'],
+ allow:['scunthorpe','therapist','penistone','matsushita','snigger','dickens','hancock','peacock','cocktail','cockpit','cockatoo','cockney','shitake','assassin','classic','passion'],
+ nums:['69','420','666','88','1488','8008','80085','58008','5318008','177013','6969','42069','69420'],
+ numsIn:['1488','80085','5318008','69420','42069','177013','6969'],
+ assOk:['class','glass','grass','bass','pass','mass','brass','compass','harass','sass','lass','morass','surpass','crass','amass','carcass','embarrass','molass','badminass'],
+ reserved:['admin','administrator','moderator','mod','gcsellion','official','support','staff','owner','system','root','null','undefined','anonymous','teacher','examiner']
+};
+function usernameProblem(u){
+ if(!/^[A-Za-z0-9_]{3,20}$/.test(u))return 'Usernames are 3–20 letters, numbers or _.';
+ const spaced=u.replace(/([a-z])([A-Z])/g,'$1_$2').toLowerCase();
+ const tr=(s,one)=>s.replace(/[0134578]/g,c=>({0:'o',1:one,3:'e',4:'a',5:'s',7:'t',8:'b'})[c]);
+ const t1=tr(spaced,'i'),t2=tr(spaced,'l');
+ const toks=[...spaced.split(/[^a-z]+/),...t1.split(/_+/),...t2.split(/_+/)];
+ if(toks.some(t=>UF.toks.includes(t)))return 'That username isn’t allowed. Please choose another.';
+ const flats=[t1,t2].map(s=>{let f=s.replace(/[^a-z]/g,'');for(const a of UF.allow)f=f.split(a).join('');return f});
+ const all=[...flats,...flats.map(f=>f.replace(/(.)\1+/g,'$1'))];
+ if(all.some(f=>UF.subs.some(w=>f.includes(w))||(f.endsWith('ass')&&!UF.assOk.some(e=>f.endsWith(e)))))return 'That username isn’t allowed. Please choose another.';
+ if(UF.reserved.includes(u.replace(/_/g,'').toLowerCase()))return 'That username is reserved. Please choose another.';
+ const runs=u.match(/[0-9]+/g)||[];
+ if(runs.some(r=>UF.nums.includes(r)||UF.numsIn.some(n=>r.includes(n))))return 'That number combination isn’t allowed. Please choose another.';
+ return '';
+}
+// ---------- live rarity (real player answers, with safeguards) ----------
+const LIVE={};
+async function fetchCounts(subj,p){
+ if(!sb)return;const k=subj+'|'+p.q;if(LIVE[k]&&Date.now()-LIVE[k].at<120000)return;
+ try{const {data,error}=await sb.rpc('answer_counts',{p_subject:subj,p_prompt:p.q});if(error)throw error;
+  const map={};let total=0;(data||[]).forEach(r=>{const n=Number(r.n)||0;map[r.answer]=n;total+=n});LIVE[k]={map,total,at:Date.now()}}catch(e){}
+}
+const liveData=p=>LIVE[(G?G.subject:store.subject)+'|'+p.q];
+function liveTier(p,a){
+ const est=a.tier,c=liveData(p);if(!c||c.total<10)return est;
+ const share=(c.map[a.name]||0)/c.total;
+ const real=share>=.2?1:share>=.1?2:share>=.05?3:share>=.02?4:share>=.005?5:6;
+ const w=Math.min(1,(c.total-10)/40);
+ const t=Math.round(est*(1-w)+real*w);
+ const lo=Math.max(1,est-2),hi=est===1?2:est===2?3:Math.min(6,est+2);
+ return Math.max(lo,Math.min(hi,t));
+}
+function liveNote(p,a){
+ const c=liveData(p);if(!c||c.total<10)return '<p class="tried">Rarity is still an estimate for this prompt, until more people have played it.</p>';
+ const n=c.map[a.name]||0,pct=Math.round(n/c.total*1000)/10;
+ return `<p class="tried">${n?pct+'% of answers so far were this':'Nobody else has given this answer yet'} · ${c.total} answers from players</p>`;
+}
 // ---------- account (Supabase login) ----------
 // ▼▼▼ PASTE YOUR SUPABASE DETAILS HERE (Supabase → Project Settings → API) ▼▼▼
 const SUPABASE_URL='https://fhqakgbuslcsnajbvuux.supabase.co';
@@ -672,7 +837,7 @@ function pushAll(){
   try{
    let r=await sb.from('progress').upsert({user_id:ACC.id,data:body,updated_at:new Date().toISOString()});if(r.error)throw r.error;
    r=await sb.from('scores').upsert(row);if(r.error)throw r.error;
-   if(log.length){r=await sb.from('answers').insert(log);if(r.error)console.warn(r.error)}
+   if(log.length){r=await sb.from('answers').upsert(log.map(x=>({...x,user_id:ACC.id})),{onConflict:'user_id,subject,prompt,answer',ignoreDuplicates:true});if(r.error)console.warn(r.error)}
    ACC.err='';
   }catch(e){ACC.err=(e&&e.message)||'Could not save';console.warn(e);if(view==='locker')locker()}
  });return writing;
@@ -736,7 +901,7 @@ function home(){
 function start(mode,list,topic){if(!list.length)return;view='play';G={mode,list,topic,i:0,score:0,res:[],subject:store.subject};ask()}
 const hud=()=>`<div class="hud"><div class="pips">${G.list.map((_,k)=>`<span class="pip ${k<G.i?'d':k===G.i?'n':''}"></span>`).join('')}</div><span class="lbl">Prompt ${G.i+1}/${G.list.length}</span><span class="score">${G.score} PTS</span></div>`;
 function ask(){
- const p=G.list[G.i],tries=[];const t0=Date.now();
+ const p=G.list[G.i],tries=[];const t0=Date.now();fetchCounts(G.subject,p);
  stage.innerHTML=`${hud()}<div class="timer" id="tm">${'<i></i>'.repeat(25)}</div>
  <section class="qcard px"><p class="spec">${S().n.toUpperCase()} · ${esc((S().packs[p.t]||'').toUpperCase())} · ${specTxt(p)}${p.p2?' · PAPER 2':''}</p>
  <h2 class="q" style="font:inherit;font-size:clamp(36px,6vw,54px)">${esc(p.q)}</h2>
@@ -760,17 +925,18 @@ function ask(){
 }
 function junkFor(k){let h='';const n=2+(Math.random()<.5?1:0);const used=[];for(let i=0;i<n;i++){let x;do{x=4+Math.random()*78}while(used.some(u=>Math.abs(u-x)<18)&&used.length<4);used.push(x);const r=(Math.random()*50-25).toFixed(0);const nx=(Math.random()<.5?-1:1)*(4+Math.random()*8);h+=spr(JUNK[Math.floor(Math.random()*JUNK.length)],'',`style="left:${x.toFixed(0)}%;transform:rotate(${r}deg);--nx:${nx.toFixed(0)}px;--nr:${(Math.random()*30-15).toFixed(0)}deg"`)}return h}
 function reveal(p,j,tries,timedOut){
- const tier=j?TIERS[j.a.tier]:null,pts=tier?tier.p:0;
- G.score+=pts;if(j&&j.a.tier===6)store.subj[G.subject].g10++;
+ if(j)j.t=liveTier(p,j.a);
+ const tier=j?TIERS[j.t]:null,pts=tier?tier.p:0;
+ G.score+=pts;if(j&&j.t===6)store.subj[G.subject].g10++;
  G.res.push({p,j,pts});
- if(j){answerLog.push({subject:G.subject,prompt:p.q,answer:j.a.name,tier:j.a.tier});if(answerLog.length>300)answerLog.splice(0,answerLog.length-300)}
- const groups=[6,5,4,3,2,1].map(t=>({t,list:p.a.filter(a=>a.tier===t)})).filter(g=>g.list.length);
+ if(j){answerLog.push({subject:G.subject,prompt:p.q,answer:j.a.name,tier:j.t});if(answerLog.length>300)answerLog.splice(0,answerLog.length-300)}
+ const groups=[6,5,4,3,2,1].map(t=>({t,list:p.a.filter(a=>liveTier(p,a)===t)})).filter(g=>g.list.length);
  const total=p.a.length;
  const listHtml=g=>`<div class="ar" style="--c:${TIERS[g.t].c}">${spr(ICON[TIERS[g.t].i])}<div><em>${TIERS[g.t].n} · ${g.list.length}</em>${(()=>{let l=g.list;if(l.length>45){const mine=j&&l.includes(j.a)?[j.a]:[];l=mine.concat(l.filter(a=>a!==j?.a).slice(0,45-mine.length))}return l.map(a=>j&&a===j.a?`<span class="you">${esc(cap(a.name))}</span>`:esc(cap(a.name))).join(', ')+(g.list.length>45?` … and ${g.list.length-45} more`:'')})()}</div></div>`;
  stage.innerHTML=`${hud()}<div class="rv"><div class="bagwrap" id="bw">${HANDLE}<div class="bag" id="bag"><div class="zip"></div><div class="layers hidden" id="ly">${TIERS.slice(1).map((t,k)=>`<div class="layer" style="--c:${t.c}"><div class="junk">${junkFor(k)}</div><div class="lab">${spr(ICON[t.i])}<span>${t.n}</span><span class="p">${t.p}</span></div></div>`).join('')}</div></div>
  <div class="note" id="note" style="--c:${tier?tier.c:'#59648a'}">${j?esc(cap(j.a.name)):timedOut?'out of time':'passed'}</div></div>
  <div class="out" id="out"><p class="spec">${esc(p.q).toUpperCase()} · ${specTxt(p)}</p>
- ${j?`<div class="stamp" style="--c:${tier.c};margin-top:14px">${spr(ICON[tier.i])}${tier.n.toUpperCase()}</div><p class="ansbig" style="--c:${tier.c}">${esc(cap(j.a.name))}</p><p class="why">${tier.d}</p><p class="gain">+<span id="ct">0</span><small>points · ${G.score} total</small></p>`
+ ${j?`<div class="stamp" style="--c:${tier.c};margin-top:14px">${spr(ICON[tier.i])}${tier.n.toUpperCase()}</div><p class="ansbig" style="--c:${tier.c}">${esc(cap(j.a.name))}</p><p class="why">${tier.d}</p>${liveNote(p,j.a)}<p class="gain">+<span id="ct">0</span><small>points · ${G.score} total</small></p>`
   :`<div class="stamp" style="--c:#59648a;margin-top:14px;color:#e8ecf7">${spr(ICON.miss)}${timedOut?'OUT OF TIME':'PASSED'}</div><p class="ansbig">No answer</p><p class="gain">+0<small>points · ${G.score} total</small></p>`}
  ${tries.length?`<p class="tried">Bounced out: ${tries.map(esc).join(', ')}</p>`:''}
  <div class="rule"><span class="lbl">Everything in the bag · ${total}</span></div>
@@ -780,17 +946,17 @@ function reveal(p,j,tries,timedOut){
  const showOut=()=>{out.classList.add('show');if(j){const ct=stage.querySelector('#ct');let v=0;const step=()=>{v=Math.min(pts,v+Math.ceil(pts/24));ct.textContent=v;if(v<pts)requestAnimationFrame(step)};reduced?ct.textContent=pts:step()}const nx=stage.querySelector('#nx');nx.onclick=()=>{G.i++;G.i<G.list.length?ask():end()};nx.focus({preventScroll:true})};
  const revealLayers=()=>{ly.classList.remove('hidden')};
  if(!j){note.style.top='16px';note.style.transform='rotate(-8deg)';revealLayers();showOut();return}
- const bw=stage.querySelector('#bw').getBoundingClientRect(),lr=layers[j.a.tier-1].getBoundingClientRect();
+ const bw=stage.querySelector('#bw').getBoundingClientRect(),lr=layers[j.t-1].getBoundingClientRect();
  const target=lr.top-bw.top+lr.height/2-note.offsetHeight/2;
- const dur=reduced?1:1500+j.a.tier*650,hold=.07,fall=.86,over=10;
+ const dur=reduced?1:1500+j.t*650,hold=.07,fall=.86,over=10;
  const frames=[{transform:'translate(0,0) rotate(-8deg)',offset:0},{transform:'translate(0,-6px) rotate(4deg)',offset:hold}];
  const N=36;for(let i=1;i<=N;i++){const t=i/N,y=(target+over)*(.5-.5*Math.cos(Math.PI*t)),sw=Math.sin(t*Math.PI*4)*16*(1-t),rot=Math.sin(t*Math.PI*4+.7)*11*(1-t);frames.push({transform:`translate(${sw.toFixed(1)}px,${y.toFixed(1)}px) rotate(${rot.toFixed(1)}deg)`,offset:hold+(fall-hold)*t})}
  frames.push({transform:`translate(0,${target-3}px) rotate(-2deg)`,offset:.94},{transform:`translate(0,${target}px) rotate(0)`,offset:1});
  note.animate(frames,{duration:dur,easing:'linear',fill:'forwards'});
  const tAt=yc=>(hold+(fall-hold)*Math.acos(Math.max(-1,Math.min(1,1-2*yc/(target+over))))/Math.PI)*dur;
- layers.forEach((l,k)=>{if(k>j.a.tier-1)return;const r=l.getBoundingClientRect(),yc=r.top-bw.top+8-note.offsetHeight/2;setTimeout(()=>{if(k<j.a.tier-1){l.classList.add('pass');setTimeout(()=>l.classList.remove('pass'),320)}l.querySelectorAll('.junk svg').forEach(s=>{s.classList.remove('nudge');void s.getBoundingClientRect();s.classList.add('nudge')})},tAt(Math.max(0,yc)))});
- setTimeout(()=>{bag.classList.add('thud');note.classList.add('landed');layers[j.a.tier-1].classList.add('hit');
-  layers.forEach((l,k)=>setTimeout(()=>l.querySelector('.lab').style.opacity='1',reduced?0:80*Math.abs(k-(j.a.tier-1))));
+ layers.forEach((l,k)=>{if(k>j.t-1)return;const r=l.getBoundingClientRect(),yc=r.top-bw.top+8-note.offsetHeight/2;setTimeout(()=>{if(k<j.t-1){l.classList.add('pass');setTimeout(()=>l.classList.remove('pass'),320)}l.querySelectorAll('.junk svg').forEach(s=>{s.classList.remove('nudge');void s.getBoundingClientRect();s.classList.add('nudge')})},tAt(Math.max(0,yc)))});
+ setTimeout(()=>{bag.classList.add('thud');note.classList.add('landed');layers[j.t-1].classList.add('hit');
+  layers.forEach((l,k)=>setTimeout(()=>l.querySelector('.lab').style.opacity='1',reduced?0:80*Math.abs(k-(j.t-1))));
   setTimeout(()=>{revealLayers();showOut()},reduced?0:520)},dur);
 }
 function end(){
@@ -802,16 +968,16 @@ function end(){
  saveLocal();pushAll();
  const sj=SUBJ[G.subject];
  const label=G.mode==='daily'?`Daily pack #${dayNo()}`:G.mode==='topic'?`${sj.packs[G.topic]} pack`:'Unlimited pack';
- const share=`GCSELLION · ${sj.n} · ${label}\n${G.res.map(x=>x.j?TIERS[x.j.a.tier].e:'⬛').join('')}\n${s} pts · ${r[1]} (Grade ${r[2]})`;
+ const share=`GCSELLION · ${sj.n} · ${label}\n${G.res.map(x=>x.j?TIERS[x.j.t].e:'⬛').join('')}\n${s} pts · ${r[1]} (Grade ${r[2]})`;
  const n=G.res.length;
  stage.innerHTML=`<div class="hud"><span class="lbl pk">${esc(label)} complete</span><span class="lbl">${ACC.state==='in'?'Saved to your locker':'Saved on this device'}</span></div>
  <div class="big">${s}</div><p class="rank">${r[1].toUpperCase()} · GRADE ${r[2]}</p>
  <div class="rule"><span class="lbl">Bag log</span><span class="lbl" style="color:var(--dim)">deeper = rarer</span></div>
  <div class="log">${TIERS.slice(1).map((t,k)=>`<div class="gl" style="top:${(k+.5)/6*100}%"><span>${t.n}</span></div>`).join('')}
- ${G.res.map((x,k)=>{const left=(k+.5)/n*100,top=x.j?(x.j.a.tier-.5)/6*100:3,c=x.j?TIERS[x.j.a.tier].c:'#59648a';return `<div class="col" style="left:${left}%;height:${top}%;--c:${c}"><i style="height:100%"></i>${spr(ICON[x.j?TIERS[x.j.a.tier].i:'miss'])}</div><span class="x" style="left:${left}%">${k+1}</span>`}).join('')}</div>
+ ${G.res.map((x,k)=>{const left=(k+.5)/n*100,top=x.j?(x.j.t-.5)/6*100:3,c=x.j?TIERS[x.j.t].c:'#59648a';return `<div class="col" style="left:${left}%;height:${top}%;--c:${c}"><i style="height:100%"></i>${spr(ICON[x.j?TIERS[x.j.t].i:'miss'])}</div><span class="x" style="left:${left}%">${k+1}</span>`}).join('')}</div>
  <div style="height:30px"></div>
  <div class="rule"><span class="lbl">Your prompts</span></div>
- <div class="alist">${G.res.map(x=>`<div class="ar" style="--c:${x.j?TIERS[x.j.a.tier].c:'#59648a'}">${spr(ICON[x.j?TIERS[x.j.a.tier].i:'miss'])}<div><em>${x.j?TIERS[x.j.a.tier].n+' · +'+x.pts:'Miss · +0'}</em>${esc(x.p.q)}: <span style="color:var(--ink)">${x.j?esc(cap(x.j.a.name)):'no answer'}</span></div></div>`).join('')}</div>
+ <div class="alist">${G.res.map(x=>`<div class="ar" style="--c:${x.j?TIERS[x.j.t].c:'#59648a'}">${spr(ICON[x.j?TIERS[x.j.t].i:'miss'])}<div><em>${x.j?TIERS[x.j.t].n+' · +'+x.pts:'Miss · +0'}</em>${esc(x.p.q)}: <span style="color:var(--ink)">${x.j?esc(cap(x.j.a.name)):'no answer'}</span></div></div>`).join('')}</div>
  <div class="rule"><span class="lbl">The grading</span></div>
  ${RANKS.map((g,k)=>`<div class="trow ${g===r?'me':''}" style="--c:${g===r?'var(--gold)':'var(--dim)'}"><span class="pts">G${g[2]}</span><span class="pts">${g[0]}–${k<RANKS.length-1?RANKS[k+1][0]-1:700}</span><span class="txt"><b>${g[1]}</b></span></div>`).join('')}
  <div style="margin-top:26px;display:flex;flex-wrap:wrap;gap:12px"><button class="btn" id="cp">COPY RESULT</button><button class="btn alt" id="again">PLAY AGAIN</button><button class="btn alt" id="lk">LOCKER</button><button class="btn alt" id="hm">HOME</button></div><div id="sb"></div>`;
@@ -845,7 +1011,7 @@ function bindAuth(){
    const em=stage.querySelector('#em').value.trim(),pw=stage.querySelector('#pw').value;
    if(authMode==='signup'){
     const un=stage.querySelector('#un').value.trim();
-    if(!/^[A-Za-z0-9_]{3,20}$/.test(un))throw new Error('Usernames are 3–20 letters, numbers or _.');
+    {const bad=usernameProblem(un);if(bad)throw new Error(bad)}
     const {data:taken}=await sb.from('profiles').select('id').ilike('username',un).limit(1);
     if(taken&&taken.length)throw new Error('That username is taken. Try another.');
     const {data,error}=await sb.auth.signUp({email:em,password:pw,options:{data:{username:un},emailRedirectTo:location.origin+location.pathname}});
@@ -857,7 +1023,7 @@ function bindAuth(){
 }
 async function locker(){
  view='locker';clearInterval(timer);G=null;
- const days=[...Array(14)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-i);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')});
+ const days=[...Array(14)].map((_,i)=>shiftDay(today(),-i));
  const head=ACC.state==='in'?`<div class="who"><span class="avatar">${esc(ACC.name.charAt(0).toUpperCase())}</span><div><p class="lbl">Logged in</p><h2 style="margin-top:6px">${esc(ACC.name)}</h2></div></div>
   <p>Your progress, high scores and daily packs save to your account, so they follow you to any device you log in on.</p>${ACC.err?`<p style="color:var(--pink)">${esc(ACC.err)}</p>`:''}<div style="margin-top:12px"><button class="btn alt" id="logout">LOG OUT</button></div>`
   :ACC.state==='checking'?`<h2>CHECKING LOGIN…</h2>`:authForm()+(ACC.err?`<p style="color:var(--pink)">${esc(ACC.err)}</p>`:'');
@@ -868,7 +1034,7 @@ async function locker(){
  ${Object.entries(SUBJ).map(([k,s])=>{const v=store.subj[k];return `<tr><td style="color:var(--ink)">${s.n}</td><td class="n">${v.dives}</td><td class="n">${v.best}</td><td class="n">${v.g10}</td><td class="n">${v.daily[today()]??'–'}</td></tr>`}).join('')}</tbody></table></div>
  <div class="rule"><span class="lbl">Daily packs · last 14 days</span></div>
  <div class="scroll"><table><thead><tr><th>Day</th>${Object.values(SUBJ).map(s=>`<th class="n">${s.n}</th>`).join('')}</tr></thead><tbody>
- ${days.map(d=>`<tr><td>${new Date(d+'T12:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}</td>${Object.keys(SUBJ).map(k=>{const v=store.subj[k].daily[d];return `<td class="n" style="${v!=null?'color:var(--ink)':''}">${v!=null?v+' · G'+rankOf(v)[2]:'–'}</td>`}).join('')}</tr>`).join('')}</tbody></table></div>
+ ${days.map(d=>`<tr><td>${new Date(d+'T12:00:00Z').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',timeZone:'UTC'})}</td>${Object.keys(SUBJ).map(k=>{const v=store.subj[k].daily[d];return `<td class="n" style="${v!=null?'color:var(--ink)':''}">${v!=null?v+' · G'+rankOf(v)[2]:'–'}</td>`}).join('')}</tr>`).join('')}</tbody></table></div>
  <div class="rule"><span class="lbl">Leaderboard · ${S().n}</span></div>
  <div id="board">${sb?'<p class="note-s">Loading the leaderboard…</p>':'<p class="note-s">The leaderboard switches on once logins are set up.</p>'}</div>`;
  stage.querySelector('#back').onclick=home;
@@ -895,6 +1061,7 @@ async function loadBoard(){
 document.getElementById('home').onclick=()=>{confirmLeave();home()};
 navRender();home();
 setTimeout(initAccount,0);
+let lastDay=today();setInterval(()=>{const t=today();if(t!==lastDay){lastDay=t;if(view==='home')home()}},30000);
 }
 </script>
 </body>
