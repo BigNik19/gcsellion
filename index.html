@@ -124,7 +124,7 @@ form.ans input.fixed{box-shadow:0 0 0 3px var(--gold);color:var(--gold)}
 .out{opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s}
 .out.show{opacity:1;transform:none}
 .stamp{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;font:12px/1.4 var(--px);background:var(--c);color:#0d1120;transform:rotate(-3deg);animation:stamp .45s cubic-bezier(.2,1.6,.4,1)}
-.stamp svg{width:22px;height:22px}
+.stamp svg{width:22px;height:22px;filter:brightness(0) opacity(.75)}
 @keyframes stamp{from{transform:scale(2.2) rotate(-12deg);opacity:0}}
 .ansbig{font-size:clamp(40px,6vw,58px);line-height:1;margin:16px 0 6px;overflow-wrap:anywhere;color:var(--c,var(--ink));text-shadow:0 0 14px color-mix(in srgb,var(--c,transparent) 45%,transparent)}
 .gain{font:clamp(26px,5vw,40px)/1 var(--px);color:var(--gold);margin:12px 0}
@@ -160,6 +160,40 @@ tr.me td{color:var(--gold)}
 .note-s{color:var(--dim);font-size:20px;margin-top:10px}
 .authf{display:grid;gap:14px;max-width:460px;margin-top:6px}.authf label{display:grid;gap:6px;color:var(--muted);font-size:21px}.authf small{color:var(--dim);font-size:18px}.authf input{font:26px var(--vt);padding:8px 12px;min-height:52px;border:0;background:#0b0f1d;color:var(--ink);box-shadow:0 0 0 3px var(--line);margin:3px}
 #amsg{color:var(--gold)}
+
+/* full-screen dive */
+.hud.sticky{position:sticky;top:0;z-index:20;background:rgba(13,17,32,.92);backdrop-filter:blur(4px);padding:10px 0;margin-top:8px}
+.dive{position:relative;width:100vw;margin-left:calc(50% - 50vw);margin-top:6px;overflow:hidden}
+.mouth{position:relative;height:150px;background:#e8495f;box-shadow:inset 0 -10px 0 #b52d45,inset 0 8px 0 #ff8a8f;display:grid;place-items:end center;padding-bottom:24px}
+.mouth .handles{position:absolute;top:-2px;left:0;right:0;display:flex;justify-content:center;gap:28vw}
+.mouth .handles i{display:block;width:90px;height:34px;border:8px solid #4a3352;border-bottom:0;box-shadow:0 -4px 0 #10131f}
+.mouth .zipline{position:absolute;left:0;right:0;bottom:0;height:14px;background:repeating-linear-gradient(90deg,#ffd36b 0 10px,#c99a2e 10px 16px);box-shadow:0 4px 0 #10131f}
+.mq{font:12px/1.5 var(--px);color:#2a0610;text-align:center;max-width:80vw;margin:0 0 10px;letter-spacing:.06em}
+.dlayers{position:relative;background:#140c18}
+.dlayer{position:relative;height:clamp(300px,62vh,700px);border-top:3px dashed rgba(255,255,255,.12);background:linear-gradient(180deg,hsl(280 30% calc(9% - var(--k)*1%)) 0%,hsl(260 35% calc(7% - var(--k)*1%)) 100%);transition:background .3s,box-shadow .3s}
+.dlayer .junk{position:absolute;inset:0;pointer-events:none}
+.dlayer .junk svg{position:absolute;opacity:.8}
+.dlayer .junk svg.nudge{animation:nudge2 .7s}
+@keyframes nudge2{30%{transform:translate(var(--nx),-12px) rotate(var(--nr))}70%{transform:translate(calc(var(--nx) * -.4),4px) rotate(-8deg)}}
+.dlab{position:absolute;left:max(4vw,14px);top:18px;display:flex;align-items:center;gap:12px;font:clamp(11px,1.6vw,15px)/1.4 var(--px);color:#e8ecf7;background:rgba(10,8,16,.75);padding:10px 14px;opacity:1;transition:opacity .5s;z-index:2}
+.dlab svg{width:28px;height:28px}.dlab b{font-weight:400;color:var(--c)}
+.dlayers.hidden .dlab{opacity:0}
+.depth{position:absolute;right:max(4vw,14px);top:20px;font:10px var(--px);color:rgba(255,255,255,.25)}
+.dlayer.pass{background:rgba(255,255,255,.07)}
+.dlayer.hit{background:linear-gradient(180deg,color-mix(in srgb,var(--c) 30%,#140c18),#140c18);box-shadow:inset 0 0 0 4px var(--c)}
+.dlayer.hit .dlab{background:var(--c);color:#0d1120}.dlayer.hit .dlab b{color:#0d1120}
+.dlayer.gone{display:none}
+.dnote{position:absolute;left:50%;top:0;z-index:5;padding:14px 22px;max-width:min(560px,86vw);background:#fffbe6;color:#1a2034;font:clamp(28px,5vw,46px)/1 var(--vt);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 -4px 0 #10131f,0 4px 0 #10131f,-4px 0 0 #10131f,4px 0 0 #10131f,8px 8px 0 2px rgba(0,0,0,.35);background-image:repeating-linear-gradient(180deg,transparent 0 27px,#9ad0ff 27px 28px);transition:background .4s,color .4s,box-shadow .4s;will-change:transform}
+.dnote.landed{background:#10131f;background-image:none;color:var(--c);box-shadow:0 -4px 0 var(--c),0 4px 0 var(--c),-4px 0 0 var(--c),4px 0 0 var(--c),0 0 40px var(--c);text-shadow:0 0 12px var(--c)}
+.dnote.bounced{transform:translate(-50%,40px) rotate(-6deg)}
+.dstamp{position:absolute;left:50%;top:0;transform:translateX(-50%) scale(2.4) rotate(-12deg);opacity:0;z-index:4;display:flex;align-items:center;gap:10px;padding:10px 16px;font:clamp(12px,2vw,16px)/1.4 var(--px);background:var(--c);color:#0d1120;transition:transform .45s cubic-bezier(.2,1.6,.4,1),opacity .2s}
+.dstamp.show{opacity:1;transform:translateX(-50%) scale(1) rotate(-3deg)}
+.dstamp svg{width:24px;height:24px;filter:brightness(0) opacity(.75)}
+.dlayer.hit .dlab svg{filter:brightness(0) opacity(.75)}
+.quake{animation:quake .45s}
+@keyframes quake{20%{transform:translate(0,6px)}40%{transform:translate(-4px,-3px)}60%{transform:translate(3px,2px)}80%{transform:translate(-1px,-1px)}}
+.out .card{margin-top:18px}
+.hint2{color:var(--muted);font-size:24px;margin:-12px 0 20px}
 footer{color:var(--dim);font-size:20px;padding:50px 0 40px}
 footer a{color:var(--cyan)}
 @media(max-width:720px){
@@ -693,6 +727,353 @@ RAW.push(
 ['H','History of physics',0,'Name a physics law, rule or principle',W('newton’s first law,newton’s second law,newton’s third law,hooke’s law,ohm’s law','law of gravity,conservation of energy,conservation of momentum,law of reflection,boyle’s law','principle of moments,fleming’s left hand rule,snell’s law,pressure law,charles’s law,archimedes principle','kepler’s laws,hubble’s law,lenz’s law,faraday’s law,coulomb’s law,right hand grip rule','pascal’s principle,bernoulli’s principle,heisenberg uncertainty principle,pauli exclusion principle,laws of thermodynamics,doppler effect','stefan boltzmann law,wien’s law,ampere’s law,gauss’s law,huygens principle,equivalence principle,noether’s theorem')]
 );
 
+// Plain-English wording for prompts. [new wording, short example hint]
+// The original wording stays as a hidden key so answer data stays linked.
+const RENAME={
+'Name a vector quantity':['Name a quantity that has a direction','like velocity: it has a size and a direction'],
+'Name a scalar quantity':['Name a quantity with no direction','like mass or time: just a size'],
+'Name a type of force':['Name a type of force','like friction or gravity'],
+'Name a factor that increases a car’s stopping distance':['Name something that makes a car take longer to stop','like a wet road'],
+'Name a quantity that appears in a Topic 1 equation':['Name something you calculate in forces and motion','like speed or acceleration'],
+'Name a safety feature that works by making a collision last longer':['Name a safety feature that cushions a crash','like a seatbelt or airbag'],
+'Name an effect a force can have on an object':['Name something a force can do to an object','like speed it up'],
+'Name an electrical safety feature':['Name something that keeps you safe from electricity','like a fuse'],
+'Name a unit from Topic 2 (Electricity)':['Name a unit used in electricity','like the volt'],
+'Name a component you could put in a circuit':['Name something you could put in an electric circuit','like a bulb or a switch'],
+'Name a device that uses the heating effect of current':['Name an electrical thing designed to get hot','like a kettle'],
+'Name a use or a danger of electrostatic charge':['Name a use or danger of static electricity','like a shock from a door handle'],
+'Name a quantity in a Topic 2 equation':['Name something you calculate in electricity','like current'],
+'Name a part of the electromagnetic spectrum':['Name a type of electromagnetic wave','like X-rays or radio waves'],
+'Name a use of electromagnetic radiation':['Name a use of light, radio waves, X-rays or similar','like cooking with microwaves'],
+'Name a hazard of electromagnetic radiation':['Name a way radiation like UV or X-rays can harm you','like sunburn'],
+'Name a term used to describe waves':['Name a word used to describe waves','like wavelength'],
+'Name an example of a wave':['Name a type of wave','like sound'],
+'Name a use of total internal reflection':['Name something that traps light inside glass or plastic','like the optical fibres in broadband'],
+'Name an energy store':['Name a type of energy store','like kinetic'],
+'Name an energy resource used to generate electricity':['Name a way to generate electricity','like wind or coal'],
+'Name a way to reduce heat loss from a house':['Name a way to keep a house warm without more heating','like loft insulation'],
+'Name something in everyday life explained by convection':['Name something caused by hot air or water rising','like a radiator warming a room'],
+'Name a change of state':['Name a change of state','like melting'],
+'Name a quantity in a Topic 5 equation':['Name something you calculate for solids, liquids and gases','like density or pressure'],
+'Name a word or phrase that describes particles in a solid, liquid or gas':['Describe how particles behave in a solid, liquid or gas','like “vibrate” or “far apart”'],
+'Name a magnetic material':['Name a magnetic metal or material','like iron'],
+'Name a device that uses electromagnetism':['Name a device that uses electricity and magnets together','like a motor'],
+'Name a way to increase the voltage induced in a coil':['Name a way to make a generator produce more electricity','like spinning it faster'],
+'Name a source of background radiation':['Name a natural or everyday source of radiation','like rocks or radon gas'],
+'Name a use of radioactivity':['Name a use of radioactivity','like smoke detectors'],
+'Name a type of nuclear radiation or a particle a nucleus can emit':['Name a type of nuclear radiation','like alpha'],
+'Name a particle found inside an atom':['Name a particle inside an atom','like a proton'],
+'Name a part of a nuclear reactor or power station':['Name a part of a nuclear power station','like the control rods'],
+'Name a stage in the life cycle of a star':['Name a stage in a star’s life','like red giant'],
+'Name something that orbits in space':['Name something that orbits in space','like the Moon'],
+'Name something linked to the evidence for the Big Bang':['Name a clue that the Big Bang happened','like galaxies moving apart'],
+'Name something that can reach terminal velocity':['Name something that falls and reaches a top speed','like a skydiver'],
+'Name a way to reduce friction':['Name a way to reduce friction','like oil'],
+'Name something that uses the principle of moments':['Name something that uses turning forces','like a see-saw or a spanner'],
+'Name something that stretches elastically':['Name something stretchy that springs back','like a rubber band'],
+'Name something that increases air resistance':['Name something that increases air resistance','like a parachute'],
+'Name a piece of measuring equipment used in physics practicals':['Name a piece of measuring equipment from science lessons','like a ruler'],
+'Name a variable you might control in a physics experiment':['Name something you keep the same in a fair test','like temperature'],
+'Name a way to make a measurement more accurate or reliable':['Name a way to make an experiment more accurate','like repeating it'],
+'Name an SI base unit':['Name a unit of measurement','like metres, seconds or kilograms'],
+'Name a unit of energy':['Name a unit of energy','like the joule'],
+'Name a unit of pressure':['Name a unit of pressure','like the pascal'],
+'Name a unit of length':['Name a unit of length','like the metre'],
+'Name a unit of time':['Name a unit of time','like the second'],
+'Name a prefix used with units':['Name a unit prefix','like kilo- or milli-'],
+'Name a unit named after a scientist':['Name a unit named after a scientist','like the newton'],
+'Name a famous physicist':['Name a famous physicist','like Einstein'],
+'Name a model of the atom or an experiment that changed it':['Name a model of the atom, or a discovery about atoms','like the plum pudding model'],
+'Name a material that conducts electricity':['Name a material that conducts electricity','like copper'],
+'Name an electrical insulator':['Name a material that doesn’t conduct electricity','like plastic'],
+'Name a source of direct current (d.c.)':['Name a source of direct current (d.c.)','like a battery'],
+'Name an animal or device that uses echoes or ultrasound':['Name an animal or device that uses echoes','like a bat or sonar'],
+'Name something explained by refraction':['Name something caused by light bending','like a rainbow'],
+'Name a good thermal insulator':['Name a material that keeps heat in','like wool'],
+'Name a factor that affects how fast an object loses heat':['Name something that affects how fast things cool down','like the temperature difference'],
+'Name a device that transfers electrical energy to kinetic energy':['Name an electrical device that makes something move','like a fan'],
+'Name something that floats on water':['Name something that floats on water','like wood'],
+'Name a factor that affects pressure':['Name something that changes pressure','like depth or force'],
+'Name something that has a magnetic field':['Name something with a magnetic field','like the Earth'],
+'Name a way to protect yourself from ionising radiation':['Name a way to protect yourself from radiation','like a lead apron'],
+'Name a detector of radiation':['Name a way to detect radiation','like a Geiger counter'],
+'Name a radioactive element or isotope':['Name a radioactive element','like uranium'],
+'Name a planet in our Solar System':['Name a planet in our Solar System','like Mars'],
+'Name something found in deep space beyond our Solar System':['Name something in space outside our Solar System','like a galaxy'],
+'Name a use of artificial satellites':['Name something satellites are used for','like GPS'],
+'Name a device that sends or receives electromagnetic waves':['Name a device that sends or receives signals through the air','like a phone or radio'],
+'Name a fact about nuclear fission or fusion':['Name a fact about splitting or joining atoms','like “releases energy” (fission and fusion)'],
+'Name something that shows Newton’s third law':['Name something that pushes back when it pushes','like a rocket (Newton’s third law)'],
+'Name something wired in parallel at home':['Name something wired in parallel at home','like the lights'],
+'Name a word used in the Forces and motion topic':['Name a word from the Forces and motion topic','any key word counts'],
+'Name a word used in the Electricity topic':['Name a word from the Electricity topic','any key word counts'],
+'Name a word used in the Waves topic':['Name a word from the Waves topic','any key word counts'],
+'Name a word used in the Energy topic':['Name a word from the Energy topic','any key word counts'],
+'Name a word used in the Solids, liquids and gases topic':['Name a word from the Solids, liquids and gases topic','any key word counts'],
+'Name a word used in the Magnetism and electromagnetism topic':['Name a word from the Magnetism topic','any key word counts'],
+'Name a word used in the Radioactivity and particles topic':['Name a word from the Radioactivity topic','any key word counts'],
+'Name a word used in the Astrophysics topic':['Name a word from the Space (Astrophysics) topic','any key word counts'],
+'Name something you can find from a motion graph':['Name something a speed or distance graph can tell you','like acceleration'],
+'Name something that moves at a constant speed':['Name something that moves at a steady speed','like an escalator'],
+'Name a reason thinking distance increases':['Name something that slows a driver’s reactions','like being tired'],
+'Name a sport where Newton’s laws are easy to see':['Name a sport full of forces and motion','like football'],
+'Name a lever or a part of one':['Name a lever, or a part of a lever','like a pivot'],
+'Name a symbol you’d draw in a circuit diagram':['Name a symbol you’d draw in a circuit diagram','like a cell or a lamp'],
+'Name something that uses a lot of electrical power at home':['Name something that uses a lot of electricity at home','like an oven'],
+'Name a wire or colour in a UK three-pin plug':['Name a wire or wire colour in a UK plug','like the live wire'],
+'Name something that makes sound':['Name something that makes sound','like a guitar'],
+'Name an animal that hears outside the human range':['Name an animal that hears sounds humans can’t','like a dog'],
+'Name a word to do with light or optics':['Name a word to do with light','like lens or mirror'],
+'Name a source of a type of electromagnetic radiation':['Name something that gives off light, heat or radio waves','like the Sun'],
+'Name a way energy is wasted in a device':['Name a way a device wastes energy','like heat'],
+'Name an example of work being done':['Name an example of a force moving something','like lifting a box'],
+'Name an advantage or disadvantage of an energy resource':['Name a pro or con of a way of making electricity','like “renewable”'],
+'Name a word about gases and the kinetic theory':['Name a word about how gases behave','like pressure'],
+'Name something that is very dense or not dense at all':['Name something very heavy for its size, or very light','like lead or a feather'],
+'Name something with a high or low specific heat capacity':['Name something that’s slow or quick to heat up','like water'],
+'Name something that is attracted to a magnet':['Name something a magnet sticks to','like a paperclip'],
+'Name a fact about transformers':['Name a word or fact about transformers','like step-up'],
+'Name a property of alpha, beta or gamma radiation':['Describe alpha, beta or gamma radiation','like “stopped by paper”'],
+'Name a word about radioactive decay and half-life':['Name a word about radioactive decay','like half-life'],
+'Name a word about orbits and gravity':['Name a word about orbits and gravity','like satellite'],
+'Name a feature of the Hertzsprung–Russell diagram':['Name something on the star chart (HR diagram)','like main sequence'],
+'Name a famous physics discovery or invention':['Name a famous physics discovery or invention','like X-rays'],
+'Name a famous physics experiment or observatory':['Name a famous physics experiment or telescope','like the Large Hadron Collider'],
+'Name a unit of speed or acceleration':['Name a unit of speed','like mph'],
+'Name a unit of mass or weight':['Name a unit of mass or weight','like the kilogram'],
+'Name a hazard or safety precaution in a physics practical':['Name a lab safety rule or hazard','like wear goggles'],
+'Name something that runs on batteries':['Name something that runs on batteries','like a torch'],
+'Name something that gives off its own light':['Name something that gives off its own light','like a candle'],
+'Name something that makes a very loud sound':['Name something really loud','like thunder'],
+'Name something that spins or rotates':['Name something that spins','like a wheel'],
+'Name a household appliance':['Name a household appliance','like a toaster'],
+'Name something that contains an electric motor':['Name something with an electric motor inside','like a drill'],
+'Name something that gets hot when it’s used':['Name something that gets hot when you use it','like a laptop'],
+'Name a good conductor of heat':['Name a material that heat travels through easily','like copper'],
+'Name something transparent or see-through':['Name something see-through','like glass'],
+'Name something that reflects light well':['Name something shiny that reflects light','like a mirror'],
+'Name something that vibrates':['Name something that vibrates','like a phone'],
+'Name something that contains a spring':['Name something with a spring inside','like a pen'],
+'Name a simple machine or something that uses one':['Name a simple machine','like a lever, ramp or pulley'],
+'Name something that can travel faster than 100 mph':['Name something that can go faster than 100 mph','like a train'],
+'Name something that runs on solar power':['Name something that runs on solar power','like a calculator'],
+'Name something you can see in the night sky':['Name something you can see in the night sky','like the Moon'],
+'Name a moon in our Solar System':['Name a moon in our Solar System','like Titan'],
+'Name a star or constellation':['Name a star or constellation','like Orion'],
+'Name a spacecraft, space mission or telescope':['Name a spacecraft, space mission or telescope','like Apollo 11'],
+'Name an astronaut or space scientist':['Name an astronaut or space scientist','like Tim Peake'],
+'Name something that contains radioactive material':['Name something that’s slightly radioactive','like a banana'],
+'Name a musical instrument':['Name a musical instrument','like a drum'],
+'Name something that uses magnets':['Name something that uses magnets','like a compass'],
+'Name a green or low-carbon technology':['Name an eco-friendly technology','like solar panels'],
+'Name something that uses air or gas pressure':['Name something that works using air pressure','like a tyre'],
+'Name something in everyday life that involves a change of state':['Name something that melts, freezes, boils or evaporates in everyday life','like an ice cube melting'],
+'Name something that bounces':['Name something that bounces','like a ball'],
+'Name a type of vehicle':['Name a type of vehicle','like a bus'],
+'Name something that measures something':['Name a measuring device','like a thermometer'],
+'Name a natural phenomenon explained by physics':['Name something in nature that physics explains','like a rainbow'],
+'Name something you’d find in a physics lab':['Name something you’d find in a science lab','like a magnet'],
+'Name a weather or atmosphere word linked to physics':['Name a weather word','like pressure or fog'],
+'Name a physics word that’s also an everyday word':['Name a physics word that’s also an everyday word','like “work” or “current”'],
+'Name a dwarf planet, asteroid or comet':['Name a dwarf planet, asteroid or comet','like Pluto'],
+'Name a word to do with nuclear power or weapons':['Name a word about nuclear power or bombs','like reactor'],
+'Name a physics law, rule or principle':['Name a law or rule in physics','like Newton’s laws'],
+'Name any word from the Physics spec':['Name any word from GCSE Physics','any physics word counts'],
+// Chemistry
+'Name a word used in the States of matter topic':['Name a word from the States of matter topic','any key word counts'],
+'Name an example of diffusion':['Name an example of something spreading out (diffusion)','like perfume'],
+'Name a key word about solutions and solubility':['Name a word about dissolving','like solvent'],
+'Name a word used in the Elements, compounds and mixtures topic':['Name a word from the Elements, compounds and mixtures topic','any key word counts'],
+'Name a method of separating a mixture':['Name a way to separate a mixture','like filtering'],
+'Name a mixture':['Name a mixture','like air'],
+'Name a compound':['Name a compound','like water'],
+'Name a word used in chromatography':['Name a word about chromatography (separating inks)','like solvent front'],
+'Name a word used in the Atomic structure topic':['Name a word from the Atomic structure topic','any key word counts'],
+'Name a term about atomic structure':['Name a word about atoms','like proton'],
+'Name an isotope':['Name an isotope','like carbon-14'],
+'Name a word used in the Periodic Table topic':['Name a word from the Periodic Table topic','any key word counts'],
+'Name a chemical element':['Name a chemical element','like oxygen'],
+'Name a non-metal element':['Name a non-metal','like carbon'],
+'Name a noble gas (Group 0)':['Name a noble gas','like helium'],
+'Name a transition metal':['Name a transition metal','like iron'],
+'Name a word used in chemical calculations':['Name a word used in chemistry calculations','like mole'],
+'Name a state symbol and what it means':['Name a state symbol','like (aq) or (s)'],
+'Name a word used in the Ionic bonding topic':['Name a word from the Ionic bonding topic','any key word counts'],
+'Name an ion from the spec':['Name an ion','like chloride'],
+'Name an ionic compound':['Name an ionic compound','like sodium chloride'],
+'Name a word used in the Covalent bonding topic':['Name a word from the Covalent bonding topic','any key word counts'],
+'Name a molecule you could draw a dot-and-cross diagram for':['Name a simple molecule','like water or methane'],
+'Name a covalent substance':['Name a substance with covalent bonds','like water'],
+'Name a form (allotrope) of carbon':['Name a form of pure carbon','like diamond'],
+'Name a property of metals':['Name a property of metals','like shiny'],
+'Name a word used in the Metallic bonding topic':['Name a word from the Metallic bonding topic','any key word counts'],
+'Name a word used in the Electrolysis topic':['Name a word from the Electrolysis topic','any key word counts'],
+'Name a product of electrolysis':['Name something made by electrolysis','like chlorine'],
+'Name a use of electrolysis':['Name a use of electrolysis','like electroplating'],
+'Name a word used in the Group 1 (alkali metals) topic':['Name a word from the Alkali metals topic','any key word counts'],
+'Name something you see when an alkali metal reacts with water':['Name something you see when sodium or potassium hits water','like fizzing'],
+'Name an alkali metal (Group 1)':['Name an alkali metal','like sodium'],
+'Name a product when an alkali metal reacts with water':['Name something made when an alkali metal reacts with water','like hydrogen'],
+'Name a word used in the Group 7 (halogens) topic':['Name a word from the Halogens topic','any key word counts'],
+'Name a halogen (Group 7)':['Name a halogen','like chlorine'],
+'Name a halogen’s colour or state at room temperature':['Describe what a halogen looks like','like “chlorine: pale green gas”'],
+'Name a halogen displacement reaction or a halide':['Name a halide, or a halogen swap reaction','like potassium bromide'],
+'Name a use of halogens or their compounds':['Name a use of chlorine, fluorine or iodine','like cleaning swimming pools'],
+'Name a word used in the Gases in the atmosphere topic':['Name a word from the Gases in the atmosphere topic','any key word counts'],
+'Name a gas found in air':['Name a gas in the air','like nitrogen'],
+'Name something that burns in oxygen':['Name something that burns','like magnesium'],
+'Name a product of combustion or thermal decomposition':['Name something made when things burn or are heated','like carbon dioxide'],
+'Name a greenhouse gas':['Name a greenhouse gas','like methane'],
+'Name a gas at room temperature':['Name a gas at room temperature','like oxygen'],
+'Name a word used in the Reactivity series topic':['Name a word from the Reactivity series topic','any key word counts'],
+'Name a metal in the reactivity series':['Name a metal in the reactivity series','like potassium'],
+'Name something needed for iron to rust (or that speeds it up)':['Name something that makes iron rust','like water'],
+'Name a way to stop iron rusting':['Name a way to stop rusting','like painting'],
+'Name a word to do with redox':['Name a word about oxidation and reduction','like “oil rig”'],
+'Name a word used in the Extraction and uses of metals topic':['Name a word from the Extracting metals topic','any key word counts'],
+'Name an alloy':['Name an alloy (a metal mix)','like steel'],
+'Name a metal ore or a way to extract metals':['Name a metal ore, or a way to get metal out of rock','like the blast furnace'],
+'Name a use of aluminium, copper, iron or steel':['Name a use of aluminium, copper, iron or steel','like electrical wires'],
+'Name a word used in the Acids and alkalis topic':['Name a word from the Acids and alkalis topic','any key word counts'],
+'Name an indicator':['Name an indicator','like litmus'],
+'Name an acid':['Name an acid','like vinegar'],
+'Name an alkali or a base':['Name an alkali or base','like sodium hydroxide'],
+'Name an everyday acidic or alkaline substance':['Name something at home that’s acidic or alkaline','like lemon juice'],
+'Name a piece of equipment used in a titration':['Name a piece of titration equipment','like a burette'],
+'Name a word used in the Salts topic':['Name a word from the Salts topic','any key word counts'],
+'Name a salt':['Name a salt','like copper sulfate'],
+'Name an insoluble salt or compound from the solubility rules':['Name something that doesn’t dissolve in water','like silver chloride'],
+'Name a step in making a pure, dry salt':['Name a step in making salt crystals','like filtering'],
+'Name a word used in the Chemical tests topic':['Name a word from the Chemical tests topic','any key word counts'],
+'Name a gas test and what it shows':['Name a test for a gas','like the squeaky pop test'],
+'Name a flame test colour':['Name a flame test colour','like lilac for potassium'],
+'Name an ion test result':['Name a result from an ion test','like a white precipitate'],
+'Name a test for water or its purity':['Name a test for water','like boiling point'],
+'Name a word used in the Energetics topic':['Name a word from the Energetics topic','any key word counts'],
+'Name an exothermic reaction':['Name a reaction that gives out heat','like burning'],
+'Name an endothermic reaction or process':['Name something that takes in heat','like melting'],
+'Name something used or measured in calorimetry':['Name something used to measure the energy of a reaction','like a thermometer'],
+'Name a word used in the Rates of reaction topic':['Name a word from the Rates of reaction topic','any key word counts'],
+'Name a factor that affects the rate of a reaction':['Name something that speeds up a reaction','like temperature'],
+'Name a way to measure the rate of a reaction':['Name a way to measure how fast a reaction is','like a gas syringe'],
+'Name a catalyst':['Name a catalyst','like an enzyme'],
+'Name a word used in the Reversible reactions topic':['Name a word from the Reversible reactions topic','any key word counts'],
+'Name a reversible reaction':['Name a reversible reaction','like the Haber process'],
+'Name a change that shifts an equilibrium':['Name a change that affects a reversible reaction','like temperature'],
+'Name a word used in the Introduction to organic chemistry topic':['Name a word from the Organic chemistry topic','any key word counts'],
+'Name a homologous series':['Name a family of organic compounds','like alkanes'],
+'Name an organic compound':['Name an organic compound','like methane'],
+'Name a word used in the Crude oil topic':['Name a word from the Crude oil topic','any key word counts'],
+'Name a fraction from crude oil':['Name something made from crude oil at a refinery','like petrol'],
+'Name a product of burning fuels':['Name something made when fuels burn','like carbon dioxide'],
+'Name a product made from crude oil':['Name a product made from crude oil','like plastic'],
+'Name a word used in the Alkanes and alkenes topic':['Name a word from the Alkanes and alkenes topic','any key word counts'],
+'Name an alkane':['Name an alkane','like methane'],
+'Name an alkene':['Name an alkene','like ethene'],
+'Name a product of a substitution or addition reaction':['Name something made by reacting an alkane or alkene','like poly(ethene)'],
+'Name a word used in the Alcohols, acids and esters topic':['Name a word from the Alcohols, acids and esters topic','any key word counts'],
+'Name an alcohol':['Name an alcohol','like ethanol'],
+'Name a carboxylic acid':['Name a carboxylic acid','like ethanoic acid'],
+'Name an ester or a use of esters':['Name an ester, or a use of esters','like perfume'],
+'Name a way ethanol is made or what it turns into':['Name a way to make ethanol, or what it turns into','like fermentation'],
+'Name a word used in the Synthetic polymers topic':['Name a word from the Polymers topic','any key word counts'],
+'Name a polymer':['Name a polymer','like nylon'],
+'Name a monomer':['Name a monomer','like ethene'],
+'Name a problem with disposing of plastics':['Name a problem with throwing away plastic','like landfill'],
+'Name any word from the Chemistry spec':['Name any word from GCSE Chemistry','any chemistry word counts'],
+// Biology
+'Name a word used in the Variety of living organisms topic':['Name a word from the Variety of life topic','any key word counts'],
+'Name a characteristic of living things':['Name something all living things do','like grow'],
+'Name a group of living organisms from the spec':['Name a group of living things','like plants or fungi'],
+'Name an organism named in the spec':['Name a living thing from GCSE Biology','like yeast'],
+'Name a pathogen or a disease it causes':['Name a germ, or a disease caused by one','like flu'],
+'Name a fungus':['Name a fungus','like a mushroom'],
+'Name a word used in the Cell structure topic':['Name a word from the Cells topic','any key word counts'],
+'Name a part of a cell':['Name a part of a cell','like the nucleus'],
+'Name a level of organisation, or an example of one':['Name a building block of living things','like cell, tissue or organ'],
+'Name a specialised cell':['Name a special type of cell','like a red blood cell'],
+'Name a use, advantage or risk of stem cells':['Name a use or risk of stem cells','like treating diseases'],
+'Name a word used in the Biological molecules and enzymes topic':['Name a word from the Food molecules and enzymes topic','any key word counts'],
+'Name a biological molecule':['Name a molecule found in living things','like glucose'],
+'Name a chemical element found in biological molecules':['Name an element found in food molecules','like carbon'],
+'Name an enzyme':['Name an enzyme','like amylase'],
+'Name a food test or its reagent':['Name a food test','like iodine for starch'],
+'Name a factor that affects enzyme activity':['Name something that affects how well enzymes work','like temperature'],
+'Name a word used in the Movement in and out of cells topic':['Name a word from the Movement in and out of cells topic','any key word counts'],
+'Name an example of diffusion, osmosis or active transport':['Name something that moves in or out of cells','like oxygen into the blood'],
+'Name a factor that affects the rate of diffusion':['Name something that speeds up diffusion','like temperature'],
+'Name a word used in the Plant nutrition (photosynthesis) topic':['Name a word from the Photosynthesis topic','any key word counts'],
+'Name something involved in photosynthesis':['Name something involved in photosynthesis','like sunlight'],
+'Name a factor that limits the rate of photosynthesis':['Name something that affects how fast plants photosynthesise','like light'],
+'Name a mineral ion plants need, or a deficiency symptom':['Name a mineral plants need, or a sign they’re missing one','like magnesium'],
+'Name a word used in the Human nutrition and digestion topic':['Name a word from the Digestion topic','any key word counts'],
+'Name a nutrient in a balanced diet':['Name a nutrient in a balanced diet','like protein'],
+'Name a food that is a good source of a nutrient':['Name a healthy food that’s a good source of a nutrient','like eggs'],
+'Name a part of the digestive system':['Name a part of the digestive system','like the stomach'],
+'Name a digestive enzyme and what it digests':['Name a digestive enzyme','like amylase'],
+'Name a word used in the Respiration topic':['Name a word from the Respiration topic','any key word counts'],
+'Name a reactant or product of respiration':['Name something used or made in respiration','like glucose'],
+'Name a difference between aerobic and anaerobic respiration':['Name a difference between respiration with and without oxygen','like “makes lactic acid”'],
+'Name a word used in the Gas exchange topic':['Name a word from the Breathing and gas exchange topic','any key word counts'],
+'Name a part of the breathing system':['Name a part of the breathing system','like the lungs'],
+'Name an effect of smoking':['Name an effect of smoking','like lung cancer'],
+'Name a leaf adaptation for gas exchange':['Name a leaf feature that lets gases in and out','like stomata'],
+'Name a word used in the Transport in plants topic':['Name a word from the Transport in plants topic','any key word counts'],
+'Name something transported in xylem or phloem':['Name something plants carry around inside them','like water or sugar'],
+'Name a factor that affects the rate of transpiration':['Name something that makes plants lose water faster','like wind'],
+'Name a word used in the Blood and circulation topic':['Name a word from the Blood and heart topic','any key word counts'],
+'Name a part of the heart or circulatory system':['Name a part of the heart or blood system','like an artery'],
+'Name a component of blood':['Name something in your blood','like plasma'],
+'Name a risk factor for coronary heart disease':['Name something that raises your risk of heart disease','like smoking'],
+'Name a word about the immune system':['Name a word about fighting disease','like antibodies'],
+'Name a word used in the Excretion topic':['Name a word from the Excretion topic','any key word counts'],
+'Name an excretory organ or part of the kidney':['Name an organ that removes waste, or a part of the kidney','like the bladder'],
+'Name a substance that is excreted, or found in urine':['Name a waste product the body gets rid of','like urea'],
+'Name a word used in the Co-ordination and response topic':['Name a word from the Nerves and hormones topic','any key word counts'],
+'Name a hormone':['Name a hormone','like adrenaline'],
+'Name a gland that makes a hormone':['Name a gland that makes hormones','like the pancreas'],
+'Name a part of the eye':['Name a part of the eye','like the retina'],
+'Name a reflex action':['Name a reflex','like blinking'],
+'Name a sense organ or receptor':['Name a sense organ or receptor','like the ear'],
+'Name a plant response to a stimulus':['Name a way plants respond to their surroundings','like growing towards light'],
+'Name a way the body controls its temperature':['Name a way your body controls its temperature','like sweating'],
+'Name a word used in the Reproduction topic':['Name a word from the Reproduction topic','any key word counts'],
+'Name a part of a reproductive system':['Name a part of a reproductive system','like the ovary'],
+'Name a part of a flower':['Name a part of a flower','like the petal'],
+'Name a condition seeds need to germinate':['Name something seeds need to start growing','like water'],
+'Name an agent of pollination or seed dispersal':['Name something that spreads pollen or seeds','like bees or wind'],
+'Name an example of asexual reproduction':['Name an example of reproduction with only one parent','like strawberry runners'],
+'Name a word used in the Inheritance topic':['Name a word from the Genetics topic','any key word counts'],
+'Name a molecule or structure in protein synthesis':['Name something involved in making proteins','like DNA or ribosomes'],
+'Name a base found in DNA':['Name a base in DNA','like adenine'],
+'Name an inherited characteristic or condition':['Name something you inherit from your parents','like eye colour'],
+'Name a fact about mitosis or meiosis':['Name a fact about cell division','like “makes identical cells”'],
+'Name a cause or type of mutation':['Name a cause of mutations','like radiation'],
+'Name a word used in the Variation and evolution topic':['Name a word from the Evolution topic','any key word counts'],
+'Name an example of evolution or natural selection':['Name an example of evolution','like antibiotic resistance'],
+'Name a word used in the Ecology and feeding relationships topic':['Name a word from the Ecology topic','any key word counts'],
+'Name a food chain or food web term':['Name a food chain word','like predator'],
+'Name an abiotic or biotic factor':['Name something in an environment that affects living things','like light or predators'],
+'Name a sampling method or ecology equipment':['Name a way to count or catch living things','like a quadrat'],
+'Name a decomposer or detritivore':['Name something that breaks down dead things','like worms or fungi'],
+'Name a way energy is lost between trophic levels':['Name a way energy is lost along a food chain','like heat'],
+'Name a word used in the Carbon and nitrogen cycles topic':['Name a word from the Carbon and nitrogen cycles topic','any key word counts'],
+'Name a process in the carbon or nitrogen cycle':['Name a step in the carbon or nitrogen cycle','like photosynthesis'],
+'Name a word used in the Human influences on the environment topic':['Name a word from the Human impact on the environment topic','any key word counts'],
+'Name a greenhouse gas from the spec':['Name a greenhouse gas','like carbon dioxide'],
+'Name a way humans damage the environment':['Name a way humans damage the environment','like pollution'],
+'Name a stage of eutrophication':['Name a step in what happens when fertiliser pollutes a lake','like algae growing'],
+'Name a way to protect biodiversity':['Name a way to protect wildlife','like nature reserves'],
+'Name a word used in the Food production topic':['Name a word from the Food production topic','any key word counts'],
+'Name a pest control method, pro or con':['Name a way to control pests, or a pro or con of one','like pesticides'],
+'Name a use of microorganisms or biotechnology':['Name something made using microbes','like bread or yoghurt'],
+'Name a condition controlled in an industrial fermenter':['Name something controlled in a fermenter','like temperature'],
+'Name a word used in the Selective breeding, GM and cloning topic':['Name a word from the Breeding and genetic engineering topic','any key word counts'],
+'Name something produced by selective breeding, GM or cloning':['Name something created by selective breeding or genetic engineering','like dog breeds'],
+'Name a tool or step in genetic modification':['Name a tool used in genetic engineering','like a plasmid'],
+'Name any word from the Biology spec':['Name any word from GCSE Biology','any biology word counts'],
+};
+
 {
 // ---------- pixel sprites ----------
 const PAL={K:'#10131f',R:'#e8495f',r:'#b52d45',L:'#ff8a8f',Y:'#ffd36b',P:'#c73a52',S:'#4a3352',W:'#fffbe6',B:'#5fd8ff',b:'#2d7fa8',G:'#8a95b4',g:'#b6f36b',X:'#ff4f7a',V:'#c79bff',O:'#ff9a3c',N:'#8b5a2b'};
@@ -774,6 +1155,8 @@ function synVariants(al){const out=new Set();const pad=' '+al+' ';
 if(typeof PHYS_EXTRA!=='undefined')for(const r of RAW)if(PHYS_EXTRA[r[3]])r[4]+=';'+PHYS_EXTRA[r[3]];
 for(const k in SUBJ)SUBJ[k].P=build(SUBJ[k].raw);
 for(const k in SUBJ){const S0=SUBJ[k],m=new Map();S0.P.forEach(p=>p.a.forEach(x=>{const e=m.get(x.al[0]);if(!e||x.tier<e.tier)m.set(x.al[0],x)}));S0.packs.Z='Whole-spec mix';S0.P.push({id:S0.P.length,t:'Z',spec:'whole spec',p2:false,q:`Name any word from the ${S0.n} spec`,a:[...m.values()],x:[]})}
+{const P=SUBJ.physics.P,su=P.find(p=>p.q==='Name an SI base unit');if(su){const seen=new Set(su.a.flatMap(a=>a.al));P.filter(p=>p.t==='U'&&p!==su).forEach(p=>p.a.forEach(a=>{if(!a.al.some(x=>seen.has(x))){a.al.forEach(x=>seen.add(x));su.a.push({...a,tier:Math.min(6,a.tier)})}}))}}
+for(const k in SUBJ)for(const p of SUBJ[k].P){p.key=p.q;const r=typeof RENAME!=='undefined'&&RENAME[p.q];if(r){p.q=r[0];p.hint=r[1]}}
 const lev=(a,b)=>{const m=a.length,n=b.length,d=[];for(let i=0;i<=m;i++){d[i]=[i];for(let j=1;j<=n;j++)d[i][j]=i?0:j}for(let i=1;i<=m;i++)for(let j=1;j<=n;j++){const c=a[i-1]===b[j-1]?0:1;d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+c);if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1)}return d[m][n]};
 const hit=(n,al,fz)=>{const ns=n.replace(/ /g,''),as=al.replace(/ /g,'');if(ns===as)return 3;if(al.length>=3&&(' '+n+' ').includes(' '+al+' '))return 2;
  if(fz&&as.length>=5&&ns[0]===as[0]&&Math.abs(ns.length-as.length)<=2&&lev(ns,as)<=(as.length>=9?2:1))return 1;return 0};
@@ -804,7 +1187,7 @@ const rng=seed=>{let h=1779033703^seed.length;for(let i=0;i<seed.length;i++){h=M
 const shuffle=(arr,r=Math.random)=>{const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const S=()=>SUBJ[store.subject];
 const pool=()=>S().P.filter(p=>!S().p2||store.p2||!p.p2);
-const isGen=p=>/^Name (a word used in|any word from)/.test(p.q);
+const isGen=p=>/^Name (a word used in|any word from)/.test(p.key||p.q);
 function pickSeven(list,r){const s=shuffle(list,r),out=[],used=new Set();const add=p=>{out.push(p);used.add(p.t)};for(const p of s)if(isGen(p)&&out.filter(isGen).length<2&&!used.has(p.t))add(p);for(const p of s)if(out.length<7&&!isGen(p)&&!used.has(p.t))add(p);for(const p of s)if(out.length<7&&!out.includes(p))out.push(p);return shuffle(out,r)}
 const topicPick=t=>{const l=shuffle(pool().filter(p=>p.t===t));const g=l.filter(isGen),o=l.filter(p=>!isGen(p));return shuffle(g.concat(o).slice(0,7))};
 const rankOf=s=>{let r=RANKS[0];for(const x of RANKS)if(s>=x[0])r=x;return r};
@@ -843,11 +1226,11 @@ function usernameProblem(u){
 // ---------- live rarity (real player answers, with safeguards) ----------
 const LIVE={};
 async function fetchCounts(subj,p){
- if(!sb)return;const k=subj+'|'+p.q;if(LIVE[k]&&Date.now()-LIVE[k].at<120000)return;
- try{const {data,error}=await sb.rpc('answer_counts',{p_subject:subj,p_prompt:p.q});if(error)throw error;
+ if(!sb)return;const k=subj+'|'+(p.key||p.q);if(LIVE[k]&&Date.now()-LIVE[k].at<120000)return;
+ try{const {data,error}=await sb.rpc('answer_counts',{p_subject:subj,p_prompt:p.key||p.q});if(error)throw error;
   const map={};let total=0;(data||[]).forEach(r=>{const n=Number(r.n)||0;map[r.answer]=n;total+=n});LIVE[k]={map,total,at:Date.now()}}catch(e){}
 }
-const liveData=p=>LIVE[(G?G.subject:store.subject)+'|'+p.q];
+const liveData=p=>LIVE[(G?G.subject:store.subject)+'|'+(p.key||p.q)];
 function liveTier(p,a){
  const est=a.tier,c=liveData(p);if(!c||c.total<10)return est;
  const share=(c.map[a.name]||0)/c.total;
@@ -953,7 +1336,7 @@ function ask(){
  const p=G.list[G.i],tries=[];const t0=Date.now();fetchCounts(G.subject,p);
  stage.innerHTML=`${hud()}<div class="timer" id="tm">${'<i></i>'.repeat(25)}</div>
  <section class="qcard px"><p class="spec">${S().n.toUpperCase()} · ${esc((S().packs[p.t]||'').toUpperCase())} · ${specTxt(p)}${p.p2?' · PAPER 2':''}</p>
- <h2 class="q" style="font:inherit;font-size:clamp(36px,6vw,54px)">${esc(p.q)}</h2>
+ <h2 class="q" style="font:inherit;font-size:clamp(36px,6vw,54px)">${esc(p.q)}</h2>${p.hint?`<p class="hint2">${esc(p.hint)}</p>`:''}
  <form class="ans" id="f" autocomplete="off"><input id="in" autocapitalize="off" spellcheck="false" placeholder="type an answer…" aria-label="Your answer"><button class="btn">DROP IT</button></form>
  <div class="fb" id="fb"><p class="why">One answer goes in the bag. Wrong ones bounce out, so keep trying until time runs out.</p></div>
  <button class="link" id="pass">Pass</button></section>`;
@@ -972,41 +1355,77 @@ function ask(){
   fb.innerHTML=`<p class="bad">✕ NOT VALID: “${esc(v)}”. TRY AGAIN</p>${j.note?`<p class="why">${esc(j.note)}</p>`:''}<p class="tried">Tried: ${tries.map(esc).join(', ')}</p>`};
  stage.querySelector('#pass').onclick=()=>finish(null);
 }
-function junkFor(k){let h='';const n=2+(Math.random()<.5?1:0);const used=[];for(let i=0;i<n;i++){let x;do{x=4+Math.random()*78}while(used.some(u=>Math.abs(u-x)<18)&&used.length<4);used.push(x);const r=(Math.random()*50-25).toFixed(0);const nx=(Math.random()<.5?-1:1)*(4+Math.random()*8);h+=spr(JUNK[Math.floor(Math.random()*JUNK.length)],'',`style="left:${x.toFixed(0)}%;transform:rotate(${r}deg);--nx:${nx.toFixed(0)}px;--nr:${(Math.random()*30-15).toFixed(0)}deg"`)}return h}
+function junkFor(k){return ''}
+function deepJunk(k){let h='';const n=7+Math.floor(Math.random()*4);for(let i=0;i<n;i++){const x=(i+.15+Math.random()*.7)/n*100,y=8+Math.random()*78,r=(Math.random()*60-30).toFixed(0),nx=(Math.random()<.5?-1:1)*(8+Math.random()*14),sz=34+Math.floor(Math.random()*22);h+=spr(JUNK[Math.floor(Math.random()*JUNK.length)],'',`style="left:${x.toFixed(1)}%;top:${y.toFixed(0)}%;width:${sz}px;height:${sz}px;transform:rotate(${r}deg);--nx:${nx.toFixed(0)}px;--nr:${(Math.random()*40-20).toFixed(0)}deg"`)}return h}
 function reveal(p,j,tries,timedOut){
  if(j)j.t=liveTier(p,j.a);
  const tier=j?TIERS[j.t]:null,pts=tier?tier.p:0;
+ const hudBefore=hud();
  G.score+=pts;if(j&&j.t===6)store.subj[G.subject].g10++;
  G.res.push({p,j,pts});
- if(j){answerLog.push({subject:G.subject,prompt:p.q,answer:j.a.name,tier:j.t});if(answerLog.length>300)answerLog.splice(0,answerLog.length-300)}
+ if(j){answerLog.push({subject:G.subject,prompt:p.key||p.q,answer:j.a.name,tier:j.t});if(answerLog.length>300)answerLog.splice(0,answerLog.length-300)}
  const groups=[6,5,4,3,2,1].map(t=>({t,list:p.a.filter(a=>liveTier(p,a)===t)})).filter(g=>g.list.length);
  const total=p.a.length;
  const listHtml=g=>`<div class="ar" style="--c:${TIERS[g.t].c}">${spr(ICON[TIERS[g.t].i])}<div><em>${TIERS[g.t].n} · ${g.list.length}</em>${(()=>{let l=g.list;if(l.length>45){const mine=j&&l.includes(j.a)?[j.a]:[];l=mine.concat(l.filter(a=>a!==j?.a).slice(0,45-mine.length))}return l.map(a=>j&&a===j.a?`<span class="you">${esc(cap(a.name))}</span>`:esc(cap(a.name))).join(', ')+(g.list.length>45?` … and ${g.list.length-45} more`:'')})()}</div></div>`;
- stage.innerHTML=`${hud()}<div class="rv"><div class="bagwrap" id="bw">${HANDLE}<div class="bag" id="bag"><div class="zip"></div><div class="layers hidden" id="ly">${TIERS.slice(1).map((t,k)=>`<div class="layer" style="--c:${t.c}"><div class="junk">${junkFor(k)}</div><div class="lab">${spr(ICON[t.i])}<span>${t.n}</span><span class="p">${t.p}</span></div></div>`).join('')}</div></div>
- <div class="note" id="note" style="--c:${tier?tier.c:'#59648a'}">${j?esc(cap(j.a.name)):timedOut?'out of time':'passed'}</div></div>
- <div class="out" id="out"><p class="spec">${esc(p.q).toUpperCase()} · ${specTxt(p)}</p>
- ${j?`<div class="stamp" style="--c:${tier.c};margin-top:14px">${spr(ICON[tier.i])}${tier.n.toUpperCase()}</div><p class="ansbig" style="--c:${tier.c}">${esc(cap(j.a.name))}</p><p class="why">${tier.d}</p>${liveNote(p,j.a)}<p class="gain">+<span id="ct">0</span><small>points · ${G.score} total</small></p>`
-  :`<div class="stamp" style="--c:#59648a;margin-top:14px;color:#e8ecf7">${spr(ICON.miss)}${timedOut?'OUT OF TIME':'PASSED'}</div><p class="ansbig">No answer</p><p class="gain">+0<small>points · ${G.score} total</small></p>`}
+ const word=j?esc(cap(j.a.name)):timedOut?'out of time':'passed';
+ stage.innerHTML=`<div class="hud sticky" id="shud">${hudBefore.replace(/^<div class="hud">|<\/div>$/g,'')}</div>
+ <section class="dive" id="dive">
+  <div class="mouth"><div class="handles"><i></i><i></i></div><div class="zipline"></div><p class="mq">${esc(p.q)}</p></div>
+  <div class="dlayers hidden" id="ly">${TIERS.slice(1).map((t,k)=>`<div class="dlayer" style="--c:${t.c};--k:${k}"><div class="junk">${deepJunk(k)}</div><div class="dlab">${spr(ICON[t.i])}<span>${t.n}</span><b>${t.p} PTS</b></div><span class="depth">${k+1}/6</span></div>`).join('')}</div>
+  <div class="dnote" id="note" style="--c:${tier?tier.c:'#59648a'}">${word}</div>
+  <div class="dstamp" id="dstamp" style="--c:${tier?tier.c:'#59648a'}">${tier?spr(ICON[tier.i])+tier.n.toUpperCase():''}</div>
+ </section>
+ <div class="out" id="out"><section class="card px" style="--c:${tier?tier.c:'var(--line)'}">
+ ${j?`<div class="stamp" style="--c:${tier.c}">${spr(ICON[tier.i])}${tier.n.toUpperCase()}</div><p class="ansbig" style="--c:${tier.c}">${esc(cap(j.a.name))}</p><p class="why">${tier.d}</p>${liveNote(p,j.a)}<p class="gain">+<span id="ct">0</span><small>points · ${G.score} total</small></p>`
+  :`<div class="stamp" style="--c:#59648a;color:#e8ecf7">${spr(ICON.miss)}${timedOut?'OUT OF TIME':'PASSED'}</div><p class="ansbig">No answer</p><p class="gain">+0<small>points · ${G.score} total</small></p>`}
  ${tries.length?`<p class="tried">Bounced out: ${tries.map(esc).join(', ')}</p>`:''}
+ <div style="margin-top:16px"><button class="btn" id="nx">${G.i<G.list.length-1?'NEXT PROMPT':'EMPTY THE BAG'}</button></div></section>
  <div class="rule"><span class="lbl">Everything in the bag · ${total}</span></div>
  <div class="alist">${groups.slice(0,3).map(listHtml).join('')}${groups.length>3?`<details class="more"><summary>Show the more common answers</summary>${groups.slice(3).map(listHtml).join('')}</details>`:''}</div>
- <div style="margin-top:22px"><button class="btn" id="nx">${G.i<G.list.length-1?'NEXT PROMPT':'EMPTY THE BAG'}</button></div></div></div>`;
- const out=stage.querySelector('#out'),note=stage.querySelector('#note'),ly=stage.querySelector('#ly'),layers=[...ly.children],bag=stage.querySelector('#bag');
- const showOut=()=>{out.classList.add('show');if(j){const ct=stage.querySelector('#ct');let v=0;const step=()=>{v=Math.min(pts,v+Math.ceil(pts/24));ct.textContent=v;if(v<pts)requestAnimationFrame(step)};reduced?ct.textContent=pts:step()}const nx=stage.querySelector('#nx');nx.onclick=()=>{G.i++;G.i<G.list.length?ask():end()};nx.focus({preventScroll:true})};
- const revealLayers=()=>{ly.classList.remove('hidden')};
- if(!j){note.style.top='16px';note.style.transform='rotate(-8deg)';revealLayers();showOut();return}
- const bw=stage.querySelector('#bw').getBoundingClientRect(),lr=layers[j.t-1].getBoundingClientRect();
- const target=lr.top-bw.top+lr.height/2-note.offsetHeight/2;
- const dur=reduced?1:1500+j.t*650,hold=.07,fall=.86,over=10;
- const frames=[{transform:'translate(0,0) rotate(-8deg)',offset:0},{transform:'translate(0,-6px) rotate(4deg)',offset:hold}];
- const N=36;for(let i=1;i<=N;i++){const t=i/N,y=(target+over)*(.5-.5*Math.cos(Math.PI*t)),sw=Math.sin(t*Math.PI*4)*16*(1-t),rot=Math.sin(t*Math.PI*4+.7)*11*(1-t);frames.push({transform:`translate(${sw.toFixed(1)}px,${y.toFixed(1)}px) rotate(${rot.toFixed(1)}deg)`,offset:hold+(fall-hold)*t})}
- frames.push({transform:`translate(0,${target-3}px) rotate(-2deg)`,offset:.94},{transform:`translate(0,${target}px) rotate(0)`,offset:1});
- note.animate(frames,{duration:dur,easing:'linear',fill:'forwards'});
- const tAt=yc=>(hold+(fall-hold)*Math.acos(Math.max(-1,Math.min(1,1-2*yc/(target+over))))/Math.PI)*dur;
- layers.forEach((l,k)=>{if(k>j.t-1)return;const r=l.getBoundingClientRect(),yc=r.top-bw.top+8-note.offsetHeight/2;setTimeout(()=>{if(k<j.t-1){l.classList.add('pass');setTimeout(()=>l.classList.remove('pass'),320)}l.querySelectorAll('.junk svg').forEach(s=>{s.classList.remove('nudge');void s.getBoundingClientRect();s.classList.add('nudge')})},tAt(Math.max(0,yc)))});
- setTimeout(()=>{bag.classList.add('thud');note.classList.add('landed');layers[j.t-1].classList.add('hit');
-  layers.forEach((l,k)=>setTimeout(()=>l.querySelector('.lab').style.opacity='1',reduced?0:80*Math.abs(k-(j.t-1))));
-  setTimeout(()=>{revealLayers();showOut()},reduced?0:520)},dur);
+ <div style="margin-top:22px"><button class="btn" id="nx2">${G.i<G.list.length-1?'NEXT PROMPT':'EMPTY THE BAG'}</button></div></div>`;
+ const dive=stage.querySelector('#dive'),out=stage.querySelector('#out'),note=stage.querySelector('#note'),ly=stage.querySelector('#ly'),layers=[...ly.children],stamp=stage.querySelector('#dstamp');
+ const go=()=>{G.i++;G.i<G.list.length?ask():end()};
+ const showOut=()=>{out.classList.add('show');if(j){const ct=stage.querySelector('#ct');let v=0;const step=()=>{v=Math.min(pts,v+Math.ceil(pts/24));ct.textContent=v;if(v<pts)requestAnimationFrame(step)};reduced?ct.textContent=pts:step()}
+  stage.querySelector('#nx').onclick=go;stage.querySelector('#nx2').onclick=go;stage.querySelector('#nx').focus({preventScroll:true})};
+ const scrollTo2=y=>window.scrollTo(0,Math.max(0,y));
+ const absTop=el=>el.getBoundingClientRect().top+window.scrollY;
+ if(!j){layers.forEach(l=>l.classList.add('gone'));note.classList.add('bounced');ly.classList.remove('hidden');showOut();return}
+ // geometry (relative to the dive section)
+ const diveTop=absTop(dive),hitL=layers[j.t-1];
+ const startY=stage.querySelector('.mouth').offsetHeight*.25;
+ const target=hitL.offsetTop+ly.offsetTop+hitL.offsetHeight*.42-note.offsetHeight/2;
+ const dist=target-startY;
+ const dur=reduced?1:1300+j.t*800;
+ const sprites=[...ly.querySelectorAll('.junk svg')].filter(s=>{const l=s.closest('.dlayer');return layers.indexOf(l)<=j.t-1}).map(s=>({s,y:s.closest('.dlayer').offsetTop+ly.offsetTop+s.offsetTop,done:false}));
+ const lines=layers.slice(0,j.t).map(l=>({l,y:l.offsetTop+ly.offsetTop,done:false}));
+ const vw=Math.min(window.innerWidth,1400),amp=Math.min(90,vw*.08);
+ note.style.transform=`translate(-50%,${startY}px)`;
+ scrollTo2(diveTop-80);
+ let t0=null;
+ const frame=ts=>{
+  if(t0===null)t0=ts;
+  const el=ts-t0,hold=reduced?0:380;
+  let y,x=0,rot=0;
+  if(el<hold){y=startY-6*Math.sin(el/hold*Math.PI);rot=-8+16*(el/hold)}
+  else{const t=Math.min(1,(el-hold)/dur);const e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;y=startY+dist*e;x=Math.sin(t*Math.PI*5)*amp*(1-t);rot=Math.sin(t*Math.PI*5+.8)*14*(1-t)}
+  note.style.transform=`translate(calc(-50% + ${x.toFixed(1)}px),${y.toFixed(1)}px) rotate(${rot.toFixed(1)}deg)`;
+  scrollTo2(diveTop+y-window.innerHeight*.38);
+  const ny=y+note.offsetHeight/2;
+  for(const sp of sprites)if(!sp.done&&ny>=sp.y){sp.done=true;sp.s.classList.add('nudge')}
+  for(const ln of lines)if(!ln.done&&ny>=ln.y){ln.done=true;ln.l.classList.add('pass');setTimeout(()=>ln.l.classList.remove('pass'),350)}
+  if(el<hold+dur)requestAnimationFrame(frame);else land(y);
+ };
+ const land=y=>{
+  note.style.transform=`translate(-50%,${y.toFixed(1)}px)`;
+  document.body.classList.add('quake');setTimeout(()=>document.body.classList.remove('quake'),450);
+  note.classList.add('landed');hitL.classList.add('hit');
+  stamp.style.top=(y+note.offsetHeight+16)+'px';stamp.classList.add('show');
+  layers.forEach((l,k)=>setTimeout(()=>l.querySelector('.dlab').style.opacity='1',reduced?0:90*Math.abs(k-(j.t-1))));
+  {const sc=stage.querySelector('#shud .score');if(sc)sc.textContent=G.score+' PTS'}
+  setTimeout(()=>{ly.classList.remove('hidden');layers.forEach((l,k)=>{if(k>j.t-1)l.classList.add('gone')});showOut();
+   const r=hitL.getBoundingClientRect();window.scrollTo({top:window.scrollY+r.top-90,behavior:reduced?'auto':'smooth'})},reduced?0:900);
+ };
+ requestAnimationFrame(frame);
 }
 function end(){
  view='end';
