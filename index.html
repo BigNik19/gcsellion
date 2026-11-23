@@ -194,6 +194,42 @@ tr.me td{color:var(--gold)}
 @keyframes quake{20%{transform:translate(0,6px)}40%{transform:translate(-4px,-3px)}60%{transform:translate(3px,2px)}80%{transform:translate(-1px,-1px)}}
 .out .card{margin-top:18px}
 .hint2{color:var(--muted);font-size:24px;margin:-12px 0 20px}
+
+/* dive v2 */
+.dlayer .zone{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);font:10px/1.4 var(--px);letter-spacing:.14em;color:rgba(255,255,255,.28);text-transform:uppercase;white-space:nowrap}
+.ghost{position:absolute;z-index:1;padding:6px 10px;font:22px/1 var(--vt);color:rgba(232,236,247,.55);border:2px dashed rgba(232,236,247,.22);background:rgba(10,8,16,.35);white-space:nowrap;pointer-events:none}
+.ghost.real{color:rgba(232,236,247,.85);border-color:rgba(95,216,255,.45)}
+.ghost b{font-weight:400;color:var(--cyan);margin-left:8px}
+.dlayer .junk svg.twinkle{animation:twinkle 1.6s ease-in-out infinite}
+@keyframes twinkle{50%{opacity:.25;transform:scale(.7)}}
+.dlayer .junk svg.chest{left:50%!important;top:auto!important;bottom:46px;width:150px!important;height:125px!important;transform:translateX(-50%)!important;filter:drop-shadow(0 0 30px rgba(255,211,107,.6));animation:none}
+.dlayer.crack{box-shadow:inset 0 3px 0 #fff,0 -2px 18px rgba(255,255,255,.4)}
+.shard{position:absolute;z-index:6;width:8px;height:8px;pointer-events:none;animation:shard .7s ease-out forwards}
+@keyframes shard{to{transform:translate(var(--dx),var(--dy)) rotate(200deg);opacity:0}}
+.depthc{position:fixed;right:max(2vw,10px);top:50%;transform:translateY(-50%);z-index:30;display:none;flex-direction:column;align-items:flex-end;gap:4px;background:rgba(10,8,16,.8);padding:12px 14px;box-shadow:0 0 0 3px var(--c,#2c3556);max-width:46vw}
+.depthc.on{display:flex}
+.depthc b{font:clamp(22px,4vw,40px)/1 var(--px);color:var(--c,#e8ecf7)}
+.depthc span{font:9px var(--px);letter-spacing:.12em;color:var(--muted)}
+.depthc em{font-style:normal;font-size:20px;color:var(--gold);text-align:right;max-width:240px}
+.skip{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:30;font:11px var(--px);letter-spacing:.1em;color:#0d1120;background:var(--cyan);border:0;padding:14px 18px;min-height:46px;cursor:pointer;box-shadow:4px 4px 0 rgba(0,0,0,.4)}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:40;transform:translateY(105%);transition:transform .5s cubic-bezier(.2,1,.3,1);display:flex;justify-content:center;pointer-events:none}
+.sheet.show{transform:none;pointer-events:auto}
+.sheet-in{width:min(900px,100%);max-height:52vh;overflow:auto;background:#121729;padding:18px clamp(16px,4vw,32px) 22px;box-shadow:0 -4px 0 var(--c),0 -20px 40px rgba(0,0,0,.5)}
+.sheet.open .sheet-in{max-height:86vh}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.srow .gain{margin:0}
+.sheet .ansbig{margin:10px 0 4px}
+.sbtns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.sall{display:none;margin-top:14px}
+.sheet.open .sall{display:block}
+.depthbig{font:clamp(16px,3vw,24px)/1 var(--px);color:var(--cyan);margin-top:10px}
+.curve svg{width:100%;height:auto;display:block}
+.curve .cl{stroke:#2c3556;stroke-width:1.5;stroke-dasharray:4 5}
+.curve .ct{font:11px var(--px);fill:#59648a;text-anchor:middle}
+.curve .ct.me{fill:#ffd36b}
+.curve .cy{font:11px var(--px);fill:#0d1120;text-anchor:middle}
+.cpct{font-size:24px;color:var(--muted);margin-top:8px}.cpct b{color:var(--gold);font-weight:400}
+@media(max-width:560px){.depthc{top:auto;bottom:84px;transform:none}.ghost{font-size:18px}.sheet .ansbig{font-size:34px;margin:6px 0 2px}.sheet .why,.sheet .tried{font-size:19px;margin-top:2px}.sheet .gain{font-size:22px}.sheet-in{padding:12px 14px 14px;max-height:46vh}.sbtns .btn{padding:10px 12px;min-height:44px;font-size:10px}}
 footer{color:var(--dim);font-size:20px;padding:50px 0 40px}
 footer a{color:var(--cyan)}
 @media(max-width:720px){
@@ -1252,7 +1288,7 @@ const SUPABASE_ANON_KEY='sb_publishable_u_Mq64PXpVKpziXUiw8x1A_WZ9_uztp';
 // ▲▲▲ Only ever use the "anon public" key here, never the "service_role" key ▲▲▲
 const sb=(window.supabase&&/^https:\/\//.test(SUPABASE_URL)&&!/PASTE/.test(SUPABASE_ANON_KEY))?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
 const ACC={state:sb?'checking':'nocfg',name:'',id:null,err:''};
-let view='home',G=null,timer=null,writing=Promise.resolve(),answerLog=[],authMode='login',recovery=false;
+let view='home',G=null,timer=null,writing=Promise.resolve(),answerLog=[],runLog=[],authMode='login',recovery=false;
 function mergeInto(remote){
  if(!remote||!remote.subj)return;
  for(const k in SUBJ){const a=store.subj[k],b=Object.assign(blank(),remote.subj[k]||{});
@@ -1264,12 +1300,13 @@ function mergeInto(remote){
 const scoreRow=()=>{const best={},daily={};let dives=0,g10=0;for(const k in SUBJ){const s=store.subj[k];best[k]=s.best;dives+=s.dives;g10+=s.g10;if(s.daily[today()]!=null)daily[k]=s.daily[today()]}return{user_id:ACC.id,best,daily,day:today(),dives,g10,updated_at:new Date().toISOString()}};
 function pushAll(){
  if(ACC.state!=='in')return writing;
- const body=JSON.parse(JSON.stringify(store)),row=scoreRow(),log=answerLog.splice(0);
+ const body=JSON.parse(JSON.stringify(store)),row=scoreRow(),log=answerLog.splice(0),runs=runLog.splice(0);
  writing=writing.then(async()=>{
   try{
    let r=await sb.from('progress').upsert({user_id:ACC.id,data:body,updated_at:new Date().toISOString()});if(r.error)throw r.error;
    r=await sb.from('scores').upsert(row);if(r.error)throw r.error;
    if(log.length){r=await sb.from('answers').upsert(log.map(x=>({...x,user_id:ACC.id})),{onConflict:'user_id,subject,prompt,answer',ignoreDuplicates:true});if(r.error)console.warn(r.error)}
+   if(runs.length){r=await sb.from('runs').insert(runs.map(x=>({...x,user_id:ACC.id})));if(r.error)console.warn(r.error)}
    ACC.err='';
   }catch(e){ACC.err=(e&&e.message)||'Could not save';console.warn(e);if(view==='locker')locker()}
  });return writing;
@@ -1301,8 +1338,9 @@ const rerender=()=>view==='locker'?locker():view==='home'?home():null;
 function navRender(){
  const ini=ACC.state==='in'?esc((ACC.name||'?').trim().charAt(0).toUpperCase()):'?';
  document.getElementById('nav').innerHTML=Object.entries(SUBJ).map(([k,s])=>`<button class="tag ${k===store.subject?'on':''}" data-s="${k}" aria-pressed="${k===store.subject}">${s.n.toUpperCase()}</button>`).join('')+
- `<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='in'?'LOCKER':'LOG IN'}</button>`;
+ `<button class="tag" id="sndBtn" aria-pressed="${sfxOn()}">SOUND ${sfxOn()?'ON':'OFF'}</button>`+`<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='in'?'LOCKER':'LOG IN'}</button>`;
  document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(G&&!confirmLeave())return;store.subject=b.dataset.s;saveLocal();navRender();view==='locker'?locker():home()});
+ document.getElementById('sndBtn').onclick=()=>{store.sound=!sfxOn();saveLocal();navRender();if(sfxOn()){ensureAudio();tone(660,.12,'square',.05)}};
  document.getElementById('lockBtn').onclick=()=>{if(G&&!confirmLeave())return;locker()};
 }
 const confirmLeave=()=>{clearInterval(timer);G=null;return true};
@@ -1330,7 +1368,7 @@ function home(){
  const p2=stage.querySelector('#p2');if(p2)p2.onchange=e=>{store.p2=e.target.checked;saveLocal();home()};
  scrollTo(0,0);
 }
-function start(mode,list,topic){if(!list.length)return;view='play';G={mode,list,topic,i:0,score:0,res:[],subject:store.subject};ask()}
+function start(mode,list,topic){if(!list.length)return;view='play';G={mode,list,topic,i:0,score:0,depth:0,res:[],subject:store.subject};ask()}
 const hud=()=>`<div class="hud"><div class="pips">${G.list.map((_,k)=>`<span class="pip ${k<G.i?'d':k===G.i?'n':''}"></span>`).join('')}</div><span class="lbl">Prompt ${G.i+1}/${G.list.length}</span><span class="score">${G.score} PTS</span></div>`;
 function ask(){
  const p=G.list[G.i],tries=[];const t0=Date.now();fetchCounts(G.subject,p);
@@ -1347,99 +1385,182 @@ function ask(){
  inp.oninput=()=>inp.classList.remove('fixed');
  clearInterval(timer);
  timer=setInterval(()=>{const left=25-(Date.now()-t0)/1000;if(left<=0){finish(null,true);return}const on=Math.ceil(left);segs.forEach((s,k)=>s.classList.toggle('off',k>=on));tm.classList.toggle('low',left<8)},100);
- stage.querySelector('#f').onsubmit=e=>{e.preventDefault();const v=inp.value.trim();if(!v)return;const j=judge(p,v);
+ stage.querySelector('#f').onsubmit=e=>{e.preventDefault();const v=inp.value.trim();if(!v)return;ensureAudio();const j=judge(p,v);
   if(j.ok){finish(j);return}
   if(j.fix){const fixed=cap(j.a.name);inp.value=fixed;inp.classList.add('fixed');shake();inp.setSelectionRange(fixed.length,fixed.length);
    fb.innerHTML=`<p class="fixmsg">DID YOU MEAN “${esc(fixed)}”?</p><p class="why">${j.kind==='part'?`“${esc(v)}” isn’t on the list, but it contains “${esc(fixed)}”, which is.`:`Looks like a typo of “${esc(fixed)}”.`} Press DROP IT to confirm, or change it.</p>${tries.length?`<p class="tried">Tried: ${tries.map(esc).join(', ')}</p>`:''}`;return}
-  tries.push(v);inp.value='';inp.classList.remove('fixed');shake();
+  tries.push(v);inp.value='';inp.classList.remove('fixed');shake();SFX.wrong();
   fb.innerHTML=`<p class="bad">✕ NOT VALID: “${esc(v)}”. TRY AGAIN</p>${j.note?`<p class="why">${esc(j.note)}</p>`:''}<p class="tried">Tried: ${tries.map(esc).join(', ')}</p>`};
  stage.querySelector('#pass').onclick=()=>finish(null);
 }
 function junkFor(k){return ''}
-function deepJunk(k){let h='';const n=7+Math.floor(Math.random()*4);for(let i=0;i<n;i++){const x=(i+.15+Math.random()*.7)/n*100,y=8+Math.random()*78,r=(Math.random()*60-30).toFixed(0),nx=(Math.random()<.5?-1:1)*(8+Math.random()*14),sz=34+Math.floor(Math.random()*22);h+=spr(JUNK[Math.floor(Math.random()*JUNK.length)],'',`style="left:${x.toFixed(1)}%;top:${y.toFixed(0)}%;width:${sz}px;height:${sz}px;transform:rotate(${r}deg);--nx:${nx.toFixed(0)}px;--nr:${(Math.random()*40-20).toFixed(0)}deg"`)}return h}
+// ---------- sound (made in the browser, no files) ----------
+let AC=null;
+const sfxOn=()=>store.sound!==false;
+function ensureAudio(){if(!sfxOn())return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}catch(e){}}
+function tone(f,d,type='square',vol=.06,when=0,slide=0){if(!AC||!sfxOn())return;try{const t=AC.currentTime+when,o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(30,f+slide),t+d);g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(AC.destination);o.start(t);o.stop(t+d+.03)}catch(e){}}
+const SFX={
+ crack(){tone(140,.16,'triangle',.16,0,-80);tone(900,.05,'square',.03,0,-700)},
+ wobble(){tone(220,.08,'sine',.04)},
+ wrong(){tone(180,.12,'square',.05,0,-60);tone(120,.16,'square',.05,.1,-40)},
+ drop(){tone(520,.25,'sine',.05,0,-300)},
+ land(t){const notes=[262,330,392,523,659,784];for(let i=0;i<t;i++)tone(notes[i],.18,'square',.05,i*.07);if(t===6){[1047,1319,1568,2093].forEach((f,i)=>tone(f,.25,'triangle',.05,.45+i*.08))}tone(70,.3,'sine',.2)}
+};
+// ---------- themed bag zones ----------
+const SPR2={
+ chest:["..KKKKKKKK..",".KNNNNNNNNK.","KNYNNNNNNYNK","KYYYYYYYYYYK","KNNNNYYNNNNK","KNYNNKKNNYNK","KNNNNNNNNNNK","KNYNNNNNNYNK","KYYYYYYYYYYK","KKKKKKKKKKKK"],
+ sandwich:["........","..KKKK..",".KWWWWK.","KggggggK","KXXXXXXK","KWWWWWWK",".KKKKKK.","........"],
+ juice:[".....K..","....K...",".KKKKKK.",".KBBBBK.",".KBWWBK.",".KBBBBK.",".KBBBBK.",".KKKKKK."],
+ test:["KKKKKKK.","KWWWWWKK","KWXWWXWK","KWWWWWWK","KWGGGXWK","KWWWWWWK","KWGGWWWK","KKKKKKKK"],
+ stack:["..........","KKKKKKKKK.","KBBBBBBBKK","KKKKKKKKK.","KXXXXXXXXK","KKKKKKKKKK","KggggggggK","KKKKKKKKK."],
+ spark:["..Y..",".YYY.","YYYYY",".YYY.","..Y.."]
+};
+const ZONES=[
+ {name:'the top of the bag',bg:'linear-gradient(180deg,#22325a,#1a2645)',items:[SPR2.stack,ICON.book,SPR2.stack,ICON.card,ICON.book]},
+ {name:'the pencil case',bg:'linear-gradient(180deg,#2a2f55,#1f2444)',items:[JUNK[0],JUNK[1],JUNK[2],ICON.pen,JUNK[0],JUNK[4]]},
+ {name:'the lunchbox',bg:'linear-gradient(180deg,#14403c,#0f302e)',items:[JUNK[3],JUNK[5],SPR2.sandwich,SPR2.juice,JUNK[3]]},
+ {name:'crumpled old tests',bg:'linear-gradient(180deg,#3b3122,#2b2419)',items:[SPR2.test,ICON.paper,SPR2.test,ICON.tick,ICON.paper]},
+ {name:'lost Year 7 stuff',bg:'linear-gradient(180deg,#2c1838,#1d1027)',items:[JUNK[9],JUNK[6],JUNK[8],JUNK[7],JUNK[10],JUNK[11]]},
+ {name:'the treasure at the very bottom',bg:'radial-gradient(120% 70% at 50% 100%,#5a4310 0%,#1a1206 55%,#0c0805 100%)',items:[SPR2.spark,SPR2.spark,SPR2.spark]}
+];
+function zoneJunk(k){const z=ZONES[k];let h='';const n=k===5?9:8+Math.floor(Math.random()*3);for(let i=0;i<n;i++){const it=z.items[Math.floor(Math.random()*z.items.length)];const x=(i+.15+Math.random()*.7)/n*100,y=8+Math.random()*80,r=(Math.random()*60-30).toFixed(0),nx=(Math.random()<.5?-1:1)*(8+Math.random()*14),sz=k===5?14+Math.floor(Math.random()*16):34+Math.floor(Math.random()*24);h+=spr(it,k===5?'twinkle':'',`style="left:${x.toFixed(1)}%;top:${y.toFixed(0)}%;width:${sz}px;height:${sz}px;transform:rotate(${r}deg);--nx:${nx.toFixed(0)}px;--nr:${(Math.random()*40-20).toFixed(0)}deg;animation-delay:${(Math.random()*2).toFixed(2)}s"`)}
+ if(k===5)h+=spr(SPR2.chest,'chest');return h}
+function crowdGhosts(p,j){
+ const c=liveData(p),by=[[],[],[],[],[],[],[]],used=new Set();
+ if(c&&c.total>0){const names=Object.entries(c.map).sort((a,b)=>b[1]-a[1]).slice(0,14);
+  for(const [nm,n] of names){if(j&&nm===j.a.name)continue;const a=p.a.find(x=>x.name===nm);if(!a)continue;used.add(a);by[liveTier(p,a)].push({t:cap(nm),s:Math.round(n/c.total*1000)/10+'%',real:true})}}
+ for(let t=1;t<=6;t++){if(by[t].length>=2)continue;const pool=shuffle(p.a.filter(a=>liveTier(p,a)===t&&!(j&&a===j.a)&&!used.has(a))).slice(0,2-by[t].length);pool.forEach(a=>by[t].push({t:cap(a.name),s:'',real:false}))}
+ return by;
+}
+function ghostHtml(list){return list.slice(0,4).map((g,i)=>{const left=i%2?60+Math.random()*28:4+Math.random()*24,top=22+Math.random()*58;return `<div class="ghost ${g.real?'real':''}" style="left:${left.toFixed(0)}%;top:${top.toFixed(0)}%;transform:rotate(${(Math.random()*10-5).toFixed(0)}deg)">${esc(g.t)}${g.s?`<b>${g.s}</b>`:''}</div>`}).join('')}
+function deepShare(p,t){const c=liveData(p);if(!c||c.total<10)return null;let n=0;for(const [nm,k] of Object.entries(c.map)){const a=p.a.find(x=>x.name===nm);if(a&&liveTier(p,a)>=t)n+=k}return Math.max(1,Math.round(n/c.total*100))}
+function burst(host,x,y,color){for(let i=0;i<12;i++){const d=document.createElement('i');d.className='shard';const a=Math.random()*Math.PI*2,r=40+Math.random()*70;d.style.cssText=`left:${x}px;top:${y}px;background:${color};--dx:${(Math.cos(a)*r).toFixed(0)}px;--dy:${(Math.sin(a)*r*.6-20).toFixed(0)}px`;host.appendChild(d);setTimeout(()=>d.remove(),700)}}
+// ---------- the dive ----------
 function reveal(p,j,tries,timedOut){
  if(j)j.t=liveTier(p,j.a);
  const tier=j?TIERS[j.t]:null,pts=tier?tier.p:0;
  const hudBefore=hud();
- G.score+=pts;if(j&&j.t===6)store.subj[G.subject].g10++;
+ G.score+=pts;G.depth=(G.depth||0)+pts*10;if(j&&j.t===6)store.subj[G.subject].g10++;
  G.res.push({p,j,pts});
  if(j){answerLog.push({subject:G.subject,prompt:p.key||p.q,answer:j.a.name,tier:j.t});if(answerLog.length>300)answerLog.splice(0,answerLog.length-300)}
  const groups=[6,5,4,3,2,1].map(t=>({t,list:p.a.filter(a=>liveTier(p,a)===t)})).filter(g=>g.list.length);
- const total=p.a.length;
  const listHtml=g=>`<div class="ar" style="--c:${TIERS[g.t].c}">${spr(ICON[TIERS[g.t].i])}<div><em>${TIERS[g.t].n} · ${g.list.length}</em>${(()=>{let l=g.list;if(l.length>45){const mine=j&&l.includes(j.a)?[j.a]:[];l=mine.concat(l.filter(a=>a!==j?.a).slice(0,45-mine.length))}return l.map(a=>j&&a===j.a?`<span class="you">${esc(cap(a.name))}</span>`:esc(cap(a.name))).join(', ')+(g.list.length>45?` … and ${g.list.length-45} more`:'')})()}</div></div>`;
+ const ghosts=crowdGhosts(p,j);
  const word=j?esc(cap(j.a.name)):timedOut?'out of time':'passed';
+ const last=G.i>=G.list.length-1;
  stage.innerHTML=`<div class="hud sticky" id="shud">${hudBefore.replace(/^<div class="hud">|<\/div>$/g,'')}</div>
  <section class="dive" id="dive">
   <div class="mouth"><div class="handles"><i></i><i></i></div><div class="zipline"></div><p class="mq">${esc(p.q)}</p></div>
-  <div class="dlayers hidden" id="ly">${TIERS.slice(1).map((t,k)=>`<div class="dlayer" style="--c:${t.c};--k:${k}"><div class="junk">${deepJunk(k)}</div><div class="dlab">${spr(ICON[t.i])}<span>${t.n}</span><b>${t.p} PTS</b></div><span class="depth">${k+1}/6</span></div>`).join('')}</div>
+  <div class="dlayers hidden" id="ly">${TIERS.slice(1).map((t,k)=>`<div class="dlayer" style="--c:${t.c};background:${ZONES[k].bg}"><div class="junk">${zoneJunk(k)}</div>${ghostHtml(ghosts[k+1])}<div class="zone">${ZONES[k].name}</div><div class="dlab">${spr(ICON[t.i])}<span>${t.n}</span><b>${t.p} PTS</b></div></div>`).join('')}</div>
   <div class="dnote" id="note" style="--c:${tier?tier.c:'#59648a'}">${word}</div>
   <div class="dstamp" id="dstamp" style="--c:${tier?tier.c:'#59648a'}">${tier?spr(ICON[tier.i])+tier.n.toUpperCase():''}</div>
  </section>
- <div class="out" id="out"><section class="card px" style="--c:${tier?tier.c:'var(--line)'}">
- ${j?`<div class="stamp" style="--c:${tier.c}">${spr(ICON[tier.i])}${tier.n.toUpperCase()}</div><p class="ansbig" style="--c:${tier.c}">${esc(cap(j.a.name))}</p><p class="why">${tier.d}</p>${liveNote(p,j.a)}<p class="gain">+<span id="ct">0</span><small>points · ${G.score} total</small></p>`
-  :`<div class="stamp" style="--c:#59648a;color:#e8ecf7">${spr(ICON.miss)}${timedOut?'OUT OF TIME':'PASSED'}</div><p class="ansbig">No answer</p><p class="gain">+0<small>points · ${G.score} total</small></p>`}
- ${tries.length?`<p class="tried">Bounced out: ${tries.map(esc).join(', ')}</p>`:''}
- <div style="margin-top:16px"><button class="btn" id="nx">${G.i<G.list.length-1?'NEXT PROMPT':'EMPTY THE BAG'}</button></div></section>
- <div class="rule"><span class="lbl">Everything in the bag · ${total}</span></div>
- <div class="alist">${groups.slice(0,3).map(listHtml).join('')}${groups.length>3?`<details class="more"><summary>Show the more common answers</summary>${groups.slice(3).map(listHtml).join('')}</details>`:''}</div>
- <div style="margin-top:22px"><button class="btn" id="nx2">${G.i<G.list.length-1?'NEXT PROMPT':'EMPTY THE BAG'}</button></div></div>`;
- const dive=stage.querySelector('#dive'),out=stage.querySelector('#out'),note=stage.querySelector('#note'),ly=stage.querySelector('#ly'),layers=[...ly.children],stamp=stage.querySelector('#dstamp');
+ <div class="depthc" id="depthc"><b id="dm">0</b><span>metres deep</span><em id="dsh"></em></div>
+ <button class="skip" id="skip">TAP TO SKIP ›</button>
+ <div class="sheet" id="sheet"><div class="sheet-in" style="--c:${tier?tier.c:'#59648a'}">
+  <div class="srow">${j?`<div class="stamp" style="--c:${tier.c}">${spr(ICON[tier.i])}${tier.n.toUpperCase()}</div>`:`<div class="stamp" style="--c:#59648a;color:#e8ecf7">${spr(ICON.miss)}${timedOut?'OUT OF TIME':'PASSED'}</div>`}<p class="gain">+<span id="ct">${j?0:0}</span><small>pts · ${G.score} total</small></p></div>
+  <p class="ansbig" style="--c:${tier?tier.c:'var(--ink)'}">${j?esc(cap(j.a.name)):'No answer'}</p>
+  ${j?`<p class="why">${tier.d}</p>${liveNote(p,j.a)}`:''}
+  ${tries.length?`<p class="tried">Bounced out: ${tries.map(esc).join(', ')}</p>`:''}
+  <div class="sbtns"><button class="btn" id="nx">${last?'EMPTY THE BAG':'NEXT PROMPT'}</button><button class="btn alt" id="all">SEE EVERY ANSWER (${p.a.length})</button></div>
+  <div class="sall" id="sall"><div class="alist">${groups.map(listHtml).join('')}</div></div>
+ </div></div>`;
+ const dive=stage.querySelector('#dive'),note=stage.querySelector('#note'),ly=stage.querySelector('#ly'),layers=[...ly.children],stamp=stage.querySelector('#dstamp'),depthc=stage.querySelector('#depthc'),dm=stage.querySelector('#dm'),skip=stage.querySelector('#skip'),sheet=stage.querySelector('#sheet');
  const go=()=>{G.i++;G.i<G.list.length?ask():end()};
- const showOut=()=>{out.classList.add('show');if(j){const ct=stage.querySelector('#ct');let v=0;const step=()=>{v=Math.min(pts,v+Math.ceil(pts/24));ct.textContent=v;if(v<pts)requestAnimationFrame(step)};reduced?ct.textContent=pts:step()}
-  stage.querySelector('#nx').onclick=go;stage.querySelector('#nx2').onclick=go;stage.querySelector('#nx').focus({preventScroll:true})};
- const scrollTo2=y=>window.scrollTo(0,Math.max(0,y));
+ stage.querySelector('#nx').onclick=go;
+ stage.querySelector('#all').onclick=e=>{sheet.classList.toggle('open');e.target.textContent=sheet.classList.contains('open')?'HIDE ANSWERS':`SEE EVERY ANSWER (${p.a.length})`};
+ const openSheet=()=>{sheet.classList.add('show');skip.remove();if(j){const ct=stage.querySelector('#ct');let v=0;const step=()=>{v=Math.min(pts,v+Math.ceil(pts/24));ct.textContent=v;if(v<pts)requestAnimationFrame(step)};reduced?ct.textContent=pts:step()}stage.querySelector('#nx').focus({preventScroll:true})};
  const absTop=el=>el.getBoundingClientRect().top+window.scrollY;
- if(!j){layers.forEach(l=>l.classList.add('gone'));note.classList.add('bounced');ly.classList.remove('hidden');showOut();return}
- // geometry (relative to the dive section)
- const diveTop=absTop(dive),hitL=layers[j.t-1];
- const startY=stage.querySelector('.mouth').offsetHeight*.25;
- const target=hitL.offsetTop+ly.offsetTop+hitL.offsetHeight*.42-note.offsetHeight/2;
- const dist=target-startY;
- const dur=reduced?1:1300+j.t*800;
- const sprites=[...ly.querySelectorAll('.junk svg')].filter(s=>{const l=s.closest('.dlayer');return layers.indexOf(l)<=j.t-1}).map(s=>({s,y:s.closest('.dlayer').offsetTop+ly.offsetTop+s.offsetTop,done:false}));
- const lines=layers.slice(0,j.t).map(l=>({l,y:l.offsetTop+ly.offsetTop,done:false}));
- const vw=Math.min(window.innerWidth,1400),amp=Math.min(90,vw*.08);
- note.style.transform=`translate(-50%,${startY}px)`;
- scrollTo2(diveTop-80);
- let t0=null;
+ if(!j){layers.forEach(l=>l.classList.add('gone'));note.classList.add('bounced');depthc.remove();ly.classList.remove('hidden');openSheet();return}
+ // ---- timeline ----
+ const diveTop=absTop(dive),hitL=layers[j.t-1],nh=note.offsetHeight;
+ const startY=stage.querySelector('.mouth').offsetHeight*.2;
+ const lineY=k=>layers[k].offsetTop+ly.offsetTop;
+ const target=lineY(j.t-1)+hitL.offsetHeight*.35-nh/2;
+ const finalDepth=pts*10;
+ const segs=[];let cur=startY;
+ segs.push({k:'hold',d:reduced?0:420,y0:cur,y1:cur});
+ for(let k=1;k<j.t;k++){const yh=lineY(k)-nh-8;segs.push({k:'fall',d:Math.min(950,380+(yh-cur)*.45),y0:cur,y1:yh});segs.push({k:'pause',d:340,y0:yh,y1:yh,line:k});cur=yh}
+ segs.push({k:'last',d:Math.min(1100,520+(target-cur)*.5),y0:cur,y1:target});
+ let si=0,segStart=null,skipped=false,done=false;
+ const sprites=[...ly.querySelectorAll('.junk svg')].map(s=>({s,y:s.closest('.dlayer').offsetTop+ly.offsetTop+s.offsetTop,done:false}));
+ const amp=Math.min(80,window.innerWidth*.07);
+ depthc.classList.add('on');
+ const setNote=(x,y,rot)=>{note.style.transform=`translate(calc(-50% + ${x.toFixed(1)}px),${y.toFixed(1)}px) rotate(${rot.toFixed(1)}deg)`;window.scrollTo(0,Math.max(0,diveTop+y-window.innerHeight*.36));dm.textContent=Math.round(Math.max(0,y-startY)/(target-startY||1)*finalDepth).toLocaleString('en-GB');const ny=y+nh/2;for(const sp of sprites)if(!sp.done&&ny>=sp.y&&sp.y<lineY(j.t-1)+hitL.offsetHeight){sp.done=true;sp.s.classList.add('nudge')}};
+ const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,easeIn=t=>t*t,easeOutBack=t=>{const c1=1.4,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)};
  const frame=ts=>{
-  if(t0===null)t0=ts;
-  const el=ts-t0,hold=reduced?0:380;
-  let y,x=0,rot=0;
-  if(el<hold){y=startY-6*Math.sin(el/hold*Math.PI);rot=-8+16*(el/hold)}
-  else{const t=Math.min(1,(el-hold)/dur);const e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;y=startY+dist*e;x=Math.sin(t*Math.PI*5)*amp*(1-t);rot=Math.sin(t*Math.PI*5+.8)*14*(1-t)}
-  note.style.transform=`translate(calc(-50% + ${x.toFixed(1)}px),${y.toFixed(1)}px) rotate(${rot.toFixed(1)}deg)`;
-  scrollTo2(diveTop+y-window.innerHeight*.38);
-  const ny=y+note.offsetHeight/2;
-  for(const sp of sprites)if(!sp.done&&ny>=sp.y){sp.done=true;sp.s.classList.add('nudge')}
-  for(const ln of lines)if(!ln.done&&ny>=ln.y){ln.done=true;ln.l.classList.add('pass');setTimeout(()=>ln.l.classList.remove('pass'),350)}
-  if(el<hold+dur)requestAnimationFrame(frame);else land(y);
+  if(done)return;if(skipped){land();return}
+  if(segStart===null){segStart=ts;if(segs[si].k==='hold')SFX.drop()}
+  const sg=segs[si],t=sg.d?Math.min(1,(ts-segStart)/sg.d):1;
+  if(sg.k==='hold')setNote(0,sg.y0-8*Math.sin(t*Math.PI),-8+16*t);
+  else if(sg.k==='fall'){const e=si===1?ease(t):easeIn(t)*.35+ease(t)*.65;setNote(Math.sin(t*Math.PI*2)*amp*.6,sg.y0+(sg.y1-sg.y0)*e,Math.sin(t*Math.PI*2+.6)*10)}
+  else if(sg.k==='pause'){setNote(Math.sin(t*Math.PI*10)*3*(1-t*.3),sg.y0+Math.sin(t*Math.PI)*-4,Math.sin(t*Math.PI*8)*2.5);if(!sg.w){sg.w=1;SFX.wobble()}}
+  else{const e=easeOutBack(t);setNote(Math.sin(t*Math.PI*2)*amp*(1-t),sg.y0+(sg.y1-sg.y0)*Math.min(e,1.04),Math.sin(t*Math.PI*2+.6)*12*(1-t))}
+  if(t>=1){if(sg.k==='pause'){const l=layers[sg.line];l.classList.add('crack');setTimeout(()=>l.classList.remove('crack'),420);burst(dive,dive.clientWidth/2,lineY(sg.line),TIERS[sg.line].c);SFX.crack()}
+   si++;segStart=null;if(si>=segs.length){land();return}}
+  requestAnimationFrame(frame);
  };
- const land=y=>{
-  note.style.transform=`translate(-50%,${y.toFixed(1)}px)`;
+ const land=()=>{
+  if(done)return;done=true;
+  note.style.transform=`translate(-50%,${target.toFixed(1)}px)`;dm.textContent=finalDepth.toLocaleString('en-GB');
+  window.scrollTo(0,Math.max(0,diveTop+target-window.innerHeight*.3));
   document.body.classList.add('quake');setTimeout(()=>document.body.classList.remove('quake'),450);
-  note.classList.add('landed');hitL.classList.add('hit');
-  stamp.style.top=(y+note.offsetHeight+16)+'px';stamp.classList.add('show');
-  layers.forEach((l,k)=>setTimeout(()=>l.querySelector('.dlab').style.opacity='1',reduced?0:90*Math.abs(k-(j.t-1))));
+  note.classList.add('landed');hitL.classList.add('hit');SFX.land(j.t);
+  burst(dive,dive.clientWidth/2,target+nh/2,tier.c);
+  stamp.style.top=(target+nh+16)+'px';stamp.classList.add('show');
+  const ds=deepShare(p,j.t);stage.querySelector('#dsh').textContent=ds!=null?`Only ${ds}% of answers get this deep`:'';
+  depthc.classList.add('landed');depthc.style.setProperty('--c',tier.c);
   {const sc=stage.querySelector('#shud .score');if(sc)sc.textContent=G.score+' PTS'}
-  setTimeout(()=>{ly.classList.remove('hidden');layers.forEach((l,k)=>{if(k>j.t-1)l.classList.add('gone')});showOut();
-   const r=hitL.getBoundingClientRect();window.scrollTo({top:window.scrollY+r.top-90,behavior:reduced?'auto':'smooth'})},reduced?0:900);
+  layers.forEach((l,k)=>setTimeout(()=>{l.querySelector('.dlab').style.opacity='1'},reduced?0:90*Math.abs(k-(j.t-1))));
+  setTimeout(()=>{ly.classList.remove('hidden');layers.forEach((l,k)=>{if(k>j.t-1)l.classList.add('gone')});openSheet()},reduced?0:850);
  };
+ skip.onclick=()=>{skipped=true};dive.onclick=()=>{if(!done)skipped=true};
+ setNote(0,startY,-8);window.scrollTo(0,Math.max(0,diveTop-90));
  requestAnimationFrame(frame);
+}
+// ---------- bell curve ----------
+async function drawCurve(subject,mode,score){
+ const el=document.getElementById('curve');if(!el)return;
+ let hist=null,isDaily=mode==='daily';
+ if(sb){try{const {data,error}=await sb.rpc('run_histogram',{p_subject:subject,p_day:isDaily?today():null});if(!error&&data){const h=new Array(71).fill(0);data.forEach(r=>{h[Math.min(70,Math.max(0,r.bucket|0))]+=Number(r.n)||0});hist=h}}catch(e){}}
+ const total=hist?hist.reduce((a,b)=>a+b,0):0,real=total>=10;
+ let h=new Array(71).fill(0);
+ if(real)h=hist;else{const mu=230,sd=105;for(let b=0;b<=70;b++){const x=b*10+5;h[b]=Math.exp(-((x-mu)**2)/(2*sd*sd))}}
+ // smooth
+ const sm=h.map((_,i)=>{let s=0,w=0;for(let k=-8;k<=8;k++){const v=h[i+k];if(v==null)continue;const g=Math.exp(-(k*k)/(2*3.2*3.2));s+=v*g;w+=g}return s/w});
+ const max=Math.max(...sm)||1,W=720,H=250,top=24,base=200,X=v=>20+v/700*680,Y=v=>base-(v/max)*(base-top);
+ let path=`M${X(0)},${base}`;sm.forEach((v,i)=>{path+=` L${X(i*10+5).toFixed(1)},${Y(v).toFixed(1)}`});path+=` L${X(700)},${base} Z`;
+ // percentile
+ let below=0,all=0;h.forEach((v,i)=>{all+=v;const lo=i*10,hi=lo+10;if(hi<=score)below+=v;else if(lo<score)below+=v*(score-lo)/10});
+ const pct=all?Math.round(below/all*100):0;
+ const lines=RANKS.slice(1).map(r=>`<line x1="${X(r[0])}" x2="${X(r[0])}" y1="${top-6}" y2="${base}" class="cl"/>`).join('');
+ const labels=RANKS.map((r,k)=>{const a=r[0],b=k<RANKS.length-1?RANKS[k+1][0]:700,me=score>=a&&score<b+(k===RANKS.length-1?1:0);return `<text x="${X((a+b)/2)}" y="${base+18}" class="ct${me?' me':''}">G${r[2]}</text>`}).join('');
+ const yx=X(Math.min(700,score));
+ el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Score curve: you scored ${score}, better than ${pct} percent of players">
+  <defs><linearGradient id="cg" x1="0" x2="1"><stop offset="0" stop-color="#ff4f7a" stop-opacity=".55"/><stop offset="1" stop-color="#5fd8ff" stop-opacity=".55"/></linearGradient></defs>
+  ${lines}<path d="${path}" fill="url(#cg)" stroke="#5fd8ff" stroke-width="2"/>
+  <line x1="20" x2="700" y1="${base}" y2="${base}" stroke="#2c3556" stroke-width="2"/>
+  ${labels}
+  <line x1="${yx}" x2="${yx}" y1="${top-10}" y2="${base}" stroke="#ffd36b" stroke-width="3"/>
+  <rect x="${Math.min(W-96,Math.max(0,yx-46))}" y="0" width="92" height="22" fill="#ffd36b"/><text x="${Math.min(W-50,Math.max(46,yx))}" y="15" class="cy">YOU ${score}</text>
+ </svg>
+ <p class="cpct">Better than <b>${pct}%</b> of ${isDaily?'today’s daily players':'recent packs'}${real?` · ${total} packs`:''}</p>
+ ${real?'':'<p class="note-s">Estimated curve. It switches to real scores once 10 or more packs have been played.</p>'}`;
 }
 function end(){
  view='end';
  const s=G.score,r=rankOf(s),st=store.subj[G.subject];
  st.dives++;st.best=Math.max(st.best,s);
  if(G.mode==='daily'&&st.daily[today()]==null)st.daily[today()]=s;
- store.hist.unshift({t:Date.now(),d:today(),s:G.subject,m:G.mode,sc:s});store.hist=store.hist.slice(0,60);
+ store.hist.unshift({t:Date.now(),d:today(),s:G.subject,m:G.mode,sc:s});runLog.push({subject:G.subject,mode:G.mode,score:s,day:today()});store.hist=store.hist.slice(0,60);
  saveLocal();pushAll();
  const sj=SUBJ[G.subject];
  const label=G.mode==='daily'?`Daily pack #${dayNo()}`:G.mode==='topic'?`${sj.packs[G.topic]} pack`:'Unlimited pack';
  const share=`GCSELLION · ${sj.n} · ${label}\n${G.res.map(x=>x.j?TIERS[x.j.t].e:'⬛').join('')}\n${s} pts · ${r[1]} (Grade ${r[2]})`;
  const n=G.res.length;
  stage.innerHTML=`<div class="hud"><span class="lbl pk">${esc(label)} complete</span><span class="lbl">${ACC.state==='in'?'Saved to your locker':'Saved on this device'}</span></div>
- <div class="big">${s}</div><p class="rank">${r[1].toUpperCase()} · GRADE ${r[2]}</p>
+ <div class="big">${s}</div><p class="depthbig">−${(G.depth||0).toLocaleString('en-GB')} m</p><p class="rank">${r[1].toUpperCase()} · GRADE ${r[2]}</p>
+ <div class="rule"><span class="lbl">How you compare</span></div><div class="curve" id="curve"><p class="note-s">Loading the curve…</p></div>
  <div class="rule"><span class="lbl">Bag log</span><span class="lbl" style="color:var(--dim)">deeper = rarer</span></div>
  <div class="log">${TIERS.slice(1).map((t,k)=>`<div class="gl" style="top:${(k+.5)/6*100}%"><span>${t.n}</span></div>`).join('')}
  ${G.res.map((x,k)=>{const left=(k+.5)/n*100,top=x.j?(x.j.t-.5)/6*100:3,c=x.j?TIERS[x.j.t].c:'#59648a';return `<div class="col" style="left:${left}%;height:${top}%;--c:${c}"><i style="height:100%"></i>${spr(ICON[x.j?TIERS[x.j.t].i:'miss'])}</div><span class="x" style="left:${left}%">${k+1}</span>`}).join('')}</div>
@@ -1451,6 +1572,7 @@ function end(){
  <div style="margin-top:26px;display:flex;flex-wrap:wrap;gap:12px"><button class="btn" id="cp">COPY RESULT</button><button class="btn alt" id="again">PLAY AGAIN</button><button class="btn alt" id="lk">LOCKER</button><button class="btn alt" id="hm">HOME</button></div><div id="sb"></div>`;
  stage.querySelector('#cp').onclick=async e=>{try{await navigator.clipboard.writeText(share);e.target.textContent='COPIED'}catch(err){stage.querySelector('#sb').innerHTML=`<textarea class="share" readonly>${esc(share)}</textarea>`;stage.querySelector('textarea').select()}};
  const mode=G.mode,topic=G.topic;
+ drawCurve(G.subject,G.mode,s);
  stage.querySelector('#again').onclick=()=>mode==='topic'?start('topic',topicPick(topic),topic):start('unlimited',pickSeven(pool()));
  stage.querySelector('#hm').onclick=home;stage.querySelector('#lk').onclick=locker;
  G=null;scrollTo(0,0);
