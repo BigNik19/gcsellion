@@ -364,6 +364,44 @@ tr.me td{color:var(--gold)}
 .mpc .mb .btn{min-height:48px}
 .mpc .tapo{margin-top:6px;font:11px var(--px);letter-spacing:.12em;color:#2a2238;animation:blink 1.2s steps(2) infinite}
 @keyframes blink{50%{opacity:.35}}
+.gnudge{display:flex;gap:14px;align-items:center;width:100%;margin:18px 0 4px;padding:12px 16px;border:0;background:#0b0f1d;box-shadow:0 0 0 2px var(--gold);color:var(--muted);font:20px/1.25 var(--vt);text-align:left;cursor:pointer}
+.gnudge:hover{background:#141a30}.gnudge svg{width:34px;height:34px;flex:none}.gnudge b{display:block;font:11px var(--px);letter-spacing:.1em;color:var(--gold);margin-bottom:4px}
+.modes .clmode{grid-column:1/-1;--c:var(--gold)}.clmode b{color:var(--gold)}.newt{font-style:normal;font-size:9px;background:var(--pink);color:#10131f;padding:3px 6px;margin-left:8px;vertical-align:2px}
+.clhero{align-items:center}.clhero>svg{width:72px;height:72px;flex:none}
+.clname{margin-top:22px;max-width:420px}.clname input,.cljoin input{width:100%;font:28px var(--vt);background:#0b0f1d;color:var(--ink);border:0;box-shadow:0 0 0 2px var(--line);padding:10px 14px;margin-top:8px;user-select:text;-webkit-user-select:text}
+.clname input:focus,.cljoin input:focus{outline:none;box-shadow:0 0 0 2px var(--cyan)}
+.clgo{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:8px}
+.cljoin{display:flex;gap:10px;margin-top:16px}.cljoin input{margin:0;text-transform:uppercase;letter-spacing:.3em;font:20px var(--px);width:auto;flex:1;min-width:0;text-align:center}
+.clwait{min-height:50vh;display:grid;place-content:center;text-align:center;gap:16px}
+.clcode{text-align:center}.clcode .code{display:flex;justify-content:center;gap:10px;margin-top:12px}
+.clcode .code b{font:clamp(34px,9vw,56px)/1 var(--px);color:var(--gold);background:#0b0f1d;box-shadow:0 0 0 2px var(--line);padding:14px 12px;min-width:1.4em}
+.clbtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px;align-items:center}
+.clpl{display:flex;flex-wrap:wrap;gap:10px}
+.clpp{display:flex;align-items:center;gap:10px;background:#0b0f1d;box-shadow:0 0 0 2px var(--line);padding:8px 12px 8px 8px;font-size:22px}
+.clpp i{font:12px var(--px);font-style:normal;width:30px;height:30px;display:grid;place-items:center;background:var(--cyan);color:#10131f}
+.clpp em{font:9px var(--px);font-style:normal;color:var(--gold);letter-spacing:.08em}.clpp em.yt{color:var(--cyan);background:none}.clpp.me{box-shadow:0 0 0 2px var(--cyan)}
+.clset{display:grid;gap:14px}.srow2{display:grid;gap:8px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.sg{border:0;cursor:pointer;min-width:56px;min-height:46px;padding:8px 14px;font:20px var(--vt);color:var(--muted);background:#0b0f1d;box-shadow:0 0 0 2px var(--line)}
+.sg.on{color:#10131f;background:var(--cyan);box-shadow:0 0 0 2px var(--cyan)}
+.srow2.tops .chip{font-size:19px;min-height:40px;padding:8px 12px;color:var(--dim)}.srow2.tops .chip.on{color:var(--ink);box-shadow:0 0 0 2px var(--cyan)}
+.clstart{margin-top:6px;width:100%}.clstart:disabled{opacity:.45;cursor:not-allowed}
+.clsum{font-size:22px}
+.clstrip{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 2px}
+.clc{position:relative;display:flex;align-items:center;gap:8px;padding:6px 10px;background:#0b0f1d;box-shadow:0 0 0 2px var(--c);font-size:19px;transition:box-shadow .3s,background .3s}
+.clc .nm{max-width:9em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.clc .sc{color:var(--gold);font-size:18px}
+.clc.me{background:#141a30}.clc.out{opacity:.45}.clc.done{box-shadow:0 0 0 2px var(--cyan)}
+.clc .tick{position:absolute;top:-9px;right:-7px;font:10px var(--px);background:var(--cyan);color:#10131f;padding:3px 4px}
+.hearts{color:var(--pink);letter-spacing:1px;font-size:16px}.hearts i{font-style:normal;color:var(--line)}
+.ans.locked{flex-wrap:wrap}.ans.locked input{flex-basis:100%;background:var(--c);color:#10131f;box-shadow:0 0 0 3px var(--c),0 0 22px var(--c);animation:lockin .35s cubic-bezier(.2,1.6,.4,1);transition:background .25s}
+@keyframes lockin{0%{transform:scale(.97)}60%{transform:scale(1.03)}100%{transform:none}}
+.lockt{flex-basis:100%;justify-content:center;display:flex;align-items:center;gap:8px;font:11px var(--px);color:var(--c);letter-spacing:.08em;padding:0 6px;white-space:nowrap}.lockt svg{width:26px;height:26px}
+.clrows{display:grid;gap:8px}
+.clr{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0b0f1d;box-shadow:inset 4px 0 0 var(--c),0 0 0 2px var(--line);font-size:21px}
+.clr.me{background:#141a30}.clr .nm{flex:0 1 9em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+.clr .an{flex:1;display:flex;align-items:center;gap:8px;min-width:0;color:var(--c)}.clr .an svg{width:24px;height:24px;flex:none}
+.clr .pt{font:11px var(--px);color:var(--c);white-space:nowrap}.clr .pos{font:14px var(--px);color:var(--c);width:1.6em}
+.clwin{text-align:center;margin-top:20px}.fin .clr .nm{flex:1 1 auto}.fin .clr .an{flex:none;white-space:nowrap;font-size:18px}
 @keyframes quake{20%{transform:translate(0,6px)}40%{transform:translate(-4px,-3px)}60%{transform:translate(3px,2px)}80%{transform:translate(-1px,-1px)}}
 .out .card{margin-top:18px}
 .hint2{color:var(--muted);font-size:24px;margin:-12px 0 20px}
@@ -2306,17 +2344,24 @@ function mergeInto(remote){
   a.dives=Math.max(a.dives,b.dives||0);a.best=Math.max(a.best,b.best||0);a.g10=Math.max(a.g10,b.g10||0);
   for(const d in b.daily)if(a.daily[d]==null)a.daily[d]=b.daily[d]}
  {const a=store.topAns,b=remote.topAns;if(b&&(!a||b.t>a.t||(b.t===a.t&&b.p>a.p)))store.topAns=b}
- store.stkDay=store.stkDay||{};for(const d in remote.stkDay||{})if(!store.stkDay[d])store.stkDay[d]=remote.stkDay[d];
+ store.stkDay=store.stkDay||{};for(const d in remote.stkDay||{}){const r=remote.stkDay[d],l=store.stkDay[d];
+  if(l!==undefined&&l!==r&&d.split('~').length<3&&!store.stkDay[d+'~'+l])store.stkDay[d+'~'+l]=l;store.stkDay[d]=r}
  store.stkSeen=store.stkSeen||{};Object.assign(store.stkSeen,remote.stkSeen||{});
  const seen=new Set(store.hist.map(h=>h.t));for(const h of remote.hist||[])if(!seen.has(h.t))store.hist.push(h);
  store.hist.sort((x,y)=>y.t-x.t);store.hist=store.hist.slice(0,60);
 }
 const scoreRow=()=>{const best={},daily={};let dives=0,g10=0;for(const k in SUBJ){const s=store.subj[k];best[k]=s.best;dives+=s.dives;g10+=s.g10;if(s.daily[today()]!=null)daily[k]=s.daily[today()]}return{user_id:ACC.id,best,daily,day:today(),dives,g10,stats:publicStats(),updated_at:new Date().toISOString()}};
+async function syncDown(){
+ if(ACC.state!=='in'||!sb)return false;
+ try{const {data,error}=await sb.from('progress').select('data').eq('user_id',ACC.id).maybeSingle();if(error)return false;if(data&&data.data){mergeInto(data.data);saveLocal()}return true}catch(e){return false}
+}
 function pushAll(){
  if(ACC.state!=='in')return writing;
- const body=JSON.parse(JSON.stringify(store)),row=scoreRow(),log=answerLog.splice(0),runs=runLog.splice(0);
+ const log=answerLog.splice(0),runs=runLog.splice(0);
  writing=writing.then(async()=>{
   try{
+   await syncDown();
+   const body=JSON.parse(JSON.stringify(store)),row=scoreRow();
    let r=await sb.from('progress').upsert({user_id:ACC.id,data:body,updated_at:new Date().toISOString()});if(r.error)throw r.error;
    r=await sb.from('scores').upsert(row);if(r.error&&/stats/.test(r.error.message||'')){delete row.stats;r=await sb.from('scores').upsert(row)}if(r.error)throw r.error;
    if(log.length){r=await sb.from('answers').upsert(log.map(x=>({...x,user_id:ACC.id})),{onConflict:'user_id,subject,prompt,answer',ignoreDuplicates:true});if(r.error)console.warn(r.error)}
@@ -2350,16 +2395,16 @@ async function initAccount(){
  try{const {data}=await sb.auth.getSession();clearTimeout(slow);if(data&&data.session)await onSignedIn(data.session.user);else{ACC.state='out';navRender();rerender()}}
  catch(e){clearTimeout(slow);ACC.state='out';navRender();rerender()}
 }
-const rerender=()=>view==='locker'?locker():view==='home'?home():view==='stickers'?stickers(true):view==='profile'?profile(profUid):null;
+const rerender=()=>view==='class'?(CL?null:classroom()):view==='locker'?locker():view==='home'?home():view==='stickers'?stickers(true):view==='profile'?profile(profUid):null;
 function navRender(){
  const ini=ACC.state==='in'?esc((ACC.name||'?').trim().charAt(0).toUpperCase()):'?';
  const sk=streakInfo();
  document.getElementById('nav').innerHTML=`<button class="stk ${sk.todayDone?'on':''}" id="stk" title="${sk.cur} day streak · sticker book" aria-label="${sk.cur} day streak, open sticker book">${spr(STICK.apple)}${sk.cur}</button>`+Object.entries(SUBJ).map(([k,s])=>`<button class="tag ${k===store.subject?'on':''}" data-s="${k}" aria-pressed="${k===store.subject}">${s.n.toUpperCase()}</button>`).join('')+
  `<button class="tag" id="sndBtn" aria-pressed="${sfxOn()}">SOUND ${sfxOn()?'ON':'OFF'}</button>`+`<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='in'?'LOCKER':ACC.state==='checking'?'…':'LOG IN'}${ACC.state==='in'&&ACC.reqs?`<b class="rdot" title="${ACC.reqs} friend request${ACC.reqs>1?'s':''}">${ACC.reqs}</b>`:''}</button>`;
- document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(G&&!confirmLeave())return;store.subject=b.dataset.s;saveLocal();navRender();view==='locker'?locker():home()});
+ document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(G&&!confirmLeave())return;if(!clConfirmLeave())return;store.subject=b.dataset.s;saveLocal();navRender();view==='locker'?locker():home()});
  document.getElementById('sndBtn').onclick=()=>{store.sound=!sfxOn();saveLocal();navRender();if(sfxOn()){ensureAudio();tone(660,.12,'square',.05)}};
- document.getElementById('stk').onclick=()=>stickers();
- document.getElementById('lockBtn').onclick=()=>{if(G&&!confirmLeave())return;locker()};
+ document.getElementById('stk').onclick=()=>{if(!clConfirmLeave())return;stickers()};
+ document.getElementById('lockBtn').onclick=()=>{if(G&&!confirmLeave())return;if(!clConfirmLeave())return;locker()};
 }
 const confirmLeave=()=>{clearInterval(timer);G=null;return true};
 // ---------- streaks (one sticker for the first pack you finish each day, any mode) ----------
@@ -2450,7 +2495,8 @@ function rollSticker(minR=0,r=Math.random){
  const list=fresh.length&&r()<.8?fresh:all;return list[Math.floor(r()*list.length)].id;
 }
 // days played before stickers existed get one too (same one on every device)
-for(const d of playedDays())if(!store.stkDay[d])store.stkDay[d]=rollSticker(0,rng('stk'+d));
+// fill in stickers for days played before stickers existed (only once we know the account's saved data, so devices agree)
+const backfillStk=()=>{for(const d of playedDays())if(!store.stkDay[d])store.stkDay[d]=rollSticker(0,rng('stk'+d))};
 const stkSvg=(s,extra='')=>spr(s.m,'',extra);
 function awardSticker(){
  const t=today();if(store.stkDay[t])return null;
@@ -2466,6 +2512,8 @@ let popQ=[];
 const popDone=()=>{const x=popQ.shift();if(x){store.stkSeen[x.k]=1;saveLocal();pushAll()}};
 const whyToday=(streak,ms)=>`For finishing your first pack today${streak>1?` · ${streak} day streak`:''}${ms?' · 7-day bonus':''}`;
 function pendingSticker(){
+ if(ACC.state==='checking')return [];
+ backfillStk();
  const t=today(),days=[...playedDays()].filter(d=>d<t),out=[],inQ=k=>popQ.some(x=>x.k===k);
  if(!store.stkDay[GIFT]&&days.length)store.stkDay[GIFT]=rollSticker(2);
  for(const k of [GIFT,t]){const id=store.stkDay[k];if(!id||!STKID[id]||store.stkSeen[k]||inQ(k))continue;
@@ -2525,10 +2573,274 @@ function showPack(info,onDone){
  z.querySelector('#mbook').onclick=()=>close(true);z.querySelector('#mok').onclick=()=>close(false);
  z.onclick=e=>{if(e.target===z&&opened)close(false)};
 }
+// ---------- CLASSROOM: live rooms with a 4-character code (Supabase Realtime, no database tables needed) ----------
+// The host's device runs the game: it picks the questions, collects answers and keeps lives and scores.
+const CL_ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const CL_OPT={lives:[1,2,3,5],max:[2,4,8,16,30],time:[10,15,20,30],qs:[10,20,0]};
+let CL=null;
+const clTab=(()=>{try{let k=sessionStorage.getItem('gcs-tab');if(!k){k=Math.random().toString(36).slice(2,10);sessionStorage.setItem('gcs-tab',k)}return k}catch(e){return Math.random().toString(36).slice(2,10)}})();
+const clName=()=>ACC.state==='in'?ACC.name:(store.clName||'');
+const clCode=()=>Array.from({length:4},()=>CL_ABC[Math.floor(Math.random()*CL_ABC.length)]).join('');
+const clDefSet=()=>({lives:3,max:8,time:15,qs:10,subs:[store.subject],tops:{},play:true});
+const clTops=(set,s)=>set.tops&&set.tops[s]?set.tops[s]:Object.keys(SUBJ[s].packs);
+function clPool(set){const out=[];for(const s of set.subs){const on=new Set(clTops(set,s));for(const p of SUBJ[s].P)if(on.has(p.t))out.push({s,id:p.id})}return out}
+const clPrompt=q=>SUBJ[q.s].P[q.id];
+const clHearts=(n,max)=>`<span class="hearts">${'♥'.repeat(Math.max(0,n))}<i>${'♥'.repeat(Math.max(0,max-n))}</i></span>`;
+const clSend=(event,payload)=>{if(CL&&CL.ch)try{CL.ch.send({type:'broadcast',event,payload})}catch(e){}};
+// important messages go twice, in case one gets lost on a bad connection (repeats are ignored)
+const clSend2=(event,payload)=>{clSend(event,payload);const c=CL;setTimeout(()=>{if(CL===c)clSend(event,payload)},650)};
+const clMeta=()=>({n:clName(),h:!!(CL&&CL.host),at:CL?CL.at:Date.now(),u:ACC.state==='in'?ACC.id:null,...(CL&&CL.host?{set:CL.set,ph:CL.phase}:{})});
+const clTrack=()=>{if(CL&&CL.ch&&CL.ready)CL.ch.track(clMeta()).catch(()=>{})};
+const clPlayers=()=>Object.entries((CL&&CL.ps)||{}).map(([k,m])=>({k,...m})).sort((a,b)=>a.at-b.at||(a.k<b.k?-1:1));
+const clClear=()=>{if(!CL)return;clearInterval(CL.tm);clearInterval(CL.rs)};
+const clHostClear=()=>{if(!CL)return;clearTimeout(CL.to);clearTimeout(CL.to2)};
+function clLeave(){
+ if(!CL)return;const c=CL;clClear();clHostClear();CL=null;
+ try{c.ch.untrack()}catch(e){}try{sb.removeChannel(c.ch)}catch(e){}
+}
+const clConfirmLeave=()=>{if(!CL)return true;if(CL.phase==='play'&&!confirm('Leave the Classroom game?'))return false;clLeave();return true};
+
+// ---------- entry screen ----------
+function classroom(pre,msg){
+ clLeave();view='class';clearInterval(timer);G=null;
+ if(!sb){stage.innerHTML=`<section class="card px" style="--c:var(--line)"><h2>CLASSROOM</h2><p>Classroom needs the online server, which isn’t set up here.</p><button class="btn alt" id="hm" style="margin-top:16px">HOME</button></section>`;stage.querySelector('#hm').onclick=home;return}
+ const guest=ACC.state!=='in';
+ stage.innerHTML=`<div class="hud"><span class="lbl pk">Classroom</span><button class="link" id="hm">← Back to the pack</button></div>
+ <section class="hero clhero">${spr(ICON.cap)}<div><h1>CLASSROOM</h1><p class="sub">Live rooms for friends or a whole class. Everyone gets the same question at the same time, and rarer answers score more. Miss one and you lose a life.</p></div></section>
+ ${msg?`<p class="bad" style="animation:none">${esc(msg)}</p>`:''}
+ ${guest?`<div class="clname"><label class="lbl" for="cln">Your name</label><input id="cln" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="name" value="${esc(store.clName||'')}"><p class="why" id="clnerr">Logged-in players use their username.</p></div>`:`<p class="why">Playing as <b style="color:var(--ink)">${esc(ACC.name)}</b>.</p>`}
+ <div class="clgo">
+  <section class="card px" style="--c:var(--gold)"><p class="lbl" style="color:var(--gold)">Host</p><p>Make a room, pick the rules, then share the code.</p><button class="btn gold" id="mk" style="margin-top:16px">CREATE A ROOM</button></section>
+  <section class="card px" style="--c:var(--cyan)"><p class="lbl" style="color:var(--cyan)">Join</p><p>Got a code? Type it in.</p>
+   <form class="cljoin" id="jf" autocomplete="off"><input id="jc" maxlength="4" autocapitalize="characters" spellcheck="false" placeholder="CODE" value="${esc(pre||'')}" aria-label="Room code"><button class="btn">JOIN</button></form></section>
+ </div>`;
+ stage.querySelector('#hm').onclick=home;
+ const nameOk=()=>{if(!guest)return true;const el=stage.querySelector('#cln'),v=el.value.trim(),pr=v?usernameProblem(v).replace('Usernames','Names').replace('username','name'):'Pick a name first.';
+  const er=stage.querySelector('#clnerr');if(pr){er.textContent=pr;er.className='bad';er.style.animation='none';el.focus();return false}store.clName=v;saveLocal();return true};
+ const jc=stage.querySelector('#jc');jc.oninput=()=>{jc.value=jc.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,4)};
+ stage.querySelector('#mk').onclick=()=>{if(nameOk())clCreate()};
+ stage.querySelector('#jf').onsubmit=e=>{e.preventDefault();const c=jc.value.trim();if(c.length!==4){jc.focus();return}if(nameOk())clJoin(c)};
+ scrollTo(0,0);
+}
+function clBusy(t){stage.innerHTML=`<div class="clwait"><p class="lbl">${esc(t)}</p></div>`}
+
+// ---------- connecting ----------
+function clConnect(code,host){
+ return new Promise((res,rej)=>{
+  CL={code,host,at:Date.now(),ps:{},phase:'lobby',set:host?clDefSet():null,ready:false,sawHost:false,game:null,round:null};
+  const me=CL;
+  const ch=sb.channel('gcsellion-room-'+code,{config:{broadcast:{self:true},presence:{key:clTab}}});me.ch=ch;
+  ch.on('presence',{event:'sync'},()=>{if(CL!==me)return;const st=ch.presenceState(),ps={};for(const k in st){const m=st[k]&&st[k][st[k].length-1];if(m)ps[k]=m}me.ps=ps;clOnPresence()});
+  for(const ev of ['start','q','ans','got','res','end','lobby'])ch.on('broadcast',{event:ev},({payload})=>{if(CL===me)clOn(ev,payload||{})});
+  const t=setTimeout(()=>rej(new Error('timeout')),9000);
+  ch.subscribe(async st=>{if(st==='SUBSCRIBED'){clearTimeout(t);me.ready=true;try{await ch.track(clMeta())}catch(e){}res()}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'){clearTimeout(t);rej(new Error(st))}});
+ });
+}
+async function clCreate(){
+ clBusy('Making a room…');
+ for(let tries=0;tries<4;tries++){
+  const code=clCode();
+  try{await clConnect(code,true)}catch(e){clLeave();classroom('', 'Couldn’t reach the Classroom server. Check your connection and try again.');return}
+  await new Promise(r=>setTimeout(r,700));
+  if(!CL)return;
+  if(clPlayers().some(p=>p.h&&p.k!==clTab)){clLeave();continue}
+  SFX_cl.join();clRender();return;
+ }
+ classroom('','Couldn’t make a room just now. Try again.');
+}
+async function clJoin(code){
+ clBusy('Joining '+code+'…');
+ try{await clConnect(code,false)}catch(e){clLeave();classroom(code,'Couldn’t reach the Classroom server. Check your connection and try again.');return}
+ const me=CL;
+ setTimeout(()=>{if(CL===me&&!me.sawHost){clLeave();classroom(code,`There’s no room with the code ${code}. Check it and try again.`)}},3500);
+}
+function clOnPresence(){
+ const ps=clPlayers(),hostP=ps.find(p=>p.h);
+ if(!CL.host){
+  if(hostP){
+   if(!CL.sawHost){
+    CL.sawHost=true;
+    if(hostP.ph==='play'){const c=CL.code;clLeave();classroom(c,'That room is already in the middle of a game. Wait for it to finish, then join again.');return}
+    SFX_cl.join();
+   }
+   CL.set=hostP.set||CL.set;
+   // first come, first served: if the room is over its limit, the latest joiners leave
+   if(CL.phase==='lobby'&&CL.set){const idx=ps.findIndex(p=>p.k===clTab);if(idx>=CL.set.max+(CL.set.play?0:1)){const c=CL.code;clLeave();classroom(c,'That room is full.');return}}
+  }else if(CL.sawHost){clLeave();classroom('','The host left, so the room closed.');return}
+ }else if(CL.game&&CL.phase==='play'){
+  // players who drop out mid-game are out
+  const here=new Set(ps.map(p=>p.k));let ch=false;
+  for(const k of CL.game.order)if(!here.has(k)&&CL.game.lives[k]>0){CL.game.lives[k]=0;CL.game.outAt[k]=CL.game.r;CL.game.left[k]=1;ch=true}
+  if(ch)clHostCheckRound();
+ }
+ if(CL&&CL.phase==='lobby')clRender();
+ else if(CL&&CL.phase==='play')clStrip();
+}
+
+// ---------- lobby ----------
+function clSetText(set){
+ if(!set)return '';
+ const subs=set.subs.map(s=>{const all=Object.keys(SUBJ[s].packs).length,n=clTops(set,s).length;return SUBJ[s].n+(n<all?` (${n} topic${n>1?'s':''})`:'')}).join(', ');
+ return `${set.lives} ${set.lives>1?'lives':'life'} · ${set.time}s per question · ${set.qs?set.qs+' questions':'until one is left'} · up to ${set.max} players · ${subs}`;
+}
+function clRender(){
+ if(!CL)return;view='class';
+ const ps=clPlayers(),set=CL.set,host=CL.host,me=ps.find(p=>p.k===clTab);
+ const players=ps.filter(p=>!(p.h&&set&&!set.play));
+ const n=players.length,pool=set?clPool(set).length:0,canStart=host&&n>=2&&pool>=3;
+ const seg=(key,vals,lab)=>`<div class="srow2"><span class="lbl">${lab}</span><div class="seg">${vals.map(v=>`<button class="sg ${set[key]===v?'on':''}" data-k="${key}" data-v="${v}">${key==='qs'&&!v?'∞':v}${key==='time'?'s':''}</button>`).join('')}</div></div>`;
+ const keep=document.activeElement&&document.activeElement.dataset?document.activeElement.dataset.k+'|'+document.activeElement.dataset.v:null,y=scrollY;
+ stage.innerHTML=`<div class="hud"><span class="lbl pk">Classroom · ${host?'your room':'lobby'}</span><button class="link" id="lv">Leave room</button></div>
+ <section class="card px clcode" style="--c:var(--gold)"><p class="lbl">Room code</p><div class="code">${CL.code.split('').map(c=>`<b>${c}</b>`).join('')}</div>
+  <p>${host?'Share this code so people can join.':'Waiting for the host to start…'}</p><div class="clbtns"><button class="btn alt" id="cpi">COPY INVITE LINK</button></div></section>
+ <div class="rule"><span class="lbl">Players · ${n}${set?' / '+set.max:''}</span></div>
+ <div class="clpl">${ps.map(p=>`<div class="clpp ${p.k===clTab?'me':''}"><i>${esc((p.n||'?').charAt(0).toUpperCase())}</i><span>${esc(p.n||'Player')}</span>${p.h?`<em>${set&&!set.play?'HOST · WATCHING':'HOST'}</em>`:''}${p.k===clTab?'<em class="yt">YOU</em>':''}</div>`).join('')}</div>
+ <div class="rule"><span class="lbl">Rules</span></div>
+ ${host?`<div class="clset">
+  ${seg('lives',CL_OPT.lives,'Lives')}${seg('time',CL_OPT.time,'Time')}${seg('qs',CL_OPT.qs,'Questions')}${seg('max',CL_OPT.max,'Max players')}
+  <div class="srow2"><span class="lbl">Subjects</span><div class="seg">${Object.entries(SUBJ).map(([k,s])=>`<button class="sg ${set.subs.includes(k)?'on':''}" data-sub="${k}">${s.n}</button>`).join('')}</div></div>
+  ${set.subs.map(s=>{const on=new Set(clTops(set,s));return `<div class="srow2 tops"><span class="lbl">${SUBJ[s].n} topics</span><div class="topics">${Object.entries(SUBJ[s].packs).map(([k,v])=>`<button class="chip ${on.has(k)?'on':''}" data-ts="${s}" data-tk="${k}">${v}</button>`).join('')}</div></div>`}).join('')}
+  <div class="srow2"><span class="lbl">You</span><div class="seg"><button class="sg ${set.play?'on':''}" data-play="1">I’m playing</button><button class="sg ${!set.play?'on':''}" data-play="0">Just hosting</button></div></div>
+ </div>
+ <p class="why">${pool} questions match these rules.${n<2?' You need at least 2 players to start.':''}</p>
+ <button class="btn gold clstart" id="go" ${canStart?'':'disabled'}>START${n>=2?` · ${n} PLAYERS`:''}</button>`
+ :`<p class="why clsum">${esc(clSetText(set))||'Waiting for the host…'}</p>`}`;
+ stage.querySelector('#lv').onclick=()=>{clLeave();classroom()};
+ stage.querySelector('#cpi').onclick=async e=>{const url=location.origin+location.pathname+'?room='+CL.code;try{await navigator.clipboard.writeText(url);e.target.textContent='COPIED'}catch(err){e.target.textContent=url}};
+ if(host){
+  const upd=()=>{ensureAudio();tone(150,.09,'triangle',.08,0,-50);clTrack();clRender()};
+  stage.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{set[b.dataset.k]=Number(b.dataset.v);upd()});
+  stage.querySelectorAll('[data-sub]').forEach(b=>b.onclick=()=>{const k=b.dataset.sub,i=set.subs.indexOf(k);if(i>=0){if(set.subs.length>1)set.subs.splice(i,1)}else{set.subs.push(k);delete set.tops[k]}upd()});
+  stage.querySelectorAll('[data-tk]').forEach(b=>b.onclick=()=>{const s=b.dataset.ts,k=b.dataset.tk,cur=new Set(clTops(set,s));if(cur.has(k)){if(cur.size>1)cur.delete(k)}else cur.add(k);set.tops[s]=[...cur];if(set.tops[s].length===Object.keys(SUBJ[s].packs).length)delete set.tops[s];upd()});
+  stage.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>{set.play=b.dataset.play==='1';upd()});
+  stage.querySelector('#go').onclick=clHostStart;
+ }
+ scrollTo(0,y);
+ if(keep){const el=stage.querySelector(`[data-k="${keep.split('|')[0]}"][data-v="${keep.split('|')[1]}"]`);if(el)el.focus({preventScroll:true})}
+}
+
+// ---------- host: running the game ----------
+function clHostStart(){
+ const set=CL.set,ps=clPlayers().filter(p=>!(p.h&&!set.play));if(ps.length<2)return;
+ const order=ps.slice(0,set.max).map(p=>p.k),names={},lives={},score={},outAt={};
+ for(const p of ps)names[p.k]=p.n||'Player';for(const k of order){lives[k]=set.lives;score[k]=0}
+ const pool=shuffle(clPool(set));
+ CL.game={order,names,lives,score,outAt,left:{},r:0,pool,ans:{},set:JSON.parse(JSON.stringify(set))};
+ CL.phase='play';clTrack();
+ CL.game.gid=Math.random().toString(36).slice(2,8);clSend2('start',{gid:CL.game.gid,order,names,lives,set:CL.game.set});
+ CL.to=setTimeout(clHostNext,3200);
+}
+const clAlive=g=>g.order.filter(k=>g.lives[k]>0);
+function clHostNext(){
+ const g=CL&&CL.game;if(!g)return;
+ g.r++;g.ans={};g.ended=false;
+ const q=g.pool[(g.r-1)%g.pool.length];
+ const msg={r:g.r,s:q.s,id:q.id,dur:g.set.time,total:g.set.qs};
+ clSend('q',msg);clearTimeout(CL.to2);CL.to2=setTimeout(()=>{if(CL&&CL.game===g&&g.r===msg.r&&!g.ended)clSend('q',msg)},700);
+ clearTimeout(CL.to);CL.to=setTimeout(()=>clHostEndRound(msg.r),g.set.time*1000+1200);
+}
+let clGotAt=0,clGotT=null;
+function clHostGot(){const g=CL.game;const send=()=>{clGotAt=Date.now();clGotT=null;if(CL&&CL.game===g)clSend('got',{r:g.r,ks:Object.keys(g.ans)})};
+ if(Date.now()-clGotAt>400)send();else if(!clGotT)clGotT=setTimeout(send,400)}
+function clHostCheckRound(){const g=CL.game;if(!g||g.ended)return;if(clAlive(g).every(k=>g.ans[k])){clearTimeout(CL.to);CL.to=setTimeout(()=>clHostEndRound(g.r),700)}}
+function clHostEndRound(r){
+ const g=CL&&CL.game;if(!g||g.r!==r||g.ended)return;g.ended=true;
+ const res={};
+ for(const k of g.order){if(g.lives[k]<=0&&!g.ans[k]){continue}
+  const a=g.ans[k];if(a){res[k]=a;g.score[k]+=TIERS[a.t].p}else{g.lives[k]--;res[k]={t:0};if(g.lives[k]<=0)g.outAt[k]=r}}
+ const alive=clAlive(g),over=(g.order.length>1&&alive.length<=1)||alive.length===0||(g.set.qs&&r>=g.set.qs);
+ clSend2('res',{r,res,lives:g.lives,score:g.score,over:!!over});
+ clearTimeout(CL.to);
+ CL.to=setTimeout(()=>{if(!CL||CL.game!==g)return;if(over){clSend2('end',{order:g.order,names:g.names,lives:g.lives,score:g.score,outAt:g.outAt,r})}else clHostNext()},over?2600:3600);
+}
+function clHostAgain(){clHostClear();CL.phase='lobby';CL.game=null;clTrack();clSend2('lobby',{});}
+
+// ---------- everyone: incoming events ----------
+function clOn(ev,m){
+ const host=CL.host;
+ if(ev==='start'){if(CL.g&&CL.g.gid===m.gid)return;CL.phase='play';CL.g={gid:m.gid,order:m.order,names:m.names,lives:m.lives,score:Object.fromEntries(m.order.map(k=>[k,0])),set:m.set,got:new Set(),res:null};
+  CL.round=null;clCountdown();return}
+ if(ev==='lobby'){if(CL.phase==='lobby'&&!CL.g)return;if(!host){CL.phase='lobby';CL.g=null;CL.round=null}clClear();clRender();return}
+ if(!CL.g)return;
+ if(ev==='q'){if(CL.round&&CL.round.r>=m.r)return;CL.g.got=new Set();CL.g.res=null;CL.round={r:m.r,q:{s:m.s,id:m.id},dur:m.dur,total:m.total,t0:Date.now(),locked:null,tries:[]};clAsk();return}
+ if(ev==='ans'){if(host&&CL.game&&m.r===CL.game.r&&!CL.game.ended&&CL.game.lives[m.k]>0&&!CL.game.ans[m.k]&&TIERS[m.t]){CL.game.ans[m.k]={t:m.t,a:String(m.a||'').slice(0,60)};clHostGot();clHostCheckRound()}return}
+ if(ev==='got'){if(CL.round&&m.r===CL.round.r){CL.g.got=new Set(m.ks||[]);if(CL.g.got.has(clTab))clearInterval(CL.rs);clStrip()}return}
+ if(ev==='res'){if(!CL.round||m.r!==CL.round.r||CL.g.res)return;clearInterval(CL.rs);clearInterval(CL.tm);Object.assign(CL.g,{lives:m.lives,score:m.score,res:m.res});clReveal(m);return}
+ if(ev==='end'){if(CL.phase==='done')return;CL.phase='done';if(host)clTrack();clEnd(m);return}
+}
+function clCountdown(){
+ clClear();view='class';let n=3;
+ const draw=()=>{stage.innerHTML=`<div class="clwait"><p class="lbl">Get ready · ${esc(clSetText(CL.g.set))}</p><div class="big">${n}</div></div>`;tone(n?440:880,.12,'square',.05)};
+ ensureAudio();draw();CL.tm=setInterval(()=>{n--;if(n<=0){clearInterval(CL.tm);stage.innerHTML='<div class="clwait"><div class="big">GO!</div></div>';tone(880,.15,'square',.05);return}draw()},1000);
+}
+const clIn=()=>CL.g&&CL.g.order.includes(clTab)&&CL.g.lives[clTab]>0;
+function clStripHtml(){
+ const g=CL.g;if(!g)return '';const max=g.set.lives;
+ return g.order.map(k=>{const r=g.res&&g.res[k],out=g.lives[k]<=0,c=r?(r.t?TIERS[r.t].c:'#59648a'):'var(--line)';
+  return `<div class="clc ${k===clTab?'me':''} ${out?'out':''} ${g.got.has(k)&&!r?'done':''}" style="--c:${c}"><span class="nm">${esc(g.names[k]||'Player')}</span>${clHearts(g.lives[k],max)}<span class="sc">${g.score[k]||0}</span>${g.got.has(k)&&!r?'<b class="tick">✓</b>':''}</div>`}).join('');
+}
+function clStrip(){const el=document.getElementById('clstrip');if(el)el.innerHTML=clStripHtml()}
+function clAsk(){
+ clClear();view='class';
+ const R=CL.round,p=clPrompt(R.q),sj=SUBJ[R.q.s],g=CL.g,playing=clIn();
+ stage.innerHTML=`<div class="hud"><span class="lbl pk">Classroom · ${CL.code}</span><span class="lbl">Question ${R.r}${R.total?'/'+R.total:''}</span></div>
+ <div class="timer" id="tm" style="grid-template-columns:repeat(${R.dur},minmax(0,1fr))">${'<i></i>'.repeat(R.dur)}</div>
+ <div class="clstrip" id="clstrip">${clStripHtml()}</div>
+ <section class="qcard px"><p class="spec">${sj.n.toUpperCase()} · ${esc((sj.packs[p.t]||'').toUpperCase())}</p>
+ <h2 class="q" style="font:inherit;font-size:clamp(28px,4.6vw,42px)">${esc(p.q)}</h2>${p.hint?`<p class="hint2">${esc(p.hint)}</p>`:''}
+ ${playing?`<form class="ans" id="f" autocomplete="off"><input id="in" autocapitalize="off" spellcheck="false" placeholder="type an answer…" aria-label="Your answer"><button class="btn" id="db">LOCK IT</button></form>
+ <div class="fb" id="fb"><p class="why">Rarer answers score more. Wrong ones bounce, so keep trying until time runs out.</p></div>`
+ :`<div class="fb"><p class="why">${g.order.includes(clTab)?'You’re out, so you’re watching this one.':'You’re hosting, so you’re watching.'}</p></div>`}</section>
+ <div id="clrev"></div>`;
+ const tm=stage.querySelector('#tm'),segs=[...tm.children];
+ CL.tm=setInterval(()=>{const left=R.dur-(Date.now()-R.t0)/1000;const on=Math.max(0,Math.ceil(left));segs.forEach((s,k)=>s.classList.toggle('off',k>=on));tm.classList.toggle('low',left<5);
+  if(left<=0){clearInterval(CL.tm);const f=stage.querySelector('#f');if(f&&!R.locked){f.querySelector('input').disabled=true;f.querySelector('button').disabled=true;stage.querySelector('#fb').innerHTML='<p class="bad" style="animation:none">TIME’S UP</p>'}}},100);
+ if(!playing)return;
+ const inp=stage.querySelector('#in'),fb=stage.querySelector('#fb');inp.focus({preventScroll:true});
+ const shake=()=>{inp.classList.remove('shake');void inp.offsetWidth;inp.classList.add('shake');inp.focus()};
+ inp.oninput=()=>inp.classList.remove('fixed');
+ stage.querySelector('#f').onsubmit=e=>{e.preventDefault();if(R.locked||Date.now()-R.t0>R.dur*1000)return;const v=inp.value.trim();if(!v)return;ensureAudio();const j=judge(p,v);
+  if(j.ok){const t=j.a.ox?7:j.a.tier,T=TIERS[t];R.locked={t,a:cap(j.a.name)};
+   const f=stage.querySelector('#f');f.classList.add('locked');f.style.setProperty('--c',T.c);inp.value=R.locked.a;inp.readOnly=true;
+   f.querySelector('button').outerHTML=`<span class="lockt">${spr(ICON[T.i])}${T.n.toUpperCase()}</span>`;
+   fb.innerHTML=`<p class="why">Locked in for <b style="color:${T.c}">+${T.p} PTS</b>. Waiting for everyone else…</p>`;
+   const nn=[392,440,523,587,659,784,988];tone(nn[t-1],.1,'square',.05);tone(nn[t-1]*1.5,.14,'square',.05,.08);if(t>=6)tone(nn[t-1]*2,.2,'triangle',.04,.18);
+   const send=()=>clSend('ans',{r:R.r,k:clTab,t,a:R.locked.a});send();clearInterval(CL.rs);CL.rs=setInterval(()=>{if(!CL||CL.round!==R||CL.g.res)return clearInterval(CL.rs);send()},1500);return}
+  if(j.fix){const fixed=cap(j.a.name);inp.value=fixed;inp.classList.add('fixed');shake();inp.setSelectionRange(fixed.length,fixed.length);
+   fb.innerHTML=`<p class="fixmsg">DID YOU MEAN “${esc(fixed)}”?</p><p class="why">Press LOCK IT to confirm, or change it.</p>`;return}
+  R.tries.push(v);inp.value='';inp.classList.remove('fixed');shake();SFX.wrong();
+  fb.innerHTML=`<p class="bad">✕ NOT VALID: “${esc(v)}”. TRY AGAIN</p>${j.note?`<p class="why">${esc(j.note)}</p>`:''}`};
+}
+function clReveal(m){
+ const g=CL.g,R=CL.round;clStrip();
+ const tm=document.getElementById('tm');if(tm)[...tm.children].forEach(s=>s.classList.add('off'));
+ const f=document.getElementById('f');if(f&&!R.locked){f.querySelector('input').disabled=true;f.querySelector('button').disabled=true;const fb=document.getElementById('fb');if(fb)fb.innerHTML='<p class="bad" style="animation:none">NO ANSWER · −1 LIFE</p>'}
+ const mine=m.res[clTab];if(mine&&!mine.t)SFX.wrong();
+ const rows=g.order.filter(k=>m.res[k]).map(k=>{const r=m.res[k],T=r.t?TIERS[r.t]:null;
+  return `<div class="clr ${k===clTab?'me':''}" style="--c:${T?T.c:'#59648a'}"><span class="nm">${esc(g.names[k]||'Player')}</span><span class="an">${T?`${spr(ICON[T.i])}${esc(r.a)}`:'No answer'}</span><span class="pt">${T?'+'+T.p:(g.lives[k]>0?'−1 ♥':'OUT')}</span></div>`}).join('');
+ const el=document.getElementById('clrev');
+ if(el){el.innerHTML=`<div class="rule"><span class="lbl">Everyone’s answers</span></div><div class="clrows">${rows}</div>${m.over?'<p class="why">That’s the game…</p>':'<p class="why">Next question coming up…</p>'}`;el.scrollIntoView({behavior:reduced?'auto':'smooth',block:'nearest'})}
+}
+function clEnd(m){
+ clClear();view='class';
+ const rank=m.order.slice().sort((a,b)=>((m.lives[b]>0)-(m.lives[a]>0))||((m.outAt[b]||1e9)-(m.outAt[a]||1e9))||(m.score[b]-m.score[a]));
+ const medal=['#ffd36b','#d9e2f2','#e0a26b'];
+ const wonMe=rank[0]===clTab;
+ stage.innerHTML=`<div class="hud"><span class="lbl pk">Classroom · ${CL.code}</span><span class="lbl">${m.r} question${m.r>1?'s':''}</span></div>
+ <div class="clwin"><p class="lbl">Winner</p><div class="big" style="font-size:clamp(34px,8vw,64px)">${esc(m.names[rank[0]]||'Player')}</div></div>
+ <div class="rule"><span class="lbl">Final standings</span></div>
+ <div class="clrows fin">${rank.map((k,i)=>`<div class="clr ${k===clTab?'me':''}" style="--c:${medal[i]||'var(--line)'}"><span class="pos">${i+1}</span><span class="nm">${esc(m.names[k]||'Player')}</span><span class="an">${m.lives[k]>0?clHearts(m.lives[k],CL.g?CL.g.set.lives:m.lives[k]):`<span style="color:var(--dim)">out on Q${m.outAt[k]||'?'}</span>`}</span><span class="pt">${m.score[k]} PTS</span></div>`).join('')}</div>
+ <div class="clbtns" style="margin-top:24px">${CL.host?'<button class="btn gold" id="ag">PLAY AGAIN</button>':'<p class="why">Waiting for the host to start another round…</p>'}<button class="btn alt" id="lv">LEAVE</button></div>`;
+ if(wonMe){ensureAudio();[523,659,784,1047].forEach((f,i)=>tone(f,.14,'square',.05,i*.1))}
+ stage.querySelector('#lv').onclick=()=>{clLeave();classroom()};
+ const ag=stage.querySelector('#ag');if(ag)ag.onclick=()=>{clHostAgain();CL.g=null;CL.round=null;clRender()};
+ scrollTo(0,0);
+}
+const SFX_cl={join(){ensureAudio();tone(523,.08,'square',.04);tone(784,.12,'square',.04,.08)}};
 // ---------- sticker book: a real book ----------
 let bookFin=null,bookAnims=[],bookPage=0,bookBusy=false,bookBack='home',bookWide=null,bookResize=null;
 const RM=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
-function stkInfo(id){const ks=Object.keys(store.stkDay||{}).filter(d=>store.stkDay[d]===id),days=ks.filter(isDay).sort();return{n:ks.length,gift:ks.length>days.length,first:days[0]||null,last:days[days.length-1]||null}}
+function stkInfo(id){const ks=Object.keys(store.stkDay||{}).filter(d=>store.stkDay[d]===id),days=[...new Set(ks.map(k=>k.slice(0,10)).filter(isDay))].sort();return{n:ks.length,gift:ks.some(k=>k.startsWith(GIFT)),first:days[0]||null,last:days[days.length-1]||null}}
 const fmtDay=d=>new Date(d+'T12:00:00Z').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
 const PAGE_NAMES=['Contents',...RAR.map(r=>r.n)];
 function bookPages(){
@@ -2881,7 +3193,8 @@ async function lockerReqs(){
 }
 // check for new requests now and then, and whenever the app comes back to the front
 setInterval(()=>{if(document.visibilityState==='visible')view==='locker'?lockerReqs():refreshReqs()},60000);
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')view==='locker'?lockerReqs():refreshReqs()});
+document.addEventListener('visibilitychange',async()=>{if(document.visibilityState!=='visible')return;view==='locker'?lockerReqs():refreshReqs();
+ if(ACC.state==='in'&&!G&&await syncDown()){navRender();if(view==='home'||view==='stickers')rerender()}});
 async function loadFriends(seq){
  const el=()=>{const e=document.getElementById('flist');return seq===profSeq&&e?e:null};
  if(!sb)return;
@@ -2914,7 +3227,7 @@ document.addEventListener('touchmove',e=>{if(e.touches&&e.touches.length>1)e.pre
 document.addEventListener('dblclick',e=>{if(!e.target.closest('input,textarea'))e.preventDefault()},{passive:false});
 // ---------- screens ----------
 function home(){
- view='home';clearInterval(timer);G=null;
+ clLeave();view='home';clearInterval(timer);G=null;
  const sj=S(),st=store.subj[store.subject],d=st.daily[today()];
  const counts={};for(const p of pool())counts[p.t]=(counts[p.t]||0)+1;
  const banner=ACC.state==='in'?`<p>Signed in as <b>${esc(ACC.name)}</b>. Progress saves to your account.</p><button class="btn alt" id="bLock">LOCKER</button>`
@@ -2924,7 +3237,8 @@ function home(){
  stage.innerHTML=`<div class="banner px">${banner}</div>
  <section class="hero">${spr(BAG,'bagart')}<div><p class="lbl pk">${sj.n} · ${sj.code} · day #${dayNo()}</p><h1 style="margin-top:12px">THE DAILY PACK</h1><p class="sub">7 prompts · 25 seconds each · rarer answers sink deeper into the bag</p></div></section>
  <div class="modes"><button class="mode px main" id="daily"><b>DAILY PACK</b><span>${d!=null?`Today: ${d} pts · ${rankOf(d)[1]}. Replay for practice.`:`Same seven ${sj.n} prompts for everyone today.`}</span></button>
- <button class="mode px" id="unl"><b>UNLIMITED</b><span>A fresh random pack from ${pool().length} prompts.</span></button></div>
+ <button class="mode px" id="unl"><b>UNLIMITED</b><span>A fresh random pack from ${pool().length} prompts.</span></button>
+ <button class="mode px clmode" id="cls"><b>CLASSROOM <i class="newt">NEW</i></b><span>Live rooms with a 4-letter code. 1v1 your friends or take on the whole class.</span></button></div>
  <div class="rule"><span class="lbl">Topic packs</span></div>
  <div class="topics">${Object.entries(sj.packs).filter(([k])=>counts[k]).map(([k,v])=>`<button class="chip" data-t="${k}">${store.subject==='physics'?`<i>${k.toUpperCase()}</i>`:''}${v}<small>${counts[k]}</small></button>`).join('')}</div>
  ${sj.p2?`<label class="toggle"><input type="checkbox" id="p2" ${store.p2?'checked':''}> Include Paper 2-only content (bold in the spec)</label>`:''}
@@ -2934,6 +3248,7 @@ function home(){
  const bl=stage.querySelector('#bLock');if(bl)bl.onclick=locker;
  stage.querySelector('#daily').onclick=()=>start('daily',pickSeven(pool(),rng(store.subject+today())));
  stage.querySelector('#unl').onclick=()=>start('unlimited',pickSeven(pool()));
+ stage.querySelector('#cls').onclick=()=>classroom();
  stage.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>start('topic',topicPick(b.dataset.t),b.dataset.t));
  const p2=stage.querySelector('#p2');if(p2)p2.onchange=e=>{store.p2=e.target.checked;saveLocal();home()};
  scrollTo(0,0);
@@ -3162,11 +3477,12 @@ function end(){
  const label=G.mode==='daily'?`Daily pack #${dayNo()}`:G.mode==='topic'?`${sj.packs[G.topic]} pack`:'Unlimited pack';
  const share=`GCSELLION · ${sj.n} · ${label}\n${G.res.map(x=>x.j?TIERS[x.j.t].e:'⬛').join('')}\n${s} pts · ${r[1]} (Grade ${r[2]})`;
  const n=G.res.length;
- let pop='';const aw=firstToday?awardSticker():null;
- if(aw){store.stkSeen[today()]=1;pop='<div id="spopw"></div>'}
+ let pop='';
+ if(firstToday)pop='<div id="spopw"></div>';
  saveLocal();pushAll();
  stage.innerHTML=`<div class="hud"><span class="lbl pk">${esc(label)} complete</span><span class="lbl">${ACC.state==='in'?'Saved to your locker':'Saved on this device'}</span></div>
  ${pop}<div class="big">${s}</div><p class="depthbig">−${(G.depth||0).toLocaleString('en-GB')} m</p><p class="rank">${r[1].toUpperCase()} · GRADE ${r[2]}</p>
+ ${ACC.state!=='in'&&sb?`<button class="gnudge px" id="gn">${spr(ICON.cap||BAG)}<span><b>LOG IN TO COUNT</b>Log in to get on the leaderboard and count towards today’s stats.</span></button>`:''}
  <div class="rule"><span class="lbl">How you compare</span></div><div class="curve" id="curve"><p class="note-s">Loading the curve…</p></div>
  <div class="rule"><span class="lbl">Bag log</span><span class="lbl" style="color:var(--dim)">deeper = rarer</span></div>
  <div class="log">${TIERS.slice(1,7).map((t,k)=>`<div class="gl" style="top:${(k+.5)/6*100}%"><span>${t.n}</span></div>`).join('')}
@@ -3181,8 +3497,11 @@ function end(){
  const mode=G.mode,topic=G.topic;
  drawCurve(G.subject,G.mode,s);
  stage.querySelector('#again').onclick=()=>mode==='topic'?start('topic',topicPick(topic),topic):start('unlimited',pickSeven(pool()));
- stage.querySelector('#hm').onclick=home;stage.querySelector('#lk').onclick=locker;
- if(aw)setTimeout(()=>showPack({...aw,why:whyToday(aw.streak,aw.ms)},()=>{navRender();const b=document.getElementById('stk');if(b)b.classList.add('bump');const w=document.getElementById('spopw');if(w){w.innerHTML=stkPopHtml(aw);w.querySelector('#spop').onclick=()=>stickers()}}),500);
+ stage.querySelector('#hm').onclick=home;stage.querySelector('#lk').onclick=locker;{const gn=stage.querySelector('#gn');if(gn)gn.onclick=locker}
+ // check the account first, so a sticker already given on another device isn't given twice
+ if(firstToday)(async()=>{const t0=Date.now();if(ACC.state==='in')await Promise.race([syncDown(),new Promise(r=>setTimeout(r,2500))]);
+  const aw=awardSticker();if(!aw){navRender();return}store.stkSeen[today()]=1;saveLocal();pushAll();
+  setTimeout(()=>showPack({...aw,why:whyToday(aw.streak,aw.ms)},()=>{navRender();const b=document.getElementById('stk');if(b)b.classList.add('bump');const w=document.getElementById('spopw');if(w){w.innerHTML=stkPopHtml(aw);w.querySelector('#spop').onclick=()=>stickers()}}),Math.max(0,500-(Date.now()-t0)))})();
  G=null;scrollTo(0,0);
 }
 let boardTab='daily';
@@ -3260,9 +3579,10 @@ async function loadBoard(){
  el.querySelectorAll('tr[data-u]').forEach(t=>{t.onclick=()=>profile(t.dataset.u);t.onkeydown=e=>{if(e.key==='Enter')profile(t.dataset.u)}});
  if(top.length)el.insertAdjacentHTML('beforeend','<p class="note-s">Tap a player to see their profile.</p>');
 }
-document.getElementById('home').onclick=()=>{confirmLeave();home()};
+document.getElementById('home').onclick=()=>{if(!clConfirmLeave())return;confirmLeave();home()};
 navRender();home();
 setTimeout(initAccount,0);
+{const rc=new URLSearchParams(location.search).get('room');if(rc&&/^[A-Za-z0-9]{4}$/.test(rc)){history.replaceState(null,'',location.pathname);setTimeout(()=>classroom(rc.toUpperCase()),50)}}
 let lastDay=today();setInterval(()=>{const t=today();if(t!==lastDay){lastDay=t;if(view==='home')home()}},30000);
 }
 </script>
