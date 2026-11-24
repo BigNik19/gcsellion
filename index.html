@@ -352,6 +352,27 @@ tr.me td{color:var(--gold)}
 .dlayer .junk svg.twinkle{animation:twinkle 1.6s ease-in-out infinite}
 @keyframes twinkle{50%{opacity:.25;transform:scale(.7)}}
 .dlayer .junk svg.chest{left:50%!important;top:auto!important;bottom:46px;width:150px!important;height:125px!important;transform:translateX(-50%)!important;filter:drop-shadow(0 0 30px rgba(255,211,107,.6));animation:none}
+.dlayer.oxl{height:clamp(380px,80vh,820px);background:radial-gradient(120% 80% at 50% 100%,#1b2f63 0%,#0a1430 50%,#050a1a 100%)!important;border-top:0}
+.oxl .oxsky span{position:absolute;width:3px;height:3px;background:#fff;opacity:.7;animation:twinkle 2.2s ease-in-out infinite}
+.oxspires{position:absolute;left:0;right:0;bottom:0;width:100%;height:58%}
+.oxspires .win{fill:#2a2c3a}
+.oxl.lit .win{animation:winlight .5s ease-out forwards}
+@keyframes winlight{to{fill:#ffd36b}}
+.oxl.lit{box-shadow:inset 0 0 0 4px #eaf2ff,inset 0 0 120px rgba(160,200,255,.35)}
+.oxl .floor{position:absolute;inset:0;z-index:3;background:repeating-linear-gradient(45deg,#3a2414 0 6px,#33200f 6px 12px);box-shadow:inset 0 8px 0 #5c3a1e,inset 0 -6px 0 #24160b;display:flex;justify-content:center}
+.oxl .floor::before{content:"";position:absolute;left:0;right:0;top:16px;border-top:3px dashed rgba(255,211,107,.35)}
+.oxl .floor span{margin-top:34px;font:10px/1.4 var(--px);letter-spacing:.14em;color:rgba(255,255,255,.3);text-transform:uppercase}
+.oxl .floor.gone{display:none}
+.fshard{position:absolute;z-index:7;background:#3a2414;box-shadow:inset 0 2px 0 #6b4424,inset 0 -2px 0 #1e1208;pointer-events:none}
+.oxflash{position:fixed;inset:0;z-index:60;pointer-events:none;background:radial-gradient(circle at 50% 50%,#fff 0%,#dfe9ff 45%,rgba(160,190,255,.6) 100%);animation:oxflash .7s ease-out forwards}
+@keyframes oxflash{0%{opacity:1}100%{opacity:0}}
+.spark{position:absolute;z-index:4;width:6px;height:6px;background:#ffd36b;box-shadow:0 0 10px #ffd36b;pointer-events:none;animation:sparkf .9s ease-out forwards}
+.spark:nth-child(3n){background:#eaf2ff;box-shadow:0 0 10px #a9c8ff}
+@keyframes sparkf{to{transform:translate(var(--dx),46px) scale(.2);opacity:0}}
+.oxcap{position:absolute;z-index:8;width:40px;height:40px;pointer-events:none;opacity:0}
+.oxcap svg{width:100%;height:100%;filter:drop-shadow(1px 0 0 #fff) drop-shadow(-1px 0 0 #fff) drop-shadow(0 -1px 0 #fff) drop-shadow(0 0 10px #ffd36b)}
+.dnote.landed.oxnote{background:linear-gradient(180deg,#0b2d5e,#002147);color:#ffd36b;text-shadow:0 0 14px #ffd36b;box-shadow:0 -4px 0 #eaf2ff,0 4px 0 #eaf2ff,-4px 0 0 #eaf2ff,4px 0 0 #eaf2ff,0 0 60px #9fc4ff,0 0 120px rgba(255,211,107,.5)}
+.trow.tease{opacity:.6}.trow.tease .txt{font-style:italic}
 .dlayer.crack{box-shadow:inset 0 3px 0 #fff,0 -2px 18px rgba(255,255,255,.4)}
 .shard{position:absolute;z-index:6;width:8px;height:8px;pointer-events:none;animation:shard .7s ease-out forwards}
 @keyframes shard{to{transform:translate(var(--dx),var(--dy)) rotate(200deg);opacity:0}}
@@ -1269,6 +1290,452 @@ X('p',146,'Name a dwarf planet, asteroid or comet','pluto,ceres,eris,halley’s 
 X('p',147,'Name a word to do with nuclear power or weapons','nuclear power station,atomic bomb,atom bomb,nuke,nuclear weapon,radioactive,waste,energy,electricity','nuclear reactor,reactor core,fuel rods,uranium 235,u 235,plutonium 239,enriched uranium,weapons grade,reactor grade,nuclear fuel,spent fuel,nuclear waste disposal,deep geological disposal,radioactive waste storage,decommissioning,nuclear accident,nuclear disaster,meltdown,core meltdown,explosion,radiation sickness,radiation leak,contamination,evacuation,exclusion zone,chernobyl disaster,fukushima daiichi,three mile island,windscale fire,sellafield,hinkley point c,sizewell,dungeness,heysham,torness,hartlepool,wylfa,dounreay,nuclear submarine,trident missile,trident,nuclear deterrent,deterrence,mutually assured destruction,mad,cold war,arms race,nuclear test,test ban treaty,non proliferation treaty,npt,disarmament,cnd,campaign for nuclear disarmament,anti nuclear protest,greenham common,iaea,inspectors,uranium enrichment,centrifuges,heavy water,nuclear fusion,hydrogen bomb,thermonuclear weapon,h bomb,a bomb,warhead,missile,icbm,ballistic missile,bomber,nuclear winter,fallout shelter,bunker,mushroom cloud,blast wave,fireball,emp,electromagnetic pulse,radiation burns,hibakusha,hiroshima peace memorial,enola gay,bockscar,little boy,fat man,trinity,manhattan project,los alamos,oppenheimer,einstein letter,leo szilard,enrico fermi,chicago pile','criticality,supercritical,prompt critical,critical mass,implosion design,gun type design,neutron initiator,tamper,levitated pit,boosted fission,teller ulam design,staged weapon,dirty bomb,radiological weapon,neutron bomb,enhanced radiation weapon,tactical nuclear weapon,strategic nuclear weapon,mirv,cruise missile,polaris,poseidon,minuteman,sarmat,satan missile,dead hand,doomsday clock,doomsday machine,doomsday plane,red button,nuclear football,launch codes,two man rule,permissive action link,ssbn,boomer submarine,vanguard class,dreadnought class,faslane,aldermaston,awe,burghfield,coulport,yongbyon,natanz,fordow,dimona,kahuta,pokhran,lop nur,semipalatinsk,novaya zemlya,bikini atoll,castle bravo,ivy mike,tsar bomba,operation crossroads,operation hurricane,montebello islands,maralinga,christmas island,mururoa,fangataufa,trinitite,glowing dial painters,radium girls,demon core,louis slotin,harry daghlian,kyshtym,goiânia,tokaimura,mayak,hanford,rocky flats,savannah river,oak ridge,y 12,k 25,calutron,gaseous diffusion,laser enrichment,smr,small modular reactor,rolls royce smr,epr,ap1000,candu,rbmk,magnox,agr,pwr,bwr,fast breeder,phénix,superphénix,monju,generation iv,molten salt reactor,thorium,iter,jet,step,tokamak,stellarator,nif,laser fusion,tritium,deuterium,lithium 6,neutron multiplication')
 X('p',148,'Name a physics law, rule or principle','newton’s laws,laws of motion,law of gravitation,gravity law,conservation of mass,law of conservation of energy,conservation of charge','law of moments,principle of conservation of momentum,boyle’s gas law,charles’ law,gay lussac’s law,pressure law,ideal gas law,archimedes’ principle,pascal’s law,bernoulli’s equation,hooke,ohm,snell,lenz,faraday’s law of induction,fleming’s right hand rule,right hand rule,right hand grip rule,corkscrew rule,law of reflection,angle of incidence equals angle of reflection,inverse square law,kirchhoff’s laws,kirchhoff’s current law,kirchhoff’s voltage law,coulomb,hubble,kepler’s first law,kepler’s second law,kepler’s third law,newton’s law of cooling,first law of thermodynamics,second law of thermodynamics,third law of thermodynamics,zeroth law of thermodynamics,law of entropy,energy can’t be created or destroyed,every action has an equal and opposite reaction,f equals ma,an object stays at rest unless a force acts','heisenberg’s uncertainty principle,pauli exclusion principle,principle of relativity,equivalence principle,principle of least action,fermat’s principle,huygens’ principle,principle of superposition,le chatelier’s principle,curie’s law,curie weiss law,wien’s displacement law,stefan boltzmann law,planck’s law,rayleigh jeans law,kirchhoff’s law of thermal radiation,beer lambert law,malus’s law,brewster’s law,bragg’s law,gauss’s law,ampère’s law,biot savart law,lorentz force law,maxwell’s equations,faraday’s law of electrolysis,joule’s law,joule’s first law,stokes’ law,poiseuille’s law,hagen poiseuille,darcy’s law,fick’s law,fourier’s law,newton’s law of viscosity,dalton’s law of partial pressures,graham’s law,avogadro’s law,henry’s law,raoult’s law,hess’s law,mass energy equivalence,e equals mc squared,conservation of angular momentum,conservation of baryon number,conservation of lepton number,cpt symmetry,noether’s theorem,bell’s theorem,no cloning theorem,correspondence principle,complementarity principle,anthropic principle,copernican principle,cosmological principle,occam’s razor,mach’s principle,titius bode law,moore’s law,murphy’s law,sod’s law,hund’s rule,aufbau principle,madelung rule,lenz’s rule,maxwell’s right hand screw rule,fleming’s left hand rule for motors,fleming’s right hand rule for generators,ohm’s law for a resistor,hooke’s law for springs,boyle’s law for gases,kepler’s law of equal areas,hubble lemaître law,titius bode,stefan’s law,wien’s law,zipf’s law')
 
+// OXBRIDGE: the secret tier. One very niche answer from the spec, one from much deeper knowledge.
+// O(subject, index, start of prompt key, ...answers)
+const OXA=[];const O=(...a)=>OXA.push(a);
+
+O('p',0,'Name a vector quantity','change in momentum|momentum change','poynting vector');
+O('p',1,'Name a scalar quantity','specific latent heat','lagrangian');
+O('p',2,'Name a type of force','normal contact force|normal reaction force','casimir force');
+O('p',3,'Name a factor that increases a car','mass of the car|mass of the vehicle','brake fade');
+O('p',4,'Name a quantity that appears in a Topic 1','perpendicular distance from the pivot|perpendicular distance','coefficient of restitution');
+O('p',5,'Name a safety feature that works by making','collapsible steering column','arrester bed|runaway truck ramp');
+O('p',6,'Name an effect a force can have on an object','change its momentum','induce precession|precession');
+O('p',7,'Name an electrical safety feature','earthing the metal case|earthed metal case','arc fault detection device|afdd');
+O('p',8,'Name a unit from Topic 2','coulomb per second','siemens');
+O('p',9,'Name a component you could put in a circuit','thermistor with a negative temperature coefficient|ntc thermistor','memristor');
+O('p',10,'Name a device that uses the heating effect','fuse wire','electric arc furnace');
+O('p',11,'Name a use or a danger of electrostatic','earthing aircraft during refuelling|bonding wire on fuel tankers','electrostatic precipitator in a power station|electrostatic precipitator');
+O('p',12,'Name a quantity in a Topic 2 equation','energy transferred per unit charge','drift velocity');
+O('p',13,'Name a part of the electromagnetic spectrum','long wave radio|long wave','extreme ultraviolet');
+O('p',14,'Name a use of electromagnetic radiation','fluorescent lamp|fluorescent tube','synchrotron crystallography');
+O('p',15,'Name a hazard of electromagnetic radiation','internal heating of body cells|internal heating','photokeratitis');
+O('p',16,'Name a term used to describe waves','wavefront','phase velocity');
+O('p',17,'Name an example of a wave','seismic s wave|s wave','gravitational wave');
+O('p',18,'Name a use of total internal reflection','prismatic periscope|prism periscope','attenuated total reflectance|atr spectroscopy');
+O('p',19,'Name an energy store','electrostatic energy store|electrostatic store','zero point energy');
+O('p',20,'Name an energy resource used to generate','pumped storage','ocean thermal energy conversion|otec');
+O('p',21,'Name a way to reduce heat loss from a house','reflective foil behind radiators','mechanical ventilation with heat recovery|mvhr');
+O('p',22,'Name something in everyday life explained by convection','sea breeze','solar granulation');
+O('p',23,'Name a change of state','sublimation','deposition|desublimation');
+O('p',24,'Name a quantity in a Topic 5 equation','absolute temperature in kelvin|kelvin temperature','boltzmann constant');
+O('p',25,'Name a word or phrase that describes particles','random motion|random movement','mean free path');
+O('p',26,'Name a magnetic material','cobalt','gadolinium');
+O('p',27,'Name a device that uses electromagnetism','relay','tokamak');
+O('p',28,'Name a way to increase the voltage induced','increase the rate of change of the magnetic field','reduce the magnetic reluctance');
+O('p',29,'Name a source of background radiation','radon gas from rocks','cosmogenic beryllium 7|beryllium 7');
+O('p',30,'Name a use of radioactivity','thickness gauge in paper mills|thickness monitoring','radioisotope thermoelectric generator|rtg');
+O('p',31,'Name a type of nuclear radiation','neutron','antineutrino');
+O('p',32,'Name a particle found inside an atom','nucleon','gluon');
+O('p',33,'Name a part of a nuclear reactor','moderator','neutron reflector');
+O('p',34,'Name a stage in the life cycle of a star','black dwarf','asymptotic giant branch');
+O('p',35,'Name something that orbits in space','comet','trojan asteroid');
+O('p',36,'Name something linked to the evidence for the Big Bang','cosmic microwave background radiation|cmbr','baryon acoustic oscillations');
+O('p',37,'Name a colour a star can be','blue white','violet');
+O('p',38,'Name something that can reach terminal velocity','ball bearing falling through oil|ball bearing in oil','stokes’ law sphere|sphere in glycerol');
+O('p',39,'Name a way to reduce friction','streamlining','superlubricity');
+O('p',40,'Name something that uses the principle of moments','beam balance','steelyard');
+O('p',41,'Name something that stretches elastically','spring obeying hooke’s law','spider dragline silk');
+O('p',42,'Name something that increases air resistance','increasing speed|higher speed','drogue parachute');
+O('p',43,'Name a piece of measuring equipment used in physics','micrometer screw gauge|micrometer','travelling microscope');
+O('p',44,'Name a variable you might control','starting temperature','ambient humidity');
+O('p',45,'Name a way to make a measurement more accurate','use a fiducial marker|fiducial marker','eliminate systematic error|correct for systematic error');
+O('p',46,'Name an SI base unit','candela','mole');
+O('p',47,'Name a unit of energy','electronvolt','hartree');
+O('p',48,'Name a unit of pressure','newton per square metre','barye');
+O('p',49,'Name a unit of length','light year','planck length');
+O('p',50,'Name a unit of time','millisecond','planck time');
+O('p',51,'Name a prefix used with units','pico','quecto');
+O('p',52,'Name a unit named after a scientist','becquerel','sievert');
+O('p',53,'Name a famous physicist','lise meitner','emmy noether');
+O('p',54,'Name a model of the atom','alpha particle scattering experiment|geiger marsden experiment','davisson germer experiment');
+O('p',55,'Name a material that conducts electricity','graphite','graphene');
+O('p',56,'Name an electrical insulator','pure water|distilled water','sulfur hexafluoride');
+O('p',57,'Name a source of direct current','solar cell','betavoltaic cell');
+O('p',58,'Name an animal or device that uses echoes','echo sounder','oilbird');
+O('p',59,'Name something explained by refraction','apparent depth','fata morgana');
+O('p',60,'Name a good thermal insulator','vacuum','aerogel');
+O('p',61,'Name a factor that affects how fast an object loses heat','surface area to volume ratio','emissivity');
+O('p',62,'Name a device that transfers electrical energy to kinetic','loudspeaker','ion thruster');
+O('p',63,'Name something that floats on water','pumice','lithium');
+O('p',64,'Name a factor that affects pressure','gravitational field strength','dynamic pressure');
+O('p',65,'Name something that has a magnetic field','current carrying solenoid|solenoid','magnetar');
+O('p',66,'Name a way to protect yourself from ionising','film badge','potassium iodide tablets');
+O('p',67,'Name a detector of radiation','photographic film','scintillation counter');
+O('p',68,'Name a radioactive element or isotope','technetium 99m','oganesson');
+O('p',69,'Name a planet in our Solar System','neptune','uranus');
+O('p',70,'Name something found in deep space beyond','supernova remnant','fast radio burst');
+O('p',71,'Name a use of artificial satellites','polar orbit mapping|polar orbiting satellites','gravimetry|gravity field mapping');
+O('p',72,'Name a device that sends or receives electromagnetic','thermal imaging camera','maser');
+O('p',73,'Name a fact about nuclear fission or fusion','daughter nuclei','lawson criterion');
+O('p',74,'Name something that shows Newton','recoil of a gun','solar sail');
+O('p',75,'Name something wired in parallel at home','ring main','radial circuit');
+O('p',76,'Name a word used in the Forces and motion','limit of proportionality','jerk');
+O('p',77,'Name a word used in the Electricity topic','double insulation','kirchhoff’s laws');
+O('p',78,'Name a word used in the Waves topic','refractive index','polarisation');
+O('p',79,'Name a word used in the Energy topic','specific heat capacity','entropy');
+O('p',80,'Name a word used in the Solids, liquids and gases','pressure law','triple point');
+O('p',81,'Name a word used in the Magnetism and electromagnetism','split ring commutator','hysteresis');
+O('p',82,'Name a word used in the Radioactivity and particles','irradiation','binding energy per nucleon');
+O('p',83,'Name a word used in the Astrophysics topic','absolute magnitude','chandrasekhar limit');
+O('p',84,'Name something you can find from a motion graph','area under a velocity time graph|area under the graph','instantaneous acceleration');
+O('p',85,'Name something that moves at a constant speed','light in a vacuum','geostationary satellite');
+O('p',86,'Name a reason thinking distance increases','medication','microsleep');
+O('p',87,'Name a sport where Newton','curling','skeleton');
+O('p',88,'Name a lever or a part of one','perpendicular distance','mechanical advantage');
+O('p',89,'Name a symbol you’d draw in a circuit diagram','light dependent resistor|ldr','zener diode');
+O('p',90,'Name something that uses a lot of electrical power at home','immersion heater','storage heater');
+O('p',91,'Name a wire or colour in a UK three-pin plug','cable grip','shuttered socket');
+O('p',92,'Name something that makes sound','tuning fork','theremin');
+O('p',93,'Name an animal that hears outside the human range','elephant','greater wax moth');
+O('p',94,'Name a word to do with light or optics','critical angle','brewster angle');
+O('p',95,'Name a source of a type of electromagnetic','radioactive substances|radioactive source','synchrotron');
+O('p',96,'Name a way energy is wasted in a device','eddy currents','hysteresis loss');
+O('p',97,'Name an example of work being done','gravity doing work on a falling object','compressing a gas');
+O('p',98,'Name an advantage or disadvantage of an energy resource','decommissioning cost','capacity factor');
+O('p',99,'Name a word about gases and the kinetic theory','absolute zero','maxwell boltzmann distribution');
+O('p',100,'Name something that is very dense or not dense','osmium','neutron star');
+O('p',101,'Name something with a high or low specific heat','water','liquid ammonia');
+O('p',102,'Name something that is attracted to a magnet','cobalt','liquid oxygen');
+O('p',103,'Name a fact about transformers','laminated core','mutual inductance');
+O('p',104,'Name a property of alpha, beta or gamma','deflected by a magnetic field','bragg peak');
+O('p',105,'Name a word about radioactive decay','decay constant','secular equilibrium');
+O('p',106,'Name a word about orbits and gravity','orbital period','lagrange point');
+O('p',107,'Name a feature of the Hertzsprung','absolute magnitude','instability strip');
+O('p',108,'Name a famous physics discovery or invention','the neutron','superconductivity');
+O('p',109,'Name a famous physics experiment or observatory','millikan oil drop','pound rebka experiment');
+O('p',110,'Name a unit of speed or acceleration','metres per second squared','gal');
+O('p',111,'Name a unit of mass or weight','atomic mass unit','slug');
+O('p',112,'Name a hazard or safety precaution in a physics','use a sand tray','interlock');
+O('p',113,'Name something that runs on batteries','pacemaker','mars rover');
+O('p',114,'Name something that gives off its own light','cherenkov radiation','sonoluminescence');
+O('p',115,'Name something that makes a very loud sound','sonic boom','pistol shrimp');
+O('p',116,'Name something that spins or rotates','pulsar','reaction wheel');
+O('p',117,'Name a household appliance','dehumidifier','sous vide');
+O('p',118,'Name something that contains an electric motor','hard drive','reaction wheel');
+O('p',119,'Name something that gets hot when it’s used','brake discs|brakes','catalytic converter');
+O('p',120,'Name a good conductor of heat','copper','diamond');
+O('p',121,'Name something transparent or see-through','cornea','aerogel');
+O('p',122,'Name something that reflects light well','retroreflector','dielectric mirror');
+O('p',123,'Name something that vibrates','quartz crystal','tectonic plates');
+O('p',124,'Name something that contains a spring','newton meter','mechanical watch balance spring|hairspring');
+O('p',125,'Name a simple machine or something that uses one','archimedes screw','differential');
+O('p',126,'Name something that can travel faster than 100 mph','peregrine falcon','parker solar probe');
+O('p',127,'Name something that runs on solar power','solar cell','solar sail');
+O('p',128,'Name something you can see in the night sky','andromeda galaxy','gegenschein');
+O('p',129,'Name a moon in our Solar System','triton','hyperion');
+O('p',130,'Name a star or constellation','polaris','eta carinae');
+O('p',131,'Name a spacecraft, space mission or telescope','gaia','event horizon telescope');
+O('p',132,'Name an astronaut or space scientist','henrietta leavitt','cecilia payne gaposchkin');
+O('p',133,'Name something that contains radioactive material','smoke detector','trinitite');
+O('p',134,'Name a musical instrument','tuning fork','ondes martenot');
+O('p',135,'Name something that uses magnets','mass spectrometer','tokamak');
+O('p',136,'Name a green or low-carbon technology','pumped storage','direct air capture');
+O('p',137,'Name something that uses air or gas pressure','manometer','pitot tube');
+O('p',138,'Name something in everyday life that involves a change of state','sublimation of dry ice|dry ice','freeze drying');
+O('p',139,'Name something that bounces','gas particles off container walls','alpha particles off gold nuclei');
+O('p',140,'Name a type of vehicle','maglev','ekranoplan');
+O('p',141,'Name something that measures something','manometer','interferometer');
+O('p',142,'Name a natural phenomenon explained by physics','total internal reflection in a diamond|diamond sparkle','brocken spectre');
+O('p',143,'Name something you’d find in a physics lab','ticker timer','cloud chamber');
+O('p',144,'Name a weather or atmosphere word linked to physics','convection current','coriolis effect');
+O('p',145,'Name a physics word that’s also an everyday word','moment','charm');
+O('p',146,'Name a dwarf planet, asteroid or comet','eris','arrokoth');
+O('p',147,'Name a word to do with nuclear power or weapons','moderator','tamper');
+O('p',148,'Name a physics law, rule or principle','fleming’s left hand rule','noether’s theorem');
+
+O('c',0,'Name a word used in the States of matter','interconversion of states','triple point');
+O('c',1,'Name a change of state','sublimation','deposition');
+O('c',2,'Name an example of diffusion','ammonia and hydrogen chloride white ring|white ring of ammonium chloride','effusion');
+O('c',3,'Name a key word about solutions and solubility','solubility curve','supersaturated');
+O('c',4,'Name a word used in the Elements, compounds and mixtures','rf value','azeotrope');
+O('c',5,'Name a method of separating a mixture','fractional distillation','zone refining');
+O('c',6,'Name a mixture','crude oil','amalgam');
+O('c',7,'Name a compound','potassium manganate vii','buckminsterfullerene oxide|cuprammonium');
+O('c',8,'Name a word used in chromatography','solvent front','retention time');
+O('c',9,'Name a word used in the Atomic structure','relative atomic mass','effective nuclear charge');
+O('c',10,'Name a term about atomic structure','isotopic abundance','subshell');
+O('c',11,'Name an isotope','chlorine 37','protium');
+O('c',12,'Name a word used in the Periodic Table','amphoteric oxide|amphoteric','lanthanide contraction');
+O('c',13,'Name a chemical element','astatine','oganesson');
+O('c',14,'Name a non-metal element','astatine','oganesson');
+O('c',15,'Name a noble gas','radon','oganesson');
+O('c',16,'Name a transition metal','scandium','technetium');
+O('c',17,'Name a word used in chemical calculations','molar volume','avogadro constant');
+O('c',18,'Name a state symbol and what it means','(aq) aqueous','');
+O('c',19,'Name a word used in the Ionic bonding','giant ionic lattice','lattice enthalpy');
+O('c',20,'Name an ion from the spec','hydrogencarbonate ion|hydrogen carbonate ion','hydronium ion|oxonium ion');
+O('c',21,'Name an ionic compound','lithium fluoride','caesium fluoride');
+O('c',22,'Name a word used in the Covalent bonding','intermolecular forces','dative covalent bond|coordinate bond');
+O('c',23,'Name a molecule you could draw a dot-and-cross','ethene','phosphine');
+O('c',24,'Name a covalent substance','silicon dioxide','silicon carbide');
+O('c',25,'Name a form (allotrope) of carbon','buckminsterfullerene','lonsdaleite');
+O('c',26,'Name a property of metals','sonorous','thermionic emission');
+O('c',27,'Name a word used in the Metallic bonding','delocalised electrons','band theory');
+O('c',28,'Name a word used in the Electrolysis','half equation','overpotential');
+O('c',29,'Name a product of electrolysis','bromine','fluorine');
+O('c',30,'Name a use of electrolysis','anodising','electrowinning');
+O('c',31,'Name a word used in the Group 1','lilac flame','electride');
+O('c',32,'Name something you see when an alkali metal reacts','lilac flame','coulomb explosion');
+O('c',33,'Name an alkali metal','francium','');
+O('c',34,'Name a product when an alkali metal reacts with water','caesium hydroxide','solvated electrons');
+O('c',35,'Name a word used in the Group 7','oxidising agent','disproportionation');
+O('c',36,'Name a halogen','astatine','tennessine');
+O('c',37,'Name a halogen’s colour or state','fluorine: pale yellow gas','astatine: black solid');
+O('c',38,'Name a halogen displacement reaction or a halide','fluorine displaces chlorine','interhalogen');
+O('c',39,'Name a use of halogens or their compounds','uranium hexafluoride','halothane');
+O('c',40,'Name a word used in the Gases in the atmosphere','thermal decomposition','great oxygenation event');
+O('c',41,'Name a gas found in air','krypton','carbonyl sulfide');
+O('c',42,'Name something that burns in oxygen','phosphorus','silane');
+O('c',43,'Name a product of combustion or thermal decomposition','sodium carbonate','sodium nitrite');
+O('c',44,'Name a greenhouse gas','sulfur hexafluoride','nitrogen trifluoride');
+O('c',45,'Name a gas at room temperature','hydrogen sulfide','diborane');
+O('c',46,'Name a word used in the Reactivity series','sacrificial protection','standard electrode potential');
+O('c',47,'Name a metal in the reactivity series','chromium','rubidium');
+O('c',48,'Name something needed for iron to rust','salt','chloride ions');
+O('c',49,'Name a way to stop iron rusting','sacrificial protection','cathodic protection with impressed current|impressed current');
+O('c',50,'Name a word to do with redox','oxidising agent','disproportionation');
+O('c',51,'Name a word used in the Extraction and uses of metals','cryolite','kroll process');
+O('c',52,'Name an alloy','magnalium','nitinol');
+O('c',53,'Name a metal ore or a way to extract metals','haematite','mond process');
+O('c',54,'Name a use of aluminium, copper, iron or steel','overhead power cables','heat sinks');
+O('c',55,'Name a word used in the Acids and alkalis','proton acceptor','buffer solution');
+O('c',56,'Name an indicator','phenolphthalein','thymolphthalein');
+O('c',57,'Name an acid','carbonic acid','fluoroantimonic acid');
+O('c',58,'Name an alkali or a base','copper ii oxide|copper oxide','superbase');
+O('c',59,'Name an everyday acidic or alkaline substance','milk of magnesia','egg white');
+O('c',60,'Name a piece of equipment used in a titration','volumetric pipette','magnetic stirrer');
+O('c',61,'Name a word used in the Salts topic','water of crystallisation','common ion effect');
+O('c',62,'Name a salt','potassium nitrate','sodium thiosulfate');
+O('c',63,'Name an insoluble salt or compound','lead iodide','silver chromate');
+O('c',64,'Name a step in making a pure, dry salt','add excess base until no more dissolves|add excess','recrystallise');
+O('c',65,'Name a word used in the Chemical tests','nichrome wire','flame emission spectroscopy');
+O('c',66,'Name a gas test and what it shows','water vapour: cobalt chloride paper turns pink','sulfur dioxide: acidified potassium dichromate turns green');
+O('c',67,'Name a flame test colour','calcium (orange-red)','barium (apple green)');
+O('c',68,'Name an ion test result','iron(iii): orange-brown precipitate','nitrate: ammonia with devarda’s alloy');
+O('c',69,'Name a test for water or its purity','cobalt chloride paper','conductivity test');
+O('c',70,'Name a word used in the Energetics','bond energy','hess’s law');
+O('c',71,'Name an exothermic reaction','thermite','haber process');
+O('c',72,'Name an endothermic reaction or process','thermal decomposition','barium hydroxide and ammonium chloride');
+O('c',73,'Name something used or measured in calorimetry','specific heat capacity','bomb calorimeter');
+O('c',74,'Name a word used in the Rates of reaction','activation energy','maxwell boltzmann distribution');
+O('c',75,'Name a factor that affects the rate of a reaction','surface area','ionic strength');
+O('c',76,'Name a way to measure the rate of a reaction','disappearing cross','colorimeter');
+O('c',77,'Name a catalyst','vanadium pentoxide','wilkinson’s catalyst');
+O('c',78,'Name a word used in the Reversible reactions','dynamic equilibrium','equilibrium constant');
+O('c',79,'Name a reversible reaction','ammonium chloride decomposing','nitrogen dioxide and dinitrogen tetroxide');
+O('c',80,'Name a change that shifts an equilibrium','remove product','');
+O('c',81,'Name a word used in the Introduction to organic','homologous series','chirality');
+O('c',82,'Name a homologous series','esters','nitriles');
+O('c',83,'Name an organic compound','ethyl ethanoate','cubane');
+O('c',84,'Name a word used in the Crude oil','viscosity','octane rating');
+O('c',85,'Name a fraction from crude oil','naphtha','petroleum coke|petcoke');
+O('c',86,'Name a product of burning fuels','particulates','polycyclic aromatic hydrocarbons');
+O('c',87,'Name a product made from crude oil','petroleum jelly','carbon black');
+O('c',88,'Name a word used in the Alkanes and alkenes','free radical substitution','markovnikov’s rule');
+O('c',89,'Name an alkane','cyclohexane','cubane');
+O('c',90,'Name an alkene','cyclohexene','isoprene');
+O('c',91,'Name a product of a substitution or addition reaction','tetrachloromethane','chlorohydrin');
+O('c',92,'Name a word used in the Alcohols, acids and esters','microbial oxidation','saponification');
+O('c',93,'Name an alcohol','propan-2-ol','sorbitol');
+O('c',94,'Name a carboxylic acid','ethanedioic acid','trifluoroacetic acid');
+O('c',95,'Name an ester or a use of esters','methyl salicylate','glyceryl trinitrate');
+O('c',96,'Name a way ethanol is made or what it turns into','microbial oxidation','dehydration to ethene');
+O('c',97,'Name a word used in the Synthetic polymers','condensation polymerisation','glass transition temperature');
+O('c',98,'Name a polymer','biopolyester','sporopollenin');
+O('c',99,'Name a monomer','tetrafluoroethene','caprolactam');
+O('c',100,'Name a problem with disposing of plastics','hydrogen chloride from burning pvc|hydrogen chloride','plastiglomerate');
+
+O('b',0,'Name a word used in the Variety of living organisms','saprotrophic nutrition|saprotrophic','archaea');
+O('b',1,'Name a characteristic of living things','excretion','metabolism');
+O('b',2,'Name a group of living organisms from the spec','protoctists','archaea');
+O('b',3,'Name an organism named in the spec','pneumococcus','tobacco mosaic virus');
+O('b',4,'Name a pathogen or a disease it causes','tobacco mosaic virus','prion');
+O('b',5,'Name a fungus','mucor','ophiocordyceps');
+O('b',6,'Name a word used in the Cell structure','differentiation','endosymbiosis');
+O('b',7,'Name a part of a cell','plasmid','tonoplast');
+O('b',8,'Name a level of organisation','organelle','biosphere');
+O('b',9,'Name a specialised cell','root hair cell','osteoclast');
+O('b',10,'Name a use, advantage or risk of stem cells','therapeutic cloning','induced pluripotent stem cells');
+O('b',11,'Name a word used in the Biological molecules','enzyme substrate complex','induced fit');
+O('b',12,'Name a biological molecule','glycerol','chitin');
+O('b',13,'Name a chemical element found in biological molecules','phosphorus','molybdenum');
+O('b',14,'Name an enzyme','catalase','rubisco');
+O('b',15,'Name a food test or its reagent','ethanol emulsion test','dcpip');
+O('b',16,'Name a factor that affects enzyme activity','substrate concentration','allosteric inhibition');
+O('b',17,'Name a word used in the Movement in and out of cells','partially permeable membrane','aquaporin');
+O('b',18,'Name an example of diffusion, osmosis or active transport','glucose reabsorption in the kidney','sodium potassium pump');
+O('b',19,'Name a factor that affects the rate of diffusion','surface area to volume ratio','fick’s law');
+O('b',20,'Name a word used in the Plant nutrition','variegated leaf','rubisco');
+O('b',21,'Name something involved in photosynthesis','magnesium','rubisco');
+O('b',22,'Name a factor that limits the rate of photosynthesis','carbon dioxide concentration','photoinhibition');
+O('b',23,'Name a mineral ion plants need','magnesium','molybdenum');
+O('b',24,'Name a word used in the Human nutrition and digestion','emulsification','chylomicron');
+O('b',25,'Name a nutrient in a balanced diet','vitamin d','selenium');
+O('b',26,'Name a food that is a good source of a nutrient','liver','spirulina');
+O('b',27,'Name a part of the digestive system','ileum','jejunum');
+O('b',28,'Name a digestive enzyme and what it digests','maltase (maltose)','enterokinase');
+O('b',29,'Name a word used in the Respiration','oxygen debt','chemiosmosis');
+O('b',30,'Name a reactant or product of respiration','lactic acid','pyruvate');
+O('b',31,'Name a difference between aerobic and anaerobic','complete breakdown of glucose','19 times more atp');
+O('b',32,'Name a word used in the Gas exchange','intercostal muscles','surfactant');
+O('b',33,'Name a part of the breathing system','pleural membranes','surfactant');
+O('b',34,'Name an effect of smoking','emphysema','buerger’s disease');
+O('b',35,'Name a leaf adaptation for gas exchange','spongy mesophyll','kranz anatomy');
+O('b',36,'Name a word used in the Transport in plants','translocation','casparian strip');
+O('b',37,'Name something transported in xylem or phloem','amino acids','florigen');
+O('b',38,'Name a factor that affects the rate of transpiration','humidity','vapour pressure deficit');
+O('b',39,'Name a word used in the Blood and circulation','double circulation','sinoatrial node');
+O('b',40,'Name a part of the heart or circulatory system','coronary artery','chordae tendineae');
+O('b',41,'Name a component of blood','fibrinogen','albumin');
+O('b',42,'Name a risk factor for coronary heart disease','genetics','lipoprotein a');
+O('b',43,'Name a word about the immune system','memory cells','opsonisation');
+O('b',44,'Name a word used in the Excretion','selective reabsorption','countercurrent multiplier');
+O('b',45,'Name an excretory organ or part of the kidney','loop of henle','podocyte');
+O('b',46,'Name a substance that is excreted','urea','creatinine');
+O('b',47,'Name a word used in the Co-ordination and response','vasoconstriction','saltatory conduction');
+O('b',48,'Name a hormone','adh','erythropoietin');
+O('b',49,'Name a gland that makes a hormone','pituitary gland','pineal gland');
+O('b',50,'Name a part of the eye','suspensory ligaments','fovea');
+O('b',51,'Name a reflex action','pupil reflex','vestibulo ocular reflex');
+O('b',52,'Name a sense organ or receptor','thermoreceptors','pacinian corpuscle');
+O('b',53,'Name a plant response to a stimulus','gravitropism','thigmonasty');
+O('b',54,'Name a way the body controls its temperature','vasodilation','non shivering thermogenesis');
+O('b',55,'Name a word used in the Reproduction','amniotic fluid','double fertilisation');
+O('b',56,'Name a part of a reproductive system','sperm duct','epididymis');
+O('b',57,'Name a part of a flower','nectary','micropyle');
+O('b',58,'Name a condition seeds need to germinate','oxygen','gibberellin');
+O('b',59,'Name an agent of pollination or seed dispersal','water','fig wasp');
+O('b',60,'Name an example of asexual reproduction','potato tubers','parthenogenesis');
+O('b',61,'Name a word used in the Inheritance','codominance','epistasis');
+O('b',62,'Name a molecule or structure in protein synthesis','anticodon','spliceosome');
+O('b',63,'Name a base found in DNA','cytosine','');
+O('b',64,'Name an inherited characteristic or condition','polydactyly','tay sachs');
+O('b',65,'Name a fact about mitosis or meiosis','23 chromosomes','independent assortment');
+O('b',66,'Name a cause or type of mutation','chemical mutagens','frameshift');
+O('b',67,'Name a word used in the Variation and evolution','selection pressure','genetic drift');
+O('b',68,'Name an example of evolution or natural selection','warfarin resistant rats','italian wall lizards');
+O('b',69,'Name a word used in the Ecology and feeding relationships','pyramid of biomass','trophic cascade');
+O('b',70,'Name a food chain or food web term','quaternary consumer','chemoautotroph');
+O('b',71,'Name an abiotic or biotic factor','salinity','allelopathy');
+O('b',72,'Name a sampling method or ecology equipment','pitfall trap','tullgren funnel');
+O('b',73,'Name a decomposer or detritivore','woodlouse','springtail');
+O('b',74,'Name a way energy is lost between trophic levels','excretion','specific dynamic action');
+O('b',75,'Name a word used in the Carbon and nitrogen cycles','denitrifying bacteria','anammox');
+O('b',76,'Name a process in the carbon or nitrogen cycle','nitrification','ammonification');
+O('b',77,'Name a word used in the Human influences on the environment','leaching','biomagnification');
+O('b',78,'Name a greenhouse gas from the spec','cfcs','nitrogen trifluoride');
+O('b',79,'Name a way humans damage the environment','eutrophication','salinisation');
+O('b',80,'Name a stage of eutrophication','decomposers increase','anoxic water');
+O('b',81,'Name a way to protect biodiversity','seed banks','frozen zoo');
+O('b',82,'Name a word used in the Food production','carbon dioxide enrichment','precision fermentation');
+O('b',83,'Name a pest control method, pro or con','bioaccumulation','sterile insect technique');
+O('b',84,'Name a use of microorganisms or biotechnology','mycoprotein','bioleaching');
+O('b',85,'Name a condition controlled in an industrial fermenter','aseptic conditions','dissolved oxygen tension');
+O('b',86,'Name a word used in the Selective breeding, GM and cloning','enucleated egg','somatic cell nuclear transfer');
+O('b',87,'Name something produced by selective breeding, GM or cloning','bt cotton','enviropig');
+O('b',88,'Name a tool or step in genetic modification','sticky ends','electroporation');
+
+// second picks for prompts whose first picks were already ordinary answers
+O('p',10,'Name a device that uses the heating effect','thermal cut out|bimetallic strip','nichrome hot wire foam cutter|hot wire cutter');
+O('p',36,'Name something linked to the evidence for the Big Bang','olbers’ paradox|olbers paradox','primordial nucleosynthesis');
+O('p',40,'Name something that uses the principle of moments','mobile crane outrigger|outriggers','trebuchet counterweight|trebuchet');
+O('p',48,'Name a unit of pressure','torr','pieze');
+O('p',54,'Name a model of the atom','chadwick’s beryllium experiment|discovery of the neutron','franck hertz experiment');
+O('p',61,'Name a factor that affects how fast an object loses heat','emissivity of the surface','stefan boltzmann law');
+O('p',69,'Name a planet in our Solar System','','');
+O('p',72,'Name a device that sends or receives electromagnetic','magnetron','klystron');
+O('p',73,'Name a fact about nuclear fission or fusion','fission releases two or three neutrons|2 or 3 neutrons released','proton proton chain');
+O('p',74,'Name something that shows Newton','squid jet propulsion','ion thruster');
+O('p',75,'Name something wired in parallel at home','cooker on its own radial circuit|cooker circuit','fused spur');
+O('p',82,'Name a word used in the Radioactivity and particles','antineutrino','strong nuclear force');
+O('p',84,'Name something you can find from a motion graph','tangent gradient','jerk from the gradient of acceleration|jerk');
+O('p',85,'Name something that moves at a constant speed','geostationary satellite orbit','continental drift');
+O('p',86,'Name a reason thinking distance increases','highway hypnosis','sleep apnoea');
+O('p',87,'Name a sport where Newton','luge','sumo');
+O('p',90,'Name something that uses a lot of electrical power at home','electric underfloor heating','bitcoin miner|crypto mining rig');
+O('p',91,'Name a wire or colour in a UK three-pin plug','sleeved pins','bs 1363');
+O('p',99,'Name a word about gases and the kinetic theory','mean free path','equipartition');
+O('p',100,'Name something that is very dense or not dense','iridium','aerographite');
+O('p',101,'Name something with a high or low specific heat','hydrogen','lithium');
+O('p',103,'Name a fact about transformers','vp ip = vs is|power in equals power out','toroidal core');
+O('p',104,'Name a property of alpha, beta or gamma','alpha range of a few centimetres in air|range in air','linear energy transfer');
+O('p',106,'Name a word about orbits and gravity','geostationary','hill sphere');
+O('p',107,'Name a feature of the Hertzsprung','spectral class','horizontal branch');
+O('p',112,'Name a hazard or safety precaution in a physics','don’t look into the laser beam|laser safety','faraday cage');
+O('p',116,'Name something that spins or rotates','neutron star','tippe top');
+O('p',119,'Name something that gets hot when it’s used','resistor','reentry heat shield|heat shield');
+O('p',120,'Name a good conductor of heat','silver','boron arsenide');
+O('p',124,'Name something that contains a spring','shock absorber','belleville washer');
+O('p',137,'Name something that uses air or gas pressure','barometer','magdeburg hemispheres');
+O('p',147,'Name a word to do with nuclear power or weapons','enrichment','criticality');
+O('c',5,'Name a method of separating a mixture','sublimation','froth flotation');
+O('c',6,'Name a mixture','brass','galinstan');
+O('c',8,'Name a word used in chromatography','stationary phase','eluent');
+O('c',9,'Name a word used in the Atomic structure','isotopic abundance','orbital');
+O('c',11,'Name an isotope','deuterium','technetium 99m');
+O('c',17,'Name a word used in chemical calculations','water of crystallisation','stoichiometry');
+O('c',18,'Name a state symbol and what it means','','');
+O('c',19,'Name a word used in the Ionic bonding','electrostatic attraction','born haber cycle');
+O('c',22,'Name a word used in the Covalent bonding','buckminsterfullerene','van der waals forces');
+O('c',24,'Name a covalent substance','buckminsterfullerene','boron nitride');
+O('c',26,'Name a property of metals','ductile','paramagnetic');
+O('c',32,'Name something you see when an alkali metal reacts','white trail','metal glows red hot');
+O('c',33,'Name an alkali metal','','ununennium|element 119');
+O('c',40,'Name a word used in the Gases in the atmosphere','iron wool reacting with oxygen|iron wool','ocean acidification');
+O('c',42,'Name something that burns in oxygen','iron wool','diborane');
+O('c',48,'Name something needed for iron to rust','acid rain','galvanic corrosion');
+O('c',53,'Name a metal ore or a way to extract metals','phytomining','froth flotation');
+O('c',55,'Name a word used in the Acids and alkalis','dissociation','pka');
+O('c',58,'Name an alkali or a base','barium hydroxide','sodium amide');
+O('c',62,'Name a salt','ammonium sulfate','rochelle salt');
+O('c',64,'Name a step in making a pure, dry salt','wash with a little cold distilled water','recrystallisation');
+O('c',66,'Name a gas test and what it shows','','hydrogen chloride: white fumes with ammonia');
+O('c',67,'Name a flame test colour','','caesium (blue-violet)');
+O('c',68,'Name an ion test result','','calcium: white precipitate with sodium hydroxide');
+O('c',71,'Name an exothermic reaction','respiration','grignard reaction');
+O('c',72,'Name an endothermic reaction or process','cracking','steam reforming');
+O('c',75,'Name a factor that affects the rate of a reaction','light','orientation of collisions');
+O('c',77,'Name a catalyst','zeolite','grubbs catalyst');
+O('c',80,'Name a change that shifts an equilibrium','','add a common ion');
+O('c',85,'Name a fraction from crude oil','refinery gases','vacuum gas oil');
+O('c',94,'Name a carboxylic acid','butanoic acid','trichloroacetic acid');
+O('c',100,'Name a problem with disposing of plastics','microplastics','nurdles');
+O('b',3,'Name an organism named in the spec','chlorella','lactobacillus bulgaricus');
+O('b',5,'Name a fungus','penicillium','armillaria');
+O('b',13,'Name a chemical element found in biological molecules','sulfur','selenium');
+O('b',18,'Name an example of diffusion, osmosis or active transport','mineral ions into root hairs by active transport|mineral ions into roots','facilitated diffusion');
+O('b',19,'Name a factor that affects the rate of diffusion','membrane thickness','partial pressure');
+O('b',22,'Name a factor that limits the rate of photosynthesis','chlorophyll','compensation point');
+O('b',23,'Name a mineral ion plants need','phosphate','boron');
+O('b',34,'Name an effect of smoking','damaged cilia','goblet cell hyperplasia');
+O('b',35,'Name a leaf adaptation for gas exchange','many stomata on the underside','sunken stomata');
+O('b',37,'Name something transported in xylem or phloem','magnesium ions','auxin');
+O('b',38,'Name a factor that affects the rate of transpiration','light intensity','boundary layer');
+O('b',43,'Name a word about the immune system','antitoxins','complement system');
+O('b',45,'Name an excretory organ or part of the kidney','bowman’s capsule','vasa recta');
+O('b',50,'Name a part of the eye','ciliary muscle','tapetum lucidum');
+O('b',51,'Name a reflex action','grasp reflex','moro reflex');
+O('b',53,'Name a plant response to a stimulus','hydrotropism','nyctinasty');
+O('b',54,'Name a way the body controls its temperature','hairs stand up','brown fat');
+O('b',57,'Name a part of a flower','receptacle','tapetum');
+O('b',58,'Name a condition seeds need to germinate','','vernalisation');
+O('b',59,'Name an agent of pollination or seed dispersal','bats','yucca moth');
+O('b',62,'Name a molecule or structure in protein synthesis','rna polymerase','aminoacyl trna synthetase');
+O('b',63,'Name a base found in DNA','','5-methylcytosine');
+O('b',69,'Name a word used in the Ecology and feeding relationships','quadrat','keystone species');
+O('b',74,'Name a way energy is lost between trophic levels','faeces','assimilation efficiency');
+O('b',75,'Name a word used in the Carbon and nitrogen cycles','root nodules','nitrogenase');
+O('b',78,'Name a greenhouse gas from the spec','hfcs','sulfur hexafluoride');
+O('b',80,'Name a stage of eutrophication','anaerobic conditions','hydrogen sulfide produced');
+O('b',81,'Name a way to protect biodiversity','wildlife corridors','biodiversity net gain');
+O('b',82,'Name a word used in the Food production','aseptic','integrated pest management');
+O('b',83,'Name a pest control method, pro or con','cane toads','pheromone traps');
+O('b',86,'Name a word used in the Selective breeding, GM and cloning','micropropagation','crispr');
+O('b',87,'Name something produced by selective breeding, GM or cloning','glofish','tuskless elephants');
+O('b',88,'Name a tool or step in genetic modification','marker gene','reverse transcriptase');
+O('b',3,'Name an organism named in the spec','','anopheles gambiae');
+
 // Plain-English wording for prompts. [new wording, short example hint]
 // The original wording stays as a hidden key so answer data stays linked.
 const RENAME={
@@ -1649,6 +2116,7 @@ const ICON={
  pen:["......KK",".....KgK","....KggK","...KggK.","..KggK..",".KGgK...","KGGK....","KKK....."],
  tick:[".......X","......XX",".....XX.","X...XX..","XX.XX...",".XXX....","..X.....","........"],
  paper:["..KKKK..",".KWWGWK.","KWGWWWWK","KWWWGWWK","KGWWWWGK","KWWGWWWK",".KWWWGK.","..KKKK.."],
+ cap:["........","...KK...","..KWWK..",".KWWWWK.","KWWWWWWK",".KKWWKKY","..KKKK.Y","..KKKK.Y"],
  star:["...YY...","...YY...","YYYYYYYY",".YYYYYY.","..YYYY..",".YYYYYY.",".YY..YY.","YY....YY"],
  miss:["X......X",".X....X.","..X..X..","...XX...","...XX...","..X..X..",".X....X.","X......X"]};
 const JUNK=[
@@ -1672,7 +2140,8 @@ const TIERS=[null,
  {n:'Highlighted',p:35,c:'#b6f36b',i:'pen',d:'Not everyone spotted that.',e:'🟩'},
  {n:"Examiner's Nod",p:60,c:'#ff4f7a',i:'tick',d:'The examiner smiles. Rare.',e:'🟥'},
  {n:'Beyond the Spec',p:85,c:'#c79bff',i:'paper',d:'Off the syllabus and still right.',e:'🟪'},
- {n:'Grade 10',p:100,c:'#ffd36b',i:'star',d:'Higher than the top grade exists.',e:'🟨'}];
+ {n:'Grade 10',p:100,c:'#ffd36b',i:'star',d:'Higher than the top grade exists.',e:'🟨'},
+ {n:'Oxbridge',p:150,c:'#eaf2ff',i:'cap',d:'You smashed through the bottom of the bag. Almost nobody ever finds this.',e:'🎓'}];
 const RANKS=[[0,'Forgot My Pen',1],[60,'Back Row',2],[130,'Doodler',3],[200,'Hand Up',4],[270,'Revision Mode',5],[340,'Top Set',6],[410,"Teacher's Pet",7],[480,'Star Pupil',8],[550,'GCSELLIONAIRE',9]];
 const SUBJ={
  physics:{n:'Physics',code:'4PH1',lab:'Spec',raw:RAW,p2:true,packs:{'1':'Forces and motion','2':'Electricity','3':'Waves','4':'Energy','5':'Solids, liquids and gases','6':'Magnetism','7':'Radioactivity','8':'Astrophysics','U':'Units','P':'Practical skills','H':'History of physics'}},
@@ -1699,8 +2168,15 @@ if(typeof PHYS_EXTRA!=='undefined')for(const r of RAW)if(PHYS_EXTRA[r[3]])r[4]+=
 if(typeof X5!=='undefined'){const R={p:RAW,c:RAW_CHEM,b:RAW_BIO};for(const [s,i,pre,...g] of X5){const r=R[s]&&R[s][i];if(!r||!r[3].startsWith(pre)){console.warn('extra answers skipped',s,i,pre);continue}
  const add=g.map((csv,k)=>csv.split(',').map(x=>x.trim()).filter(Boolean).map(x=>x+':'+(k+2)+'b').join(';')).filter(Boolean).join(';');if(add)r[4]+=';'+add}}
 for(const k in SUBJ)SUBJ[k].P=build(SUBJ[k].raw);
-for(const k in SUBJ){const S0=SUBJ[k],m=new Map();S0.P.forEach(p=>p.a.forEach(x=>{if(x.ex)return;const e=m.get(x.al[0]);if(!e||x.tier<e.tier)m.set(x.al[0],x)}));S0.packs.Z='Whole-spec mix';S0.P.push({id:S0.P.length,t:'Z',spec:'whole spec',p2:false,q:`Name any word from the ${S0.n} spec`,a:[...m.values()],x:[]})}
-{const P=SUBJ.physics.P,su=P.find(p=>p.q==='Name an SI base unit');if(su){const seen=new Set(su.a.flatMap(a=>a.al));P.filter(p=>p.t==='U'&&p!==su).forEach(p=>p.a.forEach(a=>{if(!a.al.some(x=>seen.has(x))){a.al.forEach(x=>seen.add(x));su.a.push({...a,tier:Math.min(6,a.tier)})}}))}}
+// Oxbridge: at most 2 secret answers per prompt; only niche answers (tier 5+) can be promoted
+if(typeof OXA!=='undefined'){const SM={p:'physics',c:'chemistry',b:'biology'};for(const [s,i,pre,...ans] of OXA){const p=SUBJ[SM[s]]&&SUBJ[SM[s]].P[i];if(!p||!p.q.startsWith(pre)){console.warn('oxbridge skipped',s,i,pre);continue}
+ let n=p.a.filter(a=>a.ox).length;const bad=new Set(p.x.flatMap(x=>x.al));
+ for(const raw of ans){if(!raw||n>=2)continue;const names=raw.split('|'),al=names.map(norm).filter(Boolean);if(!al.length||al.some(x=>bad.has(x)))continue;
+  const hit=p.a.find(a=>a.al.some(x=>al.includes(x)));
+  if(hit){if((hit.tier>=5||hit.ex)&&!hit.ox){hit.tier=7;hit.ox=true;hit.ex=false;al.forEach(x=>{if(!hit.al.includes(x))hit.al.push(x)});n++}continue}
+  p.a.push({name:names[0],tier:7,ox:true,al});n++}}}
+for(const k in SUBJ){const S0=SUBJ[k],m=new Map();S0.P.forEach(p=>p.a.forEach(x=>{if(x.ex||x.ox)return;const e=m.get(x.al[0]);if(!e||x.tier<e.tier)m.set(x.al[0],x)}));S0.packs.Z='Whole-spec mix';S0.P.push({id:S0.P.length,t:'Z',spec:'whole spec',p2:false,q:`Name any word from the ${S0.n} spec`,a:[...m.values()],x:[]})}
+{const P=SUBJ.physics.P,su=P.find(p=>p.q==='Name an SI base unit');if(su){const seen=new Set(su.a.flatMap(a=>a.al));P.filter(p=>p.t==='U'&&p!==su).forEach(p=>p.a.forEach(a=>{if(!a.ox&&!a.al.some(x=>seen.has(x))){a.al.forEach(x=>seen.add(x));su.a.push({...a,tier:Math.min(6,a.tier)})}}))}}
 for(const k in SUBJ)for(const p of SUBJ[k].P){p.key=p.q;const r=typeof RENAME!=='undefined'&&RENAME[p.q];if(r){p.q=r[0];p.hint=r[1]}}
 const lev=(a,b)=>{const m=a.length,n=b.length,d=[];for(let i=0;i<=m;i++){d[i]=[i];for(let j=1;j<=n;j++)d[i][j]=i?0:j}for(let i=1;i<=m;i++)for(let j=1;j<=n;j++){const c=a[i-1]===b[j-1]?0:1;d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+c);if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1)}return d[m][n]};
 const hit=(n,al,fz)=>{const ns=n.replace(/ /g,''),as=al.replace(/ /g,'');if(ns===as)return 3;if(al.length>=3&&(' '+n+' ').includes(' '+al+' '))return 2;
@@ -1741,7 +2217,7 @@ const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const stage=document.getElementById('stage');
 document.getElementById('logoBag').innerHTML=spr(BAG);
-const tierRows=()=>TIERS.slice(1).map(t=>`<div class="trow" style="--c:${t.c}">${spr(ICON[t.i])}<span class="pts">${t.p} PTS</span><span class="txt"><b>${t.n}.</b> ${t.d}</span></div>`).join('');
+const tierRows=()=>TIERS.slice(1,7).map(t=>`<div class="trow" style="--c:${t.c}">${spr(ICON[t.i])}<span class="pts">${t.p} PTS</span><span class="txt"><b>${t.n}.</b> ${t.d}</span></div>`).join('')+`<div class="trow tease" style="--c:#3d4566">${spr(ICON.miss)}<span class="pts">??? PTS</span><span class="txt"><b>???</b> Some say there’s something underneath the bottom of the bag…</span></div>`;
 const specTxt=p=>`${S().lab.toUpperCase()} ${p.spec}`;
 // ---------- username filter (mirrored in Supabase so it can't be skipped) ----------
 const UF={
@@ -1777,6 +2253,7 @@ async function fetchCounts(subj,p){
 }
 const liveData=p=>LIVE[(G?G.subject:store.subject)+'|'+(p.key||p.q)];
 function liveTier(p,a){
+ if(a.ox)return 7;
  const est=a.tier,c=liveData(p);if(!c||c.total<10)return est;
  const share=(c.map[a.name]||0)/c.total;
  const real=share>=.2?1:share>=.1?2:share>=.05?3:share>=.02?4:share>=.005?5:6;
@@ -2381,7 +2858,9 @@ const SFX={
  wobble(){tone(220,.08,'sine',.04)},
  wrong(){tone(180,.12,'square',.05,0,-60);tone(120,.16,'square',.05,.1,-40)},
  drop(){tone(520,.25,'sine',.05,0,-300)},
- land(t){const notes=[262,330,392,523,659,784];for(let i=0;i<t;i++)tone(notes[i],.18,'square',.05,i*.07);if(t===6){[1047,1319,1568,2093].forEach((f,i)=>tone(f,.25,'triangle',.05,.45+i*.08))}tone(70,.3,'sine',.2)}
+ smash(){tone(60,.6,'sawtooth',.12,0,-30);tone(1800,.12,'square',.04,0,-1500);tone(2600,.2,'triangle',.03,.02,-2200);tone(110,.5,'triangle',.2,.03,-80)},
+ ox(){[392,523,659,784,1047].forEach((f,i)=>tone(f,.5,'triangle',.05,i*.11));[523,659,784,1047].forEach(f=>tone(f,1.4,'sine',.04,.7));[1568,2093,2637].forEach((f,i)=>tone(f,.3,'triangle',.03,.8+i*.12))},
+ land(t){if(t===7){tone(70,.4,'sine',.25);return}const notes=[262,330,392,523,659,784];for(let i=0;i<t;i++)tone(notes[i],.18,'square',.05,i*.07);if(t===6){[1047,1319,1568,2093].forEach((f,i)=>tone(f,.25,'triangle',.05,.45+i*.08))}tone(70,.3,'sine',.2)}
 };
 // ---------- themed bag zones ----------
 const SPR2={
@@ -2404,24 +2883,41 @@ function gradeFloat(){const marks=['A+','A*','9','A*','9','A+','9','A*','9','A+'
 function zoneJunk(k){const z=ZONES[k];let h='';if(k===5)return gradeFloat();const n=k===5?9:8+Math.floor(Math.random()*3);for(let i=0;i<n;i++){const it=z.items[Math.floor(Math.random()*z.items.length)];const x=(i+.15+Math.random()*.7)/n*100,y=8+Math.random()*80,r=(Math.random()*60-30).toFixed(0),nx=(Math.random()<.5?-1:1)*(8+Math.random()*14),sz=k===5?14+Math.floor(Math.random()*16):34+Math.floor(Math.random()*24);h+=spr(it,k===5?'twinkle':'',`style="left:${x.toFixed(1)}%;top:${y.toFixed(0)}%;width:${sz}px;height:${sz}px;transform:rotate(${r}deg);--nx:${nx.toFixed(0)}px;--nr:${(Math.random()*40-20).toFixed(0)}deg;animation-delay:${(Math.random()*2).toFixed(2)}s"`)}
  return h}
 function crowdGhosts(p,j){
- const c=liveData(p),by=[[],[],[],[],[],[],[]],used=new Set();
+ const c=liveData(p),by=[[],[],[],[],[],[],[],[]],used=new Set();
  if(c&&c.total>0){const names=Object.entries(c.map).sort((a,b)=>b[1]-a[1]).slice(0,14);
-  for(const [nm,n] of names){if(j&&nm===j.a.name)continue;const a=p.a.find(x=>x.name===nm);if(!a)continue;used.add(a);by[liveTier(p,a)].push({t:cap(nm),s:Math.round(n/c.total*1000)/10+'%',real:true})}}
+  for(const [nm,n] of names){if(j&&nm===j.a.name)continue;const a=p.a.find(x=>x.name===nm);if(!a||a.ox)continue;used.add(a);by[liveTier(p,a)].push({t:cap(nm),s:Math.round(n/c.total*1000)/10+'%',real:true})}}
  for(let t=1;t<=6;t++){if(by[t].length>=2)continue;const pool=shuffle(p.a.filter(a=>liveTier(p,a)===t&&!(j&&a===j.a)&&!used.has(a))).slice(0,2-by[t].length);pool.forEach(a=>by[t].push({t:cap(a.name),s:'',real:false}))}
  return by;
 }
 function ghostHtml(list){return list.slice(0,4).map((g,i)=>{const left=i%2?60+Math.random()*28:4+Math.random()*24,top=22+Math.random()*58;return `<div class="ghost ${g.real?'real':''}" style="left:${left.toFixed(0)}%;top:${top.toFixed(0)}%;transform:rotate(${(Math.random()*10-5).toFixed(0)}deg)">${esc(g.t)}${g.s?`<b>${g.s}</b>`:''}</div>`}).join('')}
 function deepShare(p,t){const c=liveData(p);if(!c||c.total<10)return null;let n=0;for(const [nm,k] of Object.entries(c.map)){const a=p.a.find(x=>x.name===nm);if(a&&liveTier(p,a)>=t)n+=k}return Math.max(1,Math.round(n/c.total*100))}
 function burst(host,x,y,color){for(let i=0;i<12;i++){const d=document.createElement('i');d.className='shard';const a=Math.random()*Math.PI*2,r=40+Math.random()*70;d.style.cssText=`left:${x}px;top:${y}px;background:${color};--dx:${(Math.cos(a)*r).toFixed(0)}px;--dy:${(Math.sin(a)*r*.6-20).toFixed(0)}px`;host.appendChild(d);setTimeout(()=>d.remove(),700)}}
+// ---------- the secret layer under the bag ----------
+function oxSpires(){
+ const w=[[14,40],[17,40],[48,42],[54,42],[60,42],[79,32],[83,32],[79,40],[83,40],[106,42],[112,42],[118,42],[124,42],[130,42],[149,38]];
+ return `<svg class="oxspires" viewBox="0 0 160 60" preserveAspectRatio="xMidYMax slice" shape-rendering="crispEdges" aria-hidden="true"><g fill="#060b1a">
+  <rect x="0" y="50" width="160" height="10"/><rect x="10" y="30" width="12" height="30"/><polygon points="10,30 16,10 22,30"/><rect x="15" y="6" width="2" height="5"/>
+  <rect x="40" y="36" width="26" height="24"/><rect x="43" y="31" width="20" height="5"/><rect x="46" y="27" width="14" height="4"/><rect x="50" y="22" width="6" height="5"/><rect x="52" y="17" width="2" height="5"/>
+  <rect x="74" y="24" width="14" height="36"/><polygon points="74,24 81,6 88,24"/><rect x="80" y="2" width="2" height="5"/><rect x="72" y="22" width="3" height="4"/><rect x="87" y="22" width="3" height="4"/>
+  <rect x="100" y="34" width="38" height="26"/><rect x="99" y="25" width="4" height="9"/><rect x="135" y="25" width="4" height="9"/><rect x="100" y="21" width="2" height="4"/><rect x="136" y="21" width="2" height="4"/><polygon points="100,34 119,28 138,34"/>
+  <rect x="146" y="28" width="9" height="32"/><polygon points="146,28 150.5,14 155,28"/><rect x="0" y="44" width="10" height="16"/><rect x="24" y="46" width="16" height="14"/><rect x="66" y="44" width="8" height="16"/><rect x="88" y="42" width="12" height="18"/><rect x="138" y="44" width="8" height="16"/><rect x="155" y="46" width="5" height="14"/></g>
+  ${w.map(([x,y],i)=>`<rect class="win" style="animation-delay:${(i*.06).toFixed(2)}s" x="${x}" y="${y}" width="2" height="3"/>`).join('')}</svg>`;
+}
+function oxLayer(){
+ const stars=Array.from({length:34},()=>`<span style="left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*55).toFixed(1)}%;animation-delay:${(Math.random()*2).toFixed(2)}s"></span>`).join('');
+ const t=TIERS[7];
+ return `<div class="dlayer oxl" style="--c:${t.c}"><div class="oxsky">${stars}</div>${oxSpires()}<div class="zone">beneath the bag · the dreaming spires</div><div class="dlab">${spr(ICON[t.i])}<span>${t.n}</span><b>${t.p} PTS</b></div><div class="floor" id="floor"><span>the very bottom of the bag</span></div></div>`;
+}
 // ---------- the dive ----------
 function reveal(p,j,tries,timedOut){
  if(j)j.t=liveTier(p,j.a);
  const tier=j?TIERS[j.t]:null,pts=tier?tier.p:0;
  const hudBefore=hud();
- G.score+=pts;G.depth=(G.depth||0)+pts*10;if(j&&j.t===6)store.subj[G.subject].g10++;
+ G.score+=pts;G.depth=(G.depth||0)+pts*10;if(j&&j.t>=6)store.subj[G.subject].g10++;
  G.res.push({p,j,pts});
  if(j){answerLog.push({subject:G.subject,prompt:p.key||p.q,answer:j.a.name,tier:j.t});if(answerLog.length>300)answerLog.splice(0,answerLog.length-300)}
- const groups=[6,5,4,3,2,1].map(t=>({t,list:p.a.filter(a=>liveTier(p,a)===t)})).filter(g=>g.list.length);
+ const isOx=!!(j&&j.t===7),shown=p.a.filter(a=>!a.ox||(j&&a===j.a)).length;
+ const groups=[7,6,5,4,3,2,1].map(t=>({t,list:t===7?(isOx?[j.a]:[]):p.a.filter(a=>!a.ox&&liveTier(p,a)===t)})).filter(g=>g.list.length);
  const listHtml=g=>`<div class="ar" style="--c:${TIERS[g.t].c}">${spr(ICON[TIERS[g.t].i])}<div><em>${TIERS[g.t].n} · ${g.list.length}</em>${(()=>{let l=g.list;if(l.length>45){const mine=j&&l.includes(j.a)?[j.a]:[];l=mine.concat(l.filter(a=>a!==j?.a).slice(0,45-mine.length))}return l.map(a=>j&&a===j.a?`<span class="you">${esc(cap(a.name))}</span>`:esc(cap(a.name))).join(', ')+(g.list.length>45?` … and ${g.list.length-45} more`:'')})()}</div></div>`;
  const ghosts=crowdGhosts(p,j);
  const word=j?esc(cap(j.a.name)):timedOut?'out of time':'passed';
@@ -2429,7 +2925,7 @@ function reveal(p,j,tries,timedOut){
  stage.innerHTML=`<div class="hud sticky" id="shud">${hudBefore.replace(/^<div class="hud">|<\/div>$/g,'')}</div>
  <section class="dive" id="dive">
   <div class="mouth"><div class="handles"><i></i><i></i></div><div class="zipline"></div><p class="mq">${esc(p.q)}</p></div>
-  <div class="dlayers hidden" id="ly">${TIERS.slice(1).map((t,k)=>`<div class="dlayer" style="--c:${t.c};background:${ZONES[k].bg}"><div class="junk">${zoneJunk(k)}</div>${ghostHtml(ghosts[k+1])}<div class="zone">${ZONES[k].name}</div><div class="dlab">${spr(ICON[t.i])}<span>${t.n}</span><b>${t.p} PTS</b></div></div>`).join('')}</div>
+  <div class="dlayers hidden" id="ly">${TIERS.slice(1,7).map((t,k)=>`<div class="dlayer" style="--c:${t.c};background:${ZONES[k].bg}"><div class="junk">${zoneJunk(k)}</div>${ghostHtml(ghosts[k+1])}<div class="zone">${ZONES[k].name}</div><div class="dlab">${spr(ICON[t.i])}<span>${t.n}</span><b>${t.p} PTS</b></div></div>`).join('')+(isOx?oxLayer():'')}</div>
   <div class="dnote" id="note" style="--c:${tier?tier.c:'#59648a'}">${word}</div>
   <div class="dstamp" id="dstamp" style="--c:${tier?tier.c:'#59648a'}">${tier?spr(ICON[tier.i])+tier.n.toUpperCase():''}</div>
  </section>
@@ -2440,13 +2936,13 @@ function reveal(p,j,tries,timedOut){
   <p class="ansbig" style="--c:${tier?tier.c:'var(--ink)'}">${j?esc(cap(j.a.name)):'No answer'}</p>
   ${j?`<p class="why">${tier.d}</p>${liveNote(p,j.a)}`:''}
   ${tries.length?`<p class="tried">Bounced out: ${tries.map(esc).join(', ')}</p>`:''}
-  <div class="sbtns"><button class="btn" id="nx">${last?'EMPTY THE BAG':'NEXT PROMPT'}</button><button class="btn alt" id="all">SEE EVERY ANSWER (${p.a.length})</button></div>
+  <div class="sbtns"><button class="btn" id="nx">${last?'EMPTY THE BAG':'NEXT PROMPT'}</button><button class="btn alt" id="all">SEE EVERY ANSWER (${shown})</button></div>
   <div class="sall" id="sall"><div class="alist">${groups.map(listHtml).join('')}</div></div>
  </div></div>`;
  const dive=stage.querySelector('#dive'),note=stage.querySelector('#note'),ly=stage.querySelector('#ly'),layers=[...ly.children],stamp=stage.querySelector('#dstamp'),depthc=stage.querySelector('#depthc'),dm=stage.querySelector('#dm'),skip=stage.querySelector('#skip'),sheet=stage.querySelector('#sheet');
  const go=()=>{G.i++;G.i<G.list.length?ask():end()};
  stage.querySelector('#nx').onclick=go;
- stage.querySelector('#all').onclick=e=>{sheet.classList.toggle('open');e.target.textContent=sheet.classList.contains('open')?'HIDE ANSWERS':`SEE EVERY ANSWER (${p.a.length})`};
+ stage.querySelector('#all').onclick=e=>{sheet.classList.toggle('open');e.target.textContent=sheet.classList.contains('open')?'HIDE ANSWERS':`SEE EVERY ANSWER (${shown})`};
  const openSheet=()=>{sheet.classList.add('show');skip.remove();if(j){const ct=stage.querySelector('#ct');let v=0;const step=()=>{v=Math.min(pts,v+Math.ceil(pts/24));ct.textContent=v;if(v<pts)requestAnimationFrame(step)};reduced?ct.textContent=pts:step()}stage.querySelector('#nx').focus({preventScroll:true})};
  const absTop=el=>el.getBoundingClientRect().top+window.scrollY;
  if(!j){layers.forEach(l=>l.classList.add('gone'));note.classList.add('bounced');depthc.remove();ly.classList.remove('hidden');openSheet();return}
@@ -2464,12 +2960,27 @@ function reveal(p,j,tries,timedOut){
  depthc.classList.add('on');
  const setNote=(x,y,rot)=>{note.style.transform=`translate(calc(-50% + ${x.toFixed(1)}px),${y.toFixed(1)}px) rotate(${rot.toFixed(1)}deg)`;window.scrollTo(0,Math.max(0,diveTop+y-window.innerHeight*.36));dm.textContent=Math.round(Math.max(0,y-startY)/(dist||1)*finalDepth).toLocaleString('en-GB');const ny=y+nh/2;for(const sp of sprites)if(!sp.done&&ny>=sp.y&&sp.y<lineY(j.t-1)+hitL.offsetHeight){sp.done=true;sp.s.classList.add('nudge')}for(const ln of lines)if(!ln.done&&ny>=ln.y){ln.done=true;ln.l.classList.add('pass');setTimeout(()=>ln.l.classList.remove('pass'),500)}};
  const pw=1.8+j.t*.3,ease=t=>Math.pow(t,pw);
+ const oxl=isOx?layers[6]:null,floor=isOx?stage.querySelector('#floor'):null,floorY=isOx?lineY(6)-nh*.55:0,dur1=reduced?1:3400,dur2=reduced?1:1500;
+ let broke=false,tb=0,lastSpark=0;
+ const smash=()=>{
+  broke=true;SFX.smash();floor.classList.add('gone');oxl.classList.add('open');layers[5].classList.add('crack');
+  document.body.classList.add('quake');setTimeout(()=>document.body.classList.remove('quake'),500);
+  if(!reduced){const f=document.createElement('div');f.className='oxflash';document.body.appendChild(f);setTimeout(()=>f.remove(),700);
+   const fy=lineY(6);for(let i=0;i<30;i++){const d=document.createElement('i'),x=Math.random()*100;d.className='fshard';d.style.cssText=`left:${x.toFixed(1)}%;top:${(fy+Math.random()*24).toFixed(0)}px;width:${(8+Math.random()*28).toFixed(0)}px;height:${(6+Math.random()*16).toFixed(0)}px`;dive.appendChild(d);
+    d.animate([{transform:'translate(0,0) rotate(0deg)',opacity:1},{transform:`translate(${((x-50)*5+Math.random()*80-40).toFixed(0)}px,${(240+Math.random()*420).toFixed(0)}px) rotate(${(Math.random()*720-360).toFixed(0)}deg)`,opacity:0}],{duration:1000+Math.random()*600,easing:'cubic-bezier(.2,.6,.4,1)',fill:'forwards'}).onfinish=()=>d.remove()}}
+ };
+ const sparkAt=y=>{const d=document.createElement('i');d.className='spark';d.style.cssText=`left:calc(50% + ${(Math.random()*120-60).toFixed(0)}px);top:${(y+nh*.8).toFixed(0)}px;--dx:${(Math.random()*60-30).toFixed(0)}px`;dive.appendChild(d);setTimeout(()=>d.remove(),900)};
  const frame=ts=>{
   if(done)return;if(skipped){land();return}
   if(t0===null){t0=ts;SFX.drop()}
   const el=ts-t0;
   if(el<hold){setNote(0,startY-6*Math.sin(el/hold*Math.PI),-6+6*(el/hold))}
-  else{const t=Math.min(1,(el-hold)/dur),e=ease(t),fade=1-t;setNote(Math.sin(t*Math.PI*2.5)*amp*fade,startY+dist*e,Math.sin(t*Math.PI*2.5+.5)*8*fade);if(t>=1){land();return}}
+  else if(!isOx){const t=Math.min(1,(el-hold)/dur),e=ease(t),fade=1-t;setNote(Math.sin(t*Math.PI*2.5)*amp*fade,startY+dist*e,Math.sin(t*Math.PI*2.5+.5)*8*fade);if(t>=1){land();return}}
+  else{const e1=el-hold;
+   if(e1<dur1){const t=e1/dur1,e=Math.pow(t,3.6),fade=1-t;setNote(Math.sin(t*Math.PI*2.5)*amp*fade,startY+(floorY-startY)*e,Math.sin(t*Math.PI*2.5+.5)*8*fade)}
+   else{if(!broke){smash();tb=ts;setNote(0,floorY,0)}
+    const t2=(ts-tb-90)/dur2;
+    if(t2>=0){const t=Math.min(1,t2),e=1-Math.pow(1-t,3);const y=floorY+(target-floorY)*e;setNote(Math.sin(t*Math.PI*3)*14*(1-t),y,Math.sin(t*Math.PI*3)*4*(1-t));if(!reduced&&ts-lastSpark>40){lastSpark=ts;sparkAt(y)}if(t>=1){land();return}}}}
   requestAnimationFrame(frame);
  };
  const land=()=>{
@@ -2477,13 +2988,18 @@ function reveal(p,j,tries,timedOut){
   note.style.transform=`translate(-50%,${target.toFixed(1)}px)`;dm.textContent=finalDepth.toLocaleString('en-GB');
   window.scrollTo(0,Math.max(0,diveTop+target-window.innerHeight*.3));
   document.body.classList.add('quake');setTimeout(()=>document.body.classList.remove('quake'),450);
+  if(isOx&&!broke){floor.classList.add('gone');oxl.classList.add('open')}
   note.classList.add('landed');hitL.classList.add('hit');SFX.land(j.t);
+  if(isOx){note.classList.add('oxnote');oxl.classList.add('lit');setTimeout(()=>SFX.ox(),120);
+   if(!reduced)for(let i=0;i<10;i++){const c=document.createElement('div');c.className='oxcap';c.innerHTML=spr(ICON.cap);c.style.cssText=`left:calc(50% - 20px);top:${(target).toFixed(0)}px`;dive.appendChild(c);
+    const dx=(i-4.5)*(28+Math.random()*30),up=-(180+Math.random()*260);
+    c.animate([{transform:'translate(0,0) rotate(0deg) scale(.6)',opacity:0},{transform:`translate(${(dx*.6).toFixed(0)}px,${up.toFixed(0)}px) rotate(${(Math.random()*540-270).toFixed(0)}deg) scale(1)`,opacity:1,offset:.45},{transform:`translate(${dx.toFixed(0)}px,${(up*.35).toFixed(0)}px) rotate(${(Math.random()*900-450).toFixed(0)}deg) scale(1)`,opacity:0}],{duration:1800+Math.random()*600,delay:150+i*40,easing:'cubic-bezier(.2,.7,.4,1)',fill:'forwards'}).onfinish=()=>c.remove()}}
   stamp.style.top=(target+nh+16)+'px';stamp.classList.add('show');
   const ds=deepShare(p,j.t);stage.querySelector('#dsh').textContent=ds!=null?`Only ${ds}% of answers get this deep`:'';
   depthc.classList.add('landed');depthc.style.setProperty('--c',tier.c);
   {const sc=stage.querySelector('#shud .score');if(sc)sc.textContent=G.score+' PTS'}
   layers.forEach((l,k)=>setTimeout(()=>{l.querySelector('.dlab').style.opacity='1'},reduced?0:90*Math.abs(k-(j.t-1))));
-  setTimeout(()=>{ly.classList.remove('hidden');layers.forEach((l,k)=>{if(k>j.t-1)l.classList.add('gone')});openSheet()},reduced?0:850);
+  setTimeout(()=>{ly.classList.remove('hidden');layers.forEach((l,k)=>{if(k>j.t-1)l.classList.add('gone')});openSheet()},reduced?0:isOx?1900:850);
  };
  skip.onclick=()=>{skipped=true};dive.onclick=()=>{if(!done)skipped=true};
  setNote(0,startY,-8);window.scrollTo(0,Math.max(0,diveTop-90));
@@ -2538,8 +3054,8 @@ function end(){
  ${pop}<div class="big">${s}</div><p class="depthbig">−${(G.depth||0).toLocaleString('en-GB')} m</p><p class="rank">${r[1].toUpperCase()} · GRADE ${r[2]}</p>
  <div class="rule"><span class="lbl">How you compare</span></div><div class="curve" id="curve"><p class="note-s">Loading the curve…</p></div>
  <div class="rule"><span class="lbl">Bag log</span><span class="lbl" style="color:var(--dim)">deeper = rarer</span></div>
- <div class="log">${TIERS.slice(1).map((t,k)=>`<div class="gl" style="top:${(k+.5)/6*100}%"><span>${t.n}</span></div>`).join('')}
- ${G.res.map((x,k)=>{const left=(k+.5)/n*100,top=x.j?(x.j.t-.5)/6*100:3,c=x.j?TIERS[x.j.t].c:'#59648a';return `<div class="col" style="left:${left}%;height:${top}%;--c:${c}"><i style="height:100%"></i>${spr(ICON[x.j?TIERS[x.j.t].i:'miss'])}</div><span class="x" style="left:${left}%">${k+1}</span>`}).join('')}</div>
+ <div class="log">${TIERS.slice(1,7).map((t,k)=>`<div class="gl" style="top:${(k+.5)/6*100}%"><span>${t.n}</span></div>`).join('')}
+ ${G.res.map((x,k)=>{const left=(k+.5)/n*100,top=x.j?Math.min(100,(Math.min(x.j.t,6)-.5)/6*100+(x.j.t===7?8:0)):3,c=x.j?TIERS[x.j.t].c:'#59648a';return `<div class="col" style="left:${left}%;height:${top}%;--c:${c}"><i style="height:100%"></i>${spr(ICON[x.j?TIERS[x.j.t].i:'miss'])}</div><span class="x" style="left:${left}%">${k+1}</span>`}).join('')}</div>
  <div style="height:30px"></div>
  <div class="rule"><span class="lbl">Your prompts</span></div>
  <div class="alist">${G.res.map(x=>`<div class="ar" style="--c:${x.j?TIERS[x.j.t].c:'#59648a'}">${spr(ICON[x.j?TIERS[x.j.t].i:'miss'])}<div><em>${x.j?TIERS[x.j.t].n+' · +'+x.pts:'Miss · +0'}</em>${esc(x.p.q)}: <span style="color:var(--ink)">${x.j?esc(cap(x.j.a.name)):'no answer'}</span></div></div>`).join('')}</div>
