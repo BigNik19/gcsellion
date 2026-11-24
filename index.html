@@ -71,6 +71,10 @@ button.stk{background:none;border:0;cursor:pointer}
 .ppick{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
 .spick{width:60px;height:60px;border:0;cursor:pointer;display:grid;place-items:center;background:#0b0f1d;box-shadow:0 0 0 2px var(--line)}
 .spick svg{width:40px;height:40px}
+.thud{animation:thud .28s cubic-bezier(.3,1.8,.5,1)}
+@keyframes thud{0%{transform:scale(1)}35%{transform:scale(.92) translateY(3px)}100%{transform:scale(1)}}
+.phero.thud{animation:thudh .3s ease-out}
+@keyframes thudh{0%{transform:translateY(0)}30%{transform:translateY(5px)}100%{transform:translateY(0)}}
 .spick.on{box-shadow:0 0 0 3px var(--c),0 0 14px var(--c)}
 .pact{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:22px}
 .pact .note-s{margin:0}
@@ -151,20 +155,21 @@ button{font-family:inherit;color:inherit}
 .pip{width:18px;height:10px;background:var(--line)}
 .pip.d{background:var(--cyan)}.pip.n{background:var(--pink)}
 .score{font:14px var(--px);color:var(--gold)}
-.timer{display:grid;grid-template-columns:repeat(25,minmax(0,1fr));gap:3px;margin:22px 0 8px;height:14px}
+.timer{display:grid;grid-template-columns:repeat(25,minmax(0,1fr));gap:3px;margin:16px 0 6px;height:12px}
 .timer i{background:var(--cyan)}
 .timer i.off{background:var(--line)}
 .timer.low i:not(.off){background:var(--pink)}
-.qcard{padding:clamp(20px,4vw,36px);margin-top:18px}
+.qcard{padding:clamp(16px,3vw,28px);margin-top:14px}
 .spec{color:var(--dim);letter-spacing:.1em;font-size:20px}
-.q{font-size:clamp(36px,6vw,54px);line-height:1.02;margin:12px 0 22px;text-wrap:balance}
+.q{font-size:clamp(30px,5vw,46px);line-height:1.02;margin:10px 0 16px;text-wrap:balance}
 form.ans{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch}
-form.ans input{flex:1 1 260px;font:32px var(--vt);padding:10px 16px;min-height:60px;border:0;background:#0b0f1d;color:var(--ink);box-shadow:0 0 0 3px var(--line);margin:3px;transition:box-shadow .2s,color .2s}
+form.ans input{flex:1 1 170px;min-width:0;font:28px var(--vt);padding:8px 14px;min-height:52px;border:0;background:#0b0f1d;color:var(--ink);box-shadow:0 0 0 3px var(--line);margin:3px;transition:box-shadow .2s,color .2s}
 form.ans input::placeholder{color:var(--dim)}
+@media (max-width:480px){form.ans input{font-size:23px;padding:8px 10px}form.ans .btn{padding:12px 14px}}
 form.ans input.fixed{box-shadow:0 0 0 3px var(--gold);color:var(--gold)}
 .shake{animation:shake .4s}
 @keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
-.fb{min-height:60px;margin-top:14px}
+.fb{min-height:48px;margin-top:10px}
 .bad{font:12px/1.6 var(--px);color:var(--pink);letter-spacing:.08em;animation:blink .5s steps(2) 2}
 .fixmsg{font:12px/1.6 var(--px);color:var(--gold);letter-spacing:.06em}
 @keyframes blink{50%{opacity:0}}
@@ -1421,11 +1426,11 @@ function navRender(){
  const ini=ACC.state==='in'?esc((ACC.name||'?').trim().charAt(0).toUpperCase()):'?';
  const sk=streakInfo();
  document.getElementById('nav').innerHTML=`<button class="stk ${sk.todayDone?'on':''}" id="stk" title="${sk.cur} day streak · sticker book" aria-label="${sk.cur} day streak, open sticker book">${spr(STICK.apple)}${sk.cur}</button>`+Object.entries(SUBJ).map(([k,s])=>`<button class="tag ${k===store.subject?'on':''}" data-s="${k}" aria-pressed="${k===store.subject}">${s.n.toUpperCase()}</button>`).join('')+
- `<button class="tag" id="sndBtn" aria-pressed="${sfxOn()}">SOUND ${sfxOn()?'ON':'OFF'}</button>`+(ACC.state==='in'?`<button class="navav" id="lockBtn" style="--a:${avColor(ACC.name)}" title="Your profile" aria-label="Your profile">${ini}</button>`:`<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='checking'?'…':'LOG IN'}</button>`);
+ `<button class="tag" id="sndBtn" aria-pressed="${sfxOn()}">SOUND ${sfxOn()?'ON':'OFF'}</button>`+`<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='in'?'LOCKER':ACC.state==='checking'?'…':'LOG IN'}</button>`;
  document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(G&&!confirmLeave())return;store.subject=b.dataset.s;saveLocal();navRender();view==='locker'?locker():home()});
  document.getElementById('sndBtn').onclick=()=>{store.sound=!sfxOn();saveLocal();navRender();if(sfxOn()){ensureAudio();tone(660,.12,'square',.05)}};
  document.getElementById('stk').onclick=stickers;
- document.getElementById('lockBtn').onclick=()=>{if(G&&!confirmLeave())return;ACC.state==='in'?profile():locker()};
+ document.getElementById('lockBtn').onclick=()=>{if(G&&!confirmLeave())return;locker()};
 }
 const confirmLeave=()=>{clearInterval(timer);G=null;return true};
 // ---------- streaks (one sticker for each day you finish any daily pack) ----------
@@ -1568,7 +1573,7 @@ function heroHtml(d){
   ${d.created?`<p class="psince">Playing since ${new Date(d.created).toLocaleDateString('en-GB',{month:'long',year:'numeric'})}</p>`:''}</div>
  </section>`;
 }
-function statsHtml(d){
+function statsHtml(d,me){
  const st=d.stats||{},stk=(st.stk||[]).filter(id=>STKID[id]),top=st.top;
  const bestOverall=Math.max(0,...Object.values(d.best||{}).map(Number).filter(n=>!isNaN(n)));
  const rarest=[...stk].sort((a,b)=>STKID[b].r-STKID[a].r).slice(0,6);
@@ -1581,8 +1586,8 @@ function statsHtml(d){
  ${top?`<div class="ptop" style="--c:${TIERS[top.t].c}">${spr(ICON[TIERS[top.t].i])}<div><em>Deepest answer · ${TIERS[top.t].n}</em><b>${esc(top.a)}</b><span>${esc(top.q)}</span></div></div>`:''}
  <div class="rule"><span class="lbl">Best scores</span></div>
  <div class="scroll"><table><tbody>${Object.entries(SUBJ).map(([k,s])=>{const v=Number((d.best||{})[k])||0;return `<tr><td style="color:var(--ink)">${s.n}</td><td class="n">${v}</td><td class="n">${v?'G'+rankOf(v)[2]+' · '+esc(rankOf(v)[1]):'–'}</td></tr>`}).join('')}</tbody></table></div>
- <div class="rule"><span class="lbl">Stickers · ${stk.length} / ${STK.length}</span></div>
- ${rarest.length?`<div class="prow">${rarest.map(id=>{const s=STKID[id];return `<span class="pst" style="--c:${RAR[s.r].c}" title="${esc(s.n)} · ${RAR[s.r].n}">${stkSvg(s)}</span>`}).join('')}</div>`:`<p class="note-s">No stickers yet.</p>`}`;
+ ${me?'':`<div class="rule"><span class="lbl">Stickers · ${stk.length} / ${STK.length}</span></div>`}
+ ${me?'':rarest.length?`<div class="prow">${rarest.map(id=>{const s=STKID[id];return `<span class="pst" style="--c:${RAR[s.r].c}" title="${esc(s.n)} · ${RAR[s.r].n}">${stkSvg(s)}</span>`}).join('')}</div>`:`<p class="note-s">No stickers yet.</p>`}`;
 }
 async function profile(uid,isBack){
  if(G&&!confirmLeave())return;
@@ -1593,7 +1598,7 @@ async function profile(uid,isBack){
  const back=`<button class="link" id="back">← Back</button>`;
  if(me){
   const d=myProfileData(),own=stkCounts(),mine=STK.filter(s=>own[s.id]).sort((a,b)=>b.r-a.r);
-  stage.innerHTML=`<div class="hud"><span class="lbl pk">Profile</span>${back}</div>${heroHtml(d)}${statsHtml(d)}
+  stage.innerHTML=`<div class="hud"><span class="lbl pk">Profile</span>${back}</div>${heroHtml(d)}${statsHtml(d,true)}
   <div class="rule"><span class="lbl">Show off a sticker</span></div>
   ${mine.length?`<div class="tabs" id="pst">${STYLES.map(([k,n])=>`<button class="tag ${d.style===k?'on':''}" data-st="${k}">${n}</button>`).join('')}</div>
   <div class="ppick">${mine.map(s=>`<button class="spick ${d.sticker===s.id?'on':''}" data-k="${s.id}" style="--c:${RAR[s.r].c}" title="${esc(s.n)}" aria-label="${esc(s.n)}">${stkSvg(s)}</button>`).join('')}</div><p class="note-s" id="pmsg"></p>`
@@ -1604,11 +1609,17 @@ async function profile(uid,isBack){
   <div style="margin-top:30px;display:flex;flex-wrap:wrap;gap:12px"><button class="btn alt" id="lk">LOCKER &amp; LEADERBOARD</button><button class="btn alt" id="logout">LOG OUT</button></div>`;
   bindProfileCommon();
   const msg=t=>{const m=stage.querySelector('#pmsg');if(m)m.textContent=t};
-  const save=async(patch)=>{Object.assign(ACC,{sticker:patch.sticker!==undefined?patch.sticker:ACC.sticker,style:patch.sticker_style||ACC.style});profile();
-   if(!sb)return;const {error}=await sb.from('profiles').update(patch).eq('id',ACC.id);
+  const save=async(patch,btn)=>{Object.assign(ACC,{sticker:patch.sticker!==undefined?patch.sticker:ACC.sticker,style:patch.sticker_style||ACC.style});
+   const h=stage.querySelector('.phero');if(h)h.outerHTML=heroHtml(myProfileData());
+   stage.querySelectorAll('[data-k]').forEach(b=>b.classList.toggle('on',b.dataset.k===ACC.sticker));
+   stage.querySelectorAll('[data-st]').forEach(b=>b.classList.toggle('on',b.dataset.st===ACC.style));
+   if(btn){btn.classList.remove('thud');void btn.offsetWidth;btn.classList.add('thud')}
+   const nh=stage.querySelector('.phero');if(nh){nh.classList.add('thud')}
+   ensureAudio();tone(110,.09,'square',.07,0,-60);tone(70,.12,'triangle',.09,.01);
+   msg('Saving…');if(!sb)return;const {error}=await sb.from('profiles').update(patch).eq('id',ACC.id);
    msg(error?'Couldn’t save that. If this keeps happening, update-3.sql may not have been run yet.':'Saved. Everyone sees this on your profile.')};
-  stage.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>save({sticker:b.dataset.k===ACC.sticker?null:b.dataset.k}));
-  stage.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>save({sticker_style:b.dataset.st}));
+  stage.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>save({sticker:b.dataset.k===ACC.sticker?null:b.dataset.k},b));
+  stage.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{if(b.dataset.st!==ACC.style)save({sticker_style:b.dataset.st},b)});
   stage.querySelector('#logout').onclick=async()=>{await writing;await sb.auth.signOut();Object.assign(ACC,{state:'out',id:null,name:''});navRender();locker()};
   stage.querySelector('#pf').onsubmit=e=>{e.preventDefault();findPlayers(stage.querySelector('#pq').value.trim())};
   loadFriends(seq);
@@ -1720,7 +1731,7 @@ function ask(){
  const p=G.list[G.i],tries=[];const t0=Date.now();fetchCounts(G.subject,p);
  stage.innerHTML=`${hud()}<div class="timer" id="tm">${'<i></i>'.repeat(25)}</div>
  <section class="qcard px"><p class="spec">${S().n.toUpperCase()} · ${esc((S().packs[p.t]||'').toUpperCase())} · ${specTxt(p)}${p.p2?' · PAPER 2':''}</p>
- <h2 class="q" style="font:inherit;font-size:clamp(36px,6vw,54px)">${esc(p.q)}</h2>${p.hint?`<p class="hint2">${esc(p.hint)}</p>`:''}
+ <h2 class="q" style="font:inherit;font-size:clamp(30px,5vw,46px)">${esc(p.q)}</h2>${p.hint?`<p class="hint2">${esc(p.hint)}</p>`:''}
  <form class="ans" id="f" autocomplete="off"><input id="in" autocapitalize="off" spellcheck="false" placeholder="type an answer…" aria-label="Your answer"><button class="btn">DROP IT</button></form>
  <div class="fb" id="fb"><p class="why">One answer goes in the bag. Wrong ones bounce out, so keep trying until time runs out.</p></div>
  <button class="link" id="pass">Pass</button></section>`;
