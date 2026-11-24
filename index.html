@@ -96,7 +96,7 @@ img,svg{-webkit-user-drag:none}
 @keyframes zin{from{opacity:0}}@keyframes zout{to{opacity:0}}
 .zcard{position:relative;width:min(420px,100%);background:#f4ecd6;color:#2a2238;padding:26px 24px 22px;text-align:center;box-shadow:0 0 0 4px #10131f,0 0 0 8px var(--c),10px 10px 0 8px rgba(0,0,0,.4);animation:zpop .35s cubic-bezier(.2,1.5,.4,1)}
 @keyframes zpop{from{transform:scale(.8) rotate(-3deg);opacity:0}}
-.zx{position:absolute;top:10px;right:10px;width:54px;height:54px;border:0;background:#e6dbbf;box-shadow:0 0 0 3px #10131f,3px 3px 0 3px rgba(0,0,0,.25);font:22px var(--px);color:#2a2238;cursor:pointer;display:grid;place-items:center;padding:0}
+.zx{position:absolute;z-index:10;top:10px;right:10px;width:54px;height:54px;border:0;background:#e6dbbf;box-shadow:0 0 0 3px #10131f,3px 3px 0 3px rgba(0,0,0,.25);font:22px var(--px);color:#2a2238;cursor:pointer;display:grid;place-items:center;padding:0}
 .zx:active{transform:translate(2px,2px)}
 .zstage{position:relative;height:clamp(200px,52vw,260px);perspective:700px;display:grid;place-items:center;touch-action:none;cursor:grab}
 .zt{width:clamp(170px,46vw,220px);height:clamp(170px,46vw,220px);transform-style:preserve-3d;will-change:transform;position:relative;z-index:1}
