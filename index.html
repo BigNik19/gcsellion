@@ -2174,7 +2174,7 @@ const SCI_SYN=[
 ['solar panel','solar cell','photovoltaic panel','pv panel','photovoltaic cell'],['hydroelectric','hydroelectricity','hydro electric','hydro','hydropower','hydro power'],
 ['geothermal','geothermal energy','geothermal power'],['tidal','tidal power','tidal energy','tidal barrage'],['wave power','wave energy'],['biofuel','bio fuel','biomass fuel'],
 ['nuclear','nuclear power','nuclear energy','atomic power','atomic energy'],['fossil fuel','fossil'],['half life','halflife'],['background radiation','background count'],
-['irradiation','irradiate'],['contamination','radioactive contamination'],['ionising radiation','ionizing radiation','ionising'],['electron volt','ev'],
+['irradiation','irradiate'],['contamination','radioactive contamination'],['ionising radiation','ionizing radiation','ionising'],['electron volt'],
 ['density','mass per unit volume'],['pressure','force per unit area'],['moment','turning effect','turning force','torque'],['pivot','fulcrum'],['newton meter','forcemeter','force meter','spring balance'],
 ['hooke law','hookes law'],['limit of proportionality','elastic limit'],['spring constant','stiffness'],['extension','stretch'],
 // ---- units and symbols that only count when they're the whole answer are in SCI_WHOLE below
@@ -2277,6 +2277,109 @@ const SCI_PLURAL={viruse:'virus',nuclei:'nucleus',alveoli:'alveolus',bronchi:'br
  people:'person',larvae:'larva',algae:'alga',vertebrae:'vertebra',teste:'testis',gase:'gas',lense:'lens',buse:'bus',atria:'atrium',criteria:'criterion',phenomena:'phenomenon',indice:'index',
  matrice:'matrix',vertice:'vertex',axe:'axis',hypothese:'hypothesis',analyse:'analysis',synthese:'synthesis',nucleuse:'nucleus',cactuse:'cactus',fungie:'fungus',specie:'species',
  one:'1',two:'2',three:'3',four:'4',five:'5',six:'6',seven:'7',eight:'8',nine:'9',ten:'10',zero:'0'};
+// Everyday English: British/American names, informal names, brand names that mean the thing, and common rewordings.
+const EVERY_SYN=[
+// kitchen and appliances
+['toastie maker','toasty maker','toastie machine','toasted sandwich maker','sandwich maker','sandwich toaster','sandwich press','panini press','panini maker','panini grill','grilled sandwich maker','grilled cheese maker','toastie iron','jaffle iron','sandwich griller','breville','toasted sandwich toaster'],
+['toastie','toasted sandwich','grilled sandwich','grilled cheese','grilled cheese sandwich','cheese toastie','toasted cheese sandwich','panini'],
+['air fryer','airfryer','air frier'],['coffee machine','coffee maker','coffee pot','nespresso','coffee percolator','percolator','bean to cup machine'],['food processor','liquidiser','liquidizer','magimix'],
+['blender','smoothie maker','nutribullet','smoothie blender'],['slow cooker','crock pot','crockpot'],['pressure cooker','instant pot'],['induction hob','induction cooker','induction stove','induction cooktop'],
+['frying pan','fry pan','skillet','frypan'],['saucepan','sauce pan','cooking pot'],['whistling kettle','stove kettle','hob kettle','stovetop kettle'],['aluminium foil','tin foil','tinfoil','kitchen foil'],
+['cling film','clingfilm','plastic wrap','saran wrap','cling wrap','food wrap'],['washing up liquid','dish soap','fairy liquid','dishwashing liquid','washing up soap'],['kitchen roll','paper towel','kitchen paper'],
+['tea towel','dish towel','dish cloth','drying up cloth'],['bin','rubbish bin','dustbin','waste bin','wheelie bin','trash can','garbage can','litter bin'],['oven glove','oven mitt'],['chopping board','cutting board'],
+['electric whisk','hand mixer','hand whisk'],['stand mixer','food mixer','kitchenaid','cake mixer'],['ice lolly','popsicle','ice pop'],['ice cream','icecream'],['dishwasher','dish washer'],
+['fridge freezer','fridge and freezer'],['egg timer','kitchen timer'],['tin opener','can opener'],['bottle opener'],['corkscrew'],['tongs','kitchen tongs'],['ladle'],['grater','cheese grater'],
+['barbecue','bbq','barbeque','bar b q'],['camping stove','gas stove','portable stove','camping gas'],['water filter','brita','filter jug'],['soda stream','sodastream','fizzy water maker'],
+['sweets','candy','lollies','sweeties'],['crisps','potato crisps'],['chips','french fries','fries'],['biscuit','cookie'],['fizzy drink','soft drink','soda','fizzy pop','carbonated drink','soda pop','sparkling drink'],
+['sparkling water','fizzy water','soda water','carbonated water','seltzer','seltzer water'],['aubergine','eggplant'],['courgette','zucchini'],['coriander','cilantro'],['spring onion','scallion','green onion'],
+['swede','rutabaga'],['beetroot','beet'],['mince','ground beef','minced beef','minced meat'],['prawn','shrimp'],['sweetcorn','sweet corn','corn on the cob','maize'],['porridge','oatmeal'],
+['jacket potato','baked potato'],['mashed potato','mash'],['candy floss','cotton candy'],['takeaway','takeout','take away'],['icing sugar','powdered sugar','confectioners sugar'],['caster sugar','superfine sugar'],
+['cooking oil','vegetable oil','sunflower oil','rapeseed oil','canola oil'],['jelly','jello','gelatin dessert'],['sausage','banger'],['bacon','rashers'],['pudding','dessert','afters'],
+['tap water','drinking water','mains water'],['bottled water','mineral water'],['orange squash','fruit squash','cordial','squash drink'],['chewing gum','gum','bubble gum'],['lolly','lollipop'],
+// home
+['sofa','couch','settee'],['wardrobe','closet'],['cupboard','cabinet'],['curtains','drapes'],['duvet','quilt','comforter','doona'],['pillow'],['mattress','bed mattress'],
+['central heating','heating system','home heating'],['boiler','combi boiler','gas boiler','water heater'],['storage heater','night storage heater'],['heater','electric heater','space heater','portable heater','plug in heater'],
+['fan heater','blow heater'],['oil filled radiator','oil heater','oil radiator'],['immersion heater','immersion','hot water tank heater'],['electric blanket','heated blanket'],['hot water bottle','hottie'],
+['air conditioner','air conditioning','aircon','air con','air conditioning unit','ac unit'],['dehumidifier'],['humidifier'],['desk fan','electric fan','table fan','pedestal fan','standing fan'],
+['extractor fan','extractor hood','cooker hood','range hood','kitchen extractor'],['extension lead','extension cord','power strip','multi plug','extension cable','gang socket','extension socket'],
+['phone charger','charger','charging cable','charging lead','phone cable','usb charger'],['power bank','portable charger','battery pack'],['battery','batteries'],
+['lamp','table lamp','desk lamp','bedside lamp','reading lamp','floor lamp','standard lamp'],['lava lamp'],['smoke alarm','smoke detector','fire alarm'],['carbon monoxide alarm','co alarm','carbon monoxide detector','co detector'],
+['doorbell','door bell','electric doorbell'],['video doorbell','ring doorbell','smart doorbell'],['burglar alarm','house alarm','security alarm','intruder alarm'],['security light','motion sensor light','pir light','motion light'],
+['thermostat','room thermostat','heating thermostat'],['robot vacuum','roomba','robot hoover','robotic vacuum','robot vacuum cleaner'],['iron','clothes iron','steam iron','electric iron'],
+['washer dryer','washer drier'],['clothes airer','clothes horse','airer','drying rack'],['hair straighteners','straighteners','hair straightener','flat iron','ghd','ghds'],['curling tongs','curling iron','curling wand','hair curler','curlers'],
+['electric toothbrush','sonic toothbrush','power toothbrush'],['electric shaver','electric razor','shaver'],['hair clippers','clippers','trimmer','beard trimmer'],
+['laptop','notebook computer','chromebook','macbook'],['computer','pc','desktop','desktop computer'],['tablet','ipad','tablet computer'],['smartwatch','apple watch','smart watch'],['fitness tracker','fitbit','activity tracker'],
+['controller','gamepad','game controller','joypad'],['smart speaker','alexa','amazon echo','google home','echo dot'],['router','wifi router','wireless router','broadband router','hub','wifi hub'],
+['printer','inkjet printer','laser printer','inkjet'],['webcam','web camera'],['microphone','mic'],['record player','turntable','gramophone','vinyl player'],['calculator','scientific calculator'],
+['toilet','loo','lavatory','wc','restroom'],['bath','bathtub'],['sink','basin','washbasin','wash basin'],['shower','electric shower','power shower'],['radiator','wall radiator','central heating radiator'],
+['garden hose','hosepipe','hose'],['lawnmower','lawn mower','mower','electric mower','push mower'],['strimmer','weed whacker','string trimmer','weed eater','grass trimmer'],['hedge trimmer','hedge cutter'],
+['wheelbarrow','barrow'],['watering can'],['greenhouse','glasshouse','glass house'],['garden shed','shed'],['bonfire','campfire','camp fire'],['patio heater','outdoor heater'],
+['christmas lights','fairy lights','string lights','festive lights'],['glow stick','glowstick','light stick'],['mirror','looking glass'],['window pane','windowpane','pane of glass'],
+['thermos','thermos flask','vacuum flask'],['loft insulation','attic insulation','roof insulation'],['double glazing','double glazed windows','double glazed window','double glazed','double glazed glass'],
+['cavity wall insulation','wall insulation','cavity insulation'],['draught excluder','draft excluder','draught proofing','draught strip','draft stopper','door snake'],
+['carpet','rug'],['curtain'],['blinds','window blinds','roller blind'],['fire extinguisher','extinguisher'],['fire blanket'],['first aid kit','first aid box'],
+['sticking plaster','band aid','bandaid','plaster for a cut'],['paracetamol','acetaminophen','calpol','tylenol'],['ibuprofen','nurofen','advil'],['aspirin','acetylsalicylic acid','disprin'],
+// school, office, lab
+['pen','biro','ballpoint','ballpoint pen','ball point pen'],['rubber','eraser'],['sellotape','sticky tape','scotch tape','cellotape','clear tape'],['tape measure','measuring tape'],['metre stick','meter stick','metre rule'],
+['blu tack','bluetack','blutack','sticky tack','white tack'],['drawing pin','thumbtack','thumb tack','push pin'],['paper clip','paperclip'],['glue stick','pritt stick','pritt'],['pva glue','pva','white glue'],
+['felt tip','felt tip pen','felt pen','marker pen','marker'],['highlighter','highlighter pen'],['backpack','rucksack','school bag','book bag'],['pencil case'],['whiteboard','white board'],['interactive whiteboard','smartboard','smart board'],
+['goggles','safety goggles','safety glasses','eye protection','safety specs'],['lab coat','laboratory coat','white coat'],['heatproof mat','heat proof mat','heat mat','bench mat','heat resistant mat'],
+['clamp stand','retort stand','boss and clamp','stand and clamp','clamp and stand'],['electronic balance','top pan balance','digital balance','top pan scale','digital scales','electronic scales'],
+['stirring rod','glass rod','glass stirring rod'],['wire gauze','gauze','gauze mat'],['light microscope','optical microscope'],['data logger','datalogger','data logging'],
+// clothes and people things
+['trainers','sneakers','running shoes','plimsolls'],['jumper','sweater','pullover','jersey','sweatshirt'],['tracksuit bottoms','trackies','joggers','sweatpants','jogging bottoms'],['vest','tank top','singlet'],
+['raincoat','waterproof jacket','cagoule','anorak','rain jacket'],['wellies','wellington boots','wellingtons','rain boots','gumboots'],['sunglasses','sunnies'],['swimming costume','swimsuit','bathing suit','bathers','cozzie','swimwear'],
+['swimming trunks','swim shorts'],['woolly hat','beanie','bobble hat'],['nappy','diaper'],['dummy','pacifier'],['pram','buggy','pushchair','stroller'],['cot','crib'],
+['puffer jacket','padded jacket','down jacket','puffa jacket'],['thermal underwear','long johns'],['wetsuit','wet suit'],['space blanket','foil blanket','emergency blanket','mylar blanket'],
+// transport and roads
+['underground train','tube train','subway train','metro train'],['tram','streetcar','trolley car'],['taxi','cab','minicab'],['coach','long distance bus'],['electric car','electric vehicle','battery car','battery electric vehicle'],
+['hybrid car','hybrid'],['petrol car','gas car','petrol engine car'],['diesel car','diesel engine car'],['motorway','highway','freeway'],['pavement','sidewalk','footpath'],['traffic lights','traffic light','traffic signal','stop lights'],
+['zebra crossing','pedestrian crossing','crosswalk','pelican crossing'],['petrol station','gas station','filling station','service station'],['jet','jet plane','jet aircraft','jet airliner','airliner','passenger jet'],
+['helicopter','chopper','heli'],['speedboat','motorboat','power boat','motor boat'],['yacht','sailing boat','sailboat','sailing yacht'],['jet ski','personal watercraft','waverunner'],['submarine','sub'],
+['space rocket','rocket ship'],['space shuttle','shuttle'],['windscreen','windshield'],['car bonnet','car hood'],['number plate','license plate','licence plate','registration plate'],['handbrake','parking brake','emergency brake'],
+['headlight','headlamp','headlights','car headlight'],['speed camera','speed trap'],['speed bump','sleeping policeman','speed hump'],['crash helmet','motorbike helmet','bike helmet','cycle helmet'],['car battery'],
+['jump leads','jumper cables','booster cables'],['e scooter','electric scooter','escooter','lime scooter'],['kick scooter','push scooter'],['mobility scooter'],['go kart','go cart','gokart','kart'],
+['bumper cars','dodgems','dodgem','bumper car'],['rollercoaster','roller coaster','coaster ride'],['ferris wheel','big wheel','observation wheel'],['zip wire','zipline','zip line','flying fox'],['cable car','gondola lift'],
+// play and sport
+['see saw','seesaw','teeter totter'],['merry go round','carousel','roundabout ride'],['bouncy castle','inflatable castle','bouncy house','moon bounce'],['space hopper','hopper ball'],['skateboard','skate board'],
+['roller skates','rollerblades','inline skates','roller blades'],['trampoline','trampolining'],['table tennis','ping pong'],['ten pin bowling','bowling','tenpin bowling'],['skydiving','parachuting','sky diving','parachute jump'],
+['bungee jumping','bungee jump','bungy','bungy jumping'],['shot put','shotput','shot'],['hockey puck','puck','ice hockey puck'],['slinky','slinky spring'],['yo yo','yoyo'],['frisbee','flying disc'],['kite','flying kite'],
+['newtons cradle','newton cradle','executive toy'],['fidget spinner','spinner'],['water pistol','squirt gun','water gun','super soaker'],['nerf gun','foam dart gun'],['toy car','remote control car','rc car'],
+['playing cards','deck of cards'],['balloon','party balloon'],['helium balloon','floating balloon'],['hot air balloon'],
+// body in everyday words
+['tummy','belly'],['backbone','spine','spinal column','vertebral column'],['skull','cranium'],['collarbone','clavicle','collar bone'],['kneecap','patella','knee cap'],['thigh bone','femur','thighbone'],
+['shin bone','tibia','shinbone'],['breastbone','sternum','breast bone'],['shoulder blade','scapula'],['jawbone','mandible','jaw bone','lower jaw'],['eardrum','ear drum','tympanic membrane','tympanum'],
+['earwax','ear wax','cerumen'],['snot','bogey','nasal mucus'],['spit','saliva','drool','dribble'],['poo','faeces','feces','excrement','stool sample'],['goosebumps','goose bumps','goose pimples','goose flesh'],
+['sunburn','sun burn','sunburnt skin'],['nose bleed','nosebleed'],['heartbeat','heart beat'],['tooth','teeth'],['wisdom tooth'],['belly button','navel','tummy button'],['adams apple','adam apple','laryngeal prominence'],
+// living things
+['woodlouse','pill bug','slater','roly poly'],['ladybird','ladybug','lady beetle'],['daddy long legs','crane fly'],['seagull','gull'],['minibeast','bug','creepy crawly'],['tadpole','pollywog'],
+['conker','horse chestnut'],['sycamore seed','helicopter seed','whirlybird'],['dandelion clock','dandelion seed'],['pine cone','fir cone','pinecone'],
+// weather and nature
+['hailstone','hail','hailstones'],['heatwave','heat wave'],['thunderstorm','thunder storm','electrical storm','lightning storm'],['shooting star','meteor'],['sunrise','dawn','daybreak'],['sunset','dusk','sundown'],
+['rain cloud','storm cloud','raincloud','thundercloud','cumulonimbus'],['snowflake','snow flake'],['icicle','ice icicle'],['puddle'],['rock pool','rockpool','tide pool'],['seaside','beach','the coast','coastline'],
+// places, shops and everyday stuff
+['chemist','pharmacy','drugstore'],['supermarket','grocery store','grocers'],['cinema','movie theater','movie theatre'],['holiday','vacation'],['post box','postbox','mailbox','letter box','pillar box'],
+['car park','parking lot'],['garage','car garage'],['lift'],['escalator','moving stairs'],['travelator','moving walkway','travolator'],['queue','line up'],['cashpoint','atm','cash machine'],
+['shopping bag','carrier bag','plastic bag','bag for life'],['tin can','drinks can','aluminium can','soda can','fizzy drink can','pop can','coke can'],['jam jar','glass jar'],['plastic bottle','pop bottle'],
+['bubble wrap','bubblewrap'],['cardboard box','carton'],['milk carton'],['egg box','egg carton'],['newspaper','news paper'],['tissue paper'],['wrapping paper','gift wrap'],
+// materials and describing words
+['perspex','plexiglass','plexiglas','acrylic glass','acrylic sheet'],['lycra','spandex','elastane'],['polar fleece','fleece fabric'],['pottery','earthenware','terracotta','ceramic pot'],['tarmac','blacktop','tarmacadam'],
+['plasterboard','drywall','gypsum board'],['corrugated iron','corrugated metal','tin roof'],['chicken wire','wire mesh'],['play doh','playdough','plasticine','modelling clay'],['blue tack'],
+['bendy','flexible','bendable','pliable'],['stretchy','stretchable'],['see through','transparent','clear','see thru'],['fizzy','effervescent','bubbly'],['smelly','stinky','pungent','foul smelling','strong smelling'],
+['brittle','breakable','fragile','snappable','shatters easily'],['shiny','lustrous','glossy','sheeny'],['waterproof','water resistant','water repellent','watertight'],['sticky','tacky'],['bouncy','springy'],
+['see through plastic','clear plastic','transparent plastic'],['hot','boiling hot','scorching'],['freezing cold','ice cold','very cold'],
+// tools
+['spanner','wrench'],['screwdriver','screw driver'],['adjustable spanner','adjustable wrench','monkey wrench'],['vice','bench vice'],['spirit level'],['nail gun'],['glue gun','hot glue gun'],['soldering iron','solder iron'],
+['crowbar','wrecking bar','pry bar','jemmy'],['pliers','pincers'],['tweezers'],['hammer','claw hammer'],['saw','handsaw','hand saw'],['hacksaw','hack saw'],['power drill','cordless drill','electric drill','drill'],
+['angle grinder','grinder','disc cutter'],['pressure washer','jet washer','power washer'],['leaf blower','leaf vacuum'],['chainsaw','chain saw'],['pneumatic drill','jackhammer','road drill'],
+];
+// everyday spelling variants of single words
+const EVERY_SPELL={toasty:'toastie',donut:'doughnut',yogurt:'yoghurt',pajama:'pyjama',pajamas:'pyjamas',gray:'grey',mom:'mum',plow:'plough',jewelry:'jewellery',program:'programme',curb:'kerb',cozy:'cosy',mold:'mould',
+ mustache:'moustache',catalog:'catalogue',analog:'analogue',defense:'defence',license:'licence',traveling:'travelling',modeling:'modelling',labeled:'labelled',aging:'ageing',whiskey:'whisky',disk:'disc',dialog:'dialogue',
+ airplane:'aeroplane',tidbit:'titbit',ax:'axe',skeptical:'sceptical',pediatric:'paediatric',anemia:'anaemia',diarrhea:'diarrhoea',anesthetic:'anaesthetic',fetus:'foetus',maneuver:'manoeuvre',
+ kilometer:'kilometre',centimeter:'centimetre',millimeter:'millimetre',liter:'litre',milliliter:'millilitre',theater:'theatre',fiber:'fibre',gauge:'gauge',gage:'gauge',grey:'grey',tyres:'tyre',tires:'tyre',
+ fulfil:'fulfill',enroll:'enrol',sceptic:'sceptic',moult:'moult',molt:'moult',plough:'plough',storey:'storey',kerb:'kerb',arse:'bum',bum:'bum',butt:'bum',
+ telly:'telly',lorry:'lorry',hoover:'hoover'};
 
 {
 // ---------- pixel sprites ----------
@@ -2351,7 +2454,7 @@ const build=raw=>raw.map((r,i)=>({id:i,t:String(r[0]),spec:r[1],p2:!!r[2],q:r[3]
  a:(()=>{const seen=new Set(),keys=new Map(),key=x=>x.split(' ').filter(w=>!FILLER.has(w)).join(' ')||x;return r[4].split(';').filter(Boolean).map(x=>{const k=x.lastIndexOf(':');const names=x.slice(0,k).split('|');const ts=x.slice(k+1),ex=ts.endsWith('b'),t=parseInt(ts);return{name:names[0],tier:ex?Math.min(t,5):t,ex,al:names.map(norm).filter(Boolean)}}).filter(a=>{if(!(a.tier>=1&&a.tier<=6)||!a.al.length)return false;const hitA=a.al.map(x=>keys.get(key(x))).find(Boolean)||(a.al.some(x=>seen.has(x))?true:null);if(hitA){if(hitA!==true)a.al.forEach(x=>{if(!seen.has(x)){seen.add(x);hitA.al.push(x)}});return false}a.al.forEach(x=>{seen.add(x);if(!keys.has(key(x)))keys.set(key(x),a)});return true}).map(a=>{const extra=[];a.al.forEach(x=>synVariants(x).forEach(v=>{if(!seen.has(v)){seen.add(v);extra.push(v)}}));a.al=a.al.concat(extra);return a})})(),
  x:r[5]?r[5].split(';').filter(Boolean).map(x=>{const k=x.indexOf('=');return{al:x.slice(0,k).split('|').map(norm),note:x.slice(k+1)}}):[]}));
 const FILLER=new Set(['energy','store','force','ray','wave','radiation','particle','a','an','of','in','on','for','and','to','it','its','type','kind','unit','quantity','effect','process','method','gas','power','station','plant','material','metal','element','device','machine','test','using','use','by','with','from','is','are','that','which','my','your','thing','stuff','one','some','eg','e','g','i','think','maybe','called','like','electric','electrical','big','small','old','new','home','household','normal','basic','simple','general']);
-const SYN=[['oven','stove','cooker'],['hob','stovetop','cooktop','stove top'],['tv','television','telly'],['mobile phone','phone','cell phone','cellphone','smartphone','iphone','mobile'],['fridge','refrigerator'],['freezer','deep freeze','deep freezer'],['hair dryer','hairdryer','blow dryer','hair drier'],['loudspeaker','speaker'],['headphone','earphone','earbud','airpod'],['bike','bicycle','push bike'],['motorbike','motorcycle','motor bike'],['car','automobile','motor car'],['lorry','truck','hgv'],['plane','aeroplane','airplane','aircraft'],['lift','elevator'],['torch','flashlight'],['rubbish','trash','garbage'],['petrol','gasoline'],['film','movie'],['football','soccer'],['tap','faucet'],['socket','plug socket','power socket','outlet','wall socket'],['wire','cable','wiring'],['light bulb','bulb','lightbulb','lamp'],['microwave','microwave oven'],['washing machine','washer'],['tumble dryer','dryer','clothes dryer'],['laptop','computer','pc'],['games console','console','playstation','xbox','nintendo switch'],['remote control','remote','tv remote'],['sun','sunlight','sunshine'],['rock','stone'],['seatbelt','seat belt'],['helmet','crash helmet'],['magnifying glass','magnifier','hand lens'],['glasses','spectacles','specs','eyeglasses'],['contact lens','contacts'],['wifi','wi fi','wireless internet'],['solar panel','solar cell','photovoltaic panel','pv panel'],['wind turbine','windmill'],['power station','power plant'],['gps','sat nav','satnav','satellite navigation'],['fire','flame'],['skydiver','sky diver','parachutist'],['stopwatch','stop clock','timer'],['scales','weighing scales','weighing machine'],['spacecraft','spaceship','space ship'],['space station','iss'],['sea','ocean'],['lightning','lightening'],['aurora','northern lights','aurora borealis'],['earthquake','quake'],['hurricane','typhoon','cyclone'],['tornado','twister'],['fog','mist'],['steam','water vapour'],['vacuum cleaner','hoover','hoovering'],['radiator','heater'],['kettle','electric kettle'],['toaster','toastie maker'],['drill','power drill','electric drill'],['clock','wall clock'],['watch','wristwatch','smartwatch'],['trampoline','trampolining']];
+const SYN=[['oven','stove','cooker'],['hob','stovetop','cooktop','stove top'],['tv','television','telly'],['mobile phone','phone','cell phone','cellphone','smartphone','iphone','mobile'],['fridge','refrigerator'],['freezer','deep freeze','deep freezer'],['hair dryer','hairdryer','blow dryer','hair drier'],['loudspeaker','speaker'],['headphone','earphone','earbud','airpod'],['bike','bicycle','push bike'],['motorbike','motorcycle','motor bike'],['car','automobile','motor car'],['lorry','truck','hgv'],['plane','aeroplane','airplane','aircraft'],['lift','elevator'],['torch','flashlight'],['rubbish','trash','garbage'],['petrol','gasoline'],['film','movie'],['football','soccer'],['tap','faucet'],['socket','plug socket','power socket','outlet','wall socket'],['wire','cable','wiring'],['light bulb','bulb','lightbulb','lamp'],['microwave','microwave oven'],['washing machine','washer'],['tumble dryer','dryer','clothes dryer'],['computer','pc'],['games console','console','playstation','xbox','nintendo switch'],['remote control','remote','tv remote'],['sun','sunlight','sunshine'],['rock','stone'],['seatbelt','seat belt'],['helmet','crash helmet'],['magnifying glass','magnifier','hand lens'],['glasses','spectacles','specs','eyeglasses'],['contact lens','contacts'],['wifi','wi fi','wireless internet'],['solar panel','solar cell','photovoltaic panel','pv panel'],['wind turbine','windmill'],['power station','power plant'],['gps','sat nav','satnav','satellite navigation'],['fire','flame'],['skydiver','sky diver','parachutist'],['stopwatch','stop clock','timer'],['scales','weighing scales','weighing machine'],['spacecraft','spaceship','space ship'],['space station','iss'],['sea','ocean'],['lightning','lightening'],['aurora','northern lights','aurora borealis'],['earthquake','quake'],['hurricane','typhoon','cyclone'],['tornado','twister'],['fog','mist'],['steam','water vapour'],['vacuum cleaner','hoover','hoovering'],['kettle','electric kettle'],['drill','power drill','electric drill'],['clock','wall clock'],['watch','wristwatch','smartwatch'],['trampoline','trampolining']];
 const SYNMAP=new Map();const SYNMULTI=[];
 SYN.forEach(g=>{const ng=g.map(norm);ng.forEach(m=>{if(m.includes(' '))SYNMULTI.push([m,ng]);else{if(!SYNMAP.has(m))SYNMAP.set(m,ng)}})});
 function synVariants(al){const out=new Set();const pad=' '+al+' ';
@@ -2381,15 +2484,18 @@ const lev=(a,b)=>{const m=a.length,n=b.length,d=[];for(let i=0;i<=m;i++){d[i]=[i
 //          These always need the player to confirm.
 const FILL2=new Set([...FILLER,'reaction','vessel','tissue','gland','organ','cell']);
 const CANON=new Map(),WHOLE=new Map();let CMAXW=1;
-const plur=t=>t.split(' ').map(w=>SCI_PLURAL[w]||w).join(' ');
+const TOKMAP=Object.assign({},typeof SCI_PLURAL!=='undefined'?SCI_PLURAL:{},typeof EVERY_SPELL!=='undefined'?EVERY_SPELL:{});
+const plur=t=>t.split(' ').map(w=>TOKMAP[w]||w).join(' ');
 const canonPhrase=(toks)=>{const out=[];for(let i=0;i<toks.length;){let hit=0;for(let L=Math.min(CMAXW,toks.length-i);L>=1;L--){const ph=toks.slice(i,i+L).join(' '),c=CANON.get(ph);if(c!==undefined){if(c)out.push(c);i+=L;hit=1;break}}if(!hit){out.push(toks[i]);i++}}return out.join(' ')};
-const canon=n=>{const t=plur(n);if(!t)return t;let c=canonPhrase(t.split(' '));const c2=canonPhrase(c.split(' '));return c2};
+const canon=n=>{const t=plur(n);if(!t)return t;return canonPhrase(canonPhrase(t.split(' ')).split(' '))};
 (()=>{
- const add=(g,whole)=>{const k0=plur(norm(g[0]));if(!k0)return;for(const w of g){const k=plur(norm(w));if(!k||k===k0)continue;
-  if(whole){if(!WHOLE.has(k))WHOLE.set(k,[]);WHOLE.get(k).push(k0)}else{if(!CANON.has(k))CANON.set(k,k0);CMAXW=Math.max(CMAXW,k.split(' ').length)}}};
- for(const g of (typeof SCI_SYN!=='undefined'?SCI_SYN:[]))add(g,false);
- for(const g of SYN)add(g,false);
- for(const g of (typeof SCI_WHOLE!=='undefined'?SCI_WHOLE:[]))add(g,true);
+ // groups that share a phrase are joined, so every phrase has exactly one stand-in
+ const par=new Map(),find=x=>{while(par.get(x)!==x){par.set(x,par.get(par.get(x)));x=par.get(x)}return x};
+ const node=x=>{if(!par.has(x))par.set(x,x);return x};
+ const groups=[...(typeof SCI_SYN!=='undefined'?SCI_SYN:[]),...SYN,...(typeof EVERY_SYN!=='undefined'?EVERY_SYN:[])];
+ for(const g of groups){const ks=g.map(w=>plur(norm(w))).filter(Boolean);if(!ks.length)continue;const r=find(node(ks[0]));for(const k of ks.slice(1)){const r2=find(node(k));if(r2!==r)par.set(r2,r)}}
+ for(const k of par.keys()){CANON.set(k,find(k));CMAXW=Math.max(CMAXW,k.split(' ').length)}
+ for(const g of (typeof SCI_WHOLE!=='undefined'?SCI_WHOLE:[])){const k0=plur(norm(g[0]));for(const w of g.slice(1)){const k=plur(norm(w));if(!k||k===k0)continue;if(!WHOLE.has(k))WHOLE.set(k,[]);WHOLE.get(k).push(k0)}}
 })();
 const sq=s=>s.replace(/ /g,'');
 const coreOf=s=>s.split(' ').filter(w=>!FILL2.has(w)).sort().join(' ');
@@ -2400,6 +2506,7 @@ const stemSeq=s=>s.split(' ').filter(w=>!FILL2.has(w)).map(stem).sort().join(' '
 const phon=s=>s.replace(/ph/g,'f').replace(/ck/g,'k').replace(/c(?=[eiy])/g,'s').replace(/[cq]/g,'k').replace(/x/g,'ks').replace(/y/g,'i').replace(/z/g,'s').replace(/wh/g,'w').replace(/gh/g,'g').replace(/kn/g,'n').replace(/rh/g,'r').replace(/(.)\1+/g,'$1').replace(/ou/g,'u').replace(/ae|oe/g,'e');
 const featCache=new Map();
 const feat=s=>{let f=featCache.get(s);if(f)return f;const c=canon(s);f={raw:s,sq:sq(s),can:c,csq:sq(c),core:coreOf(c),stem:stemSeq(c),ph:phon(sq(c)),phr:phon(sq(s)),toks:c.split(' ').filter(w=>!FILL2.has(w))};if(featCache.size>60000)featCache.clear();featCache.set(s,f);return f};
+const DEVICE=new Set(['maker','machine','press','iron','toaster','oven','cooker','heater','dryer','player','appliance','gadget','grill','fryer','blender','mixer','warmer','kettle','lamp','light','fan','pump']);
 const inPhrase=(hay,needle)=>needle.length>=3&&(' '+hay+' ').includes(' '+needle+' ');
 const allow=L=>L<=3?0:L<=5?1:L<=8?2:L<=12?3:4;
 // exact-level score: 5 raw, 4.5 equivalent, 4 same core words, 3.5 contains it (only filler around it), 2 contains it plus other words (ask)
@@ -2423,15 +2530,18 @@ function nearScore(I,A){
  if(!A.csq||!I.csq)return 0;
  let s=Math.max(nearPair(I.csq,A.csq,I.ph,A.ph),A.sq!==A.csq||I.sq!==I.csq?nearPair(I.sq,A.sq,I.phr,A.phr):0);
  if(I.stem&&I.stem===A.stem)s=Math.max(s,.9);
+ // typed the thing, the answer is the machine for it ("toastie" -> "toastie maker")
+ if(I.csq.length>=4&&A.can.startsWith(I.can+' ')&&DEVICE.has(A.can.slice(I.can.length+1)))s=Math.max(s,.65);
  if(A.toks.length>1&&A.toks.length===I.toks.length){const used=new Set();let ok=true;for(const t of A.toks){const k=I.toks.findIndex((u,j)=>!used.has(j)&&(u===t||(Math.abs(u.length-t.length)<=allow(t.length)&&lev(u,t)<=allow(t.length))));if(k<0){ok=false;break}used.add(k)}if(ok)s=Math.max(s,.8)}
  return s;
 }
 function judge(p,input){
  const n=norm(input);if(!n)return{ok:false};
- const forms=[n,...(WHOLE.get(plur(n))||[])].map(feat);
- let best=null,bs=0,bl=0;const near=new Map();
+ const tk=n.split(' '),perms=tk.length===2?[tk[1]+' '+tk[0]]:tk.length===3?[[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]].map(o=>o.map(i=>tk[i]).join(' ')):[];
+ const forms=[n,...(WHOLE.get(plur(n))||[]),...perms].map(feat);
+ let best=null,bs=0,bl=1e9,bla=0;const near=new Map();
  for(const a of p.a)for(const al of a.al){const A=feat(al);
-  for(const I of forms){const s=exactScore(I,A);if(s>bs||(s===bs&&s&&al.length>bl)){best=a;bs=s;bl=al.length}}
+  for(const I of forms){const s=exactScore(I,A);if(!s)continue;const d=lev(forms[0].sq,A.sq);if(s>bs||(s===bs&&(d<bl||(d===bl&&al.length>bla)))){best=a;bs=s;bl=d;bla=al.length}}
  }
  // "not valid" notes beat anything except a straight match
  let xs=0,xn=null;for(const x of p.x)for(const al of x.al){const A=feat(al);for(const I of forms){const s=exactScore(I,A);if(s>xs){xs=s;xn=x.note}}}
@@ -2439,7 +2549,8 @@ function judge(p,input){
  if(bs>=3.5)return{ok:true,a:best};
  // near misses: rank the closest answers
  const I=forms[0];
- for(const a of p.a){if(a.ox)continue;let m=0;for(const al of a.al){const s=nearScore(I,feat(al));if(s>m)m=s}if(m>=.6)near.set(a,m)}
+ const nf=forms.filter((f,i)=>i===0||i>forms.length-perms.length-1);
+ for(const a of p.a){if(a.ox)continue;let m=0;for(const al of a.al){const A=feat(al);for(const F of nf){const s=nearScore(F,A)*(F===I?1:.97);if(s>m)m=s}}if(m>=.6)near.set(a,m)}
  if(xs>=2&&!near.size&&bs<2)return{ok:false,note:xn};
  const cands=[...near.entries()].sort((x,y)=>y[1]-x[1]).map(e=>e[0]);
  if(bs===2&&best){const i=cands.indexOf(best);if(i>=0)cands.splice(i,1);cands.unshift(best)}
@@ -3022,9 +3133,9 @@ function clAsk(){
    fb.innerHTML=`<p class="why">Locked in for <b style="color:${T.c}">+${T.p} PTS</b>. Waiting for everyone else…</p>`;
    const nn=[392,440,523,587,659,784,988];tone(nn[t-1],.1,'square',.05);tone(nn[t-1]*1.5,.14,'square',.05,.08);if(t>=6)tone(nn[t-1]*2,.2,'triangle',.04,.18);
    const send=()=>clSend('ans',{r:R.r,k:clTab,t,a:R.locked.a});send();clearInterval(CL.rs);CL.rs=setInterval(()=>{if(!CL||CL.round!==R||CL.g.res)return clearInterval(CL.rs);send()},1500);return}
-  if(j.fix){const fixed=cap(j.a.name);inp.value=fixed;inp.classList.add('fixed');shake();inp.setSelectionRange(fixed.length,fixed.length);
+  if(j.fix&&norm(v)!==R.asked){R.asked=norm(v);inp.classList.add('fixed');shake();
    fb.innerHTML=dymHtml(j,v,'LOCK IT');wireDym(fb,j,inp,stage.querySelector('#f'));return}
-  R.tries.push(v);inp.value='';inp.classList.remove('fixed');shake();SFX.wrong();
+  R.asked=null;R.tries.push(v);inp.value='';inp.classList.remove('fixed');shake();SFX.wrong();
   fb.innerHTML=`<p class="bad">✕ NOT VALID: “${esc(v)}”. TRY AGAIN</p>${j.note?`<p class="why">${esc(j.note)}</p>`:''}`};
 }
 function clReveal(m){
@@ -3483,19 +3594,20 @@ function ask(){
  inp.focus();
  const shake=()=>{inp.classList.remove('shake');void inp.offsetWidth;inp.classList.add('shake');inp.focus()};
  const finish=(j,out)=>{clearInterval(timer);reveal(p,j,tries,out)};
+ let asked=null;   // the text we last offered suggestions for: sending it again means "no, I meant what I typed"
  inp.oninput=()=>inp.classList.remove('fixed');
  clearInterval(timer);
  timer=setInterval(()=>{const left=25-(Date.now()-t0)/1000;if(left<=0){finish(null,true);return}const on=Math.ceil(left);segs.forEach((s,k)=>s.classList.toggle('off',k>=on));tm.classList.toggle('low',left<8)},100);
  stage.querySelector('#f').onsubmit=e=>{e.preventDefault();const v=inp.value.trim();if(!v)return;ensureAudio();const j=judge(p,v);
   if(j.ok){finish(j);return}
-  if(j.fix){const fixed=cap(j.a.name);inp.value=fixed;inp.classList.add('fixed');shake();inp.setSelectionRange(fixed.length,fixed.length);
+  if(j.fix&&norm(v)!==asked){asked=norm(v);inp.classList.add('fixed');shake();
    fb.innerHTML=dymHtml(j,v,'DROP IT')+(tries.length?`<p class="tried">Tried: ${tries.map(esc).join(', ')}</p>`:'');wireDym(fb,j,inp,stage.querySelector('#f'));return}
-  tries.push(v);inp.value='';inp.classList.remove('fixed');shake();SFX.wrong();
+  asked=null;tries.push(v);inp.value='';inp.classList.remove('fixed');shake();SFX.wrong();
   fb.innerHTML=`<p class="bad">✕ NOT VALID: “${esc(v)}”. TRY AGAIN</p>${j.note?`<p class="why">${esc(j.note)}</p>`:''}<p class="tried">Tried: ${tries.map(esc).join(', ')}</p>`};
  stage.querySelector('#pass').onclick=()=>finish(null);
 }
 // "did you mean": up to three tappable suggestions; nothing counts until the player picks one
-const dymHtml=(j,v,btn)=>{const c=j.cands||[j.a];return `<p class="fixmsg">DID YOU MEAN…</p><div class="dym">${c.map((a,i)=>`<button type="button" class="dyb${i?'':' on'}" data-dym="${i}">${esc(cap(a.name))}</button>`).join('')}</div><p class="why">${j.kind==='part'?`“${esc(v)}” isn’t on the list, but it contains “${esc(cap(c[0].name))}”, which is.`:`“${esc(v)}” isn’t on the list as typed.`} Tap one to confirm, press ${btn} for the first, or keep typing.</p>`};
+const dymHtml=(j,v,btn)=>{const c=j.cands||[j.a];return `<p class="fixmsg">DID YOU MEAN…</p><div class="dym">${c.map((a,i)=>`<button type="button" class="dyb" data-dym="${i}">${esc(cap(a.name))}</button>`).join('')}</div><p class="why">“${esc(v)}” isn’t on the list as typed. Tap a suggestion if that’s what you meant, or press ${btn} again to send it anyway.</p>`};
 const wireDym=(root,j,inp,form)=>root.querySelectorAll('[data-dym]').forEach(b=>b.onclick=()=>{inp.value=cap((j.cands||[j.a])[+b.dataset.dym].name);if(form.requestSubmit)form.requestSubmit();else form.dispatchEvent(new Event('submit',{cancelable:true}))});
 function junkFor(k){return ''}
 // ---------- sound (made in the browser, no files) ----------
