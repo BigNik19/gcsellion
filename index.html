@@ -382,8 +382,9 @@ tr.me td{color:var(--gold)}
 .depthc span{font:9px var(--px);letter-spacing:.12em;color:var(--muted)}
 .depthc em{font-style:normal;font-size:20px;color:var(--gold);text-align:right;max-width:240px}
 .skip{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:30;font:11px var(--px);letter-spacing:.1em;color:#0d1120;background:var(--cyan);border:0;padding:14px 18px;min-height:46px;cursor:pointer;box-shadow:4px 4px 0 rgba(0,0,0,.4)}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:40;transform:translateY(105%);transition:transform .5s cubic-bezier(.2,1,.3,1);display:flex;justify-content:center;pointer-events:none}
-.sheet.show{transform:none;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:40;transform:translateY(110%);visibility:hidden;transition:transform .5s cubic-bezier(.2,1,.3,1),visibility 0s .5s;display:flex;justify-content:center;pointer-events:none}
+.sheet.show{transform:none;visibility:visible;transition:transform .5s cubic-bezier(.2,1,.3,1),visibility 0s;pointer-events:auto}
+.sheet .stamp{animation:none}.sheet.show .stamp{animation:stamp .45s cubic-bezier(.2,1.6,.4,1) .15s both}
 .sheet-in{width:min(900px,100%);max-height:52vh;overflow:auto;background:#121729;padding:18px clamp(16px,4vw,32px) 22px;box-shadow:0 -4px 0 var(--c),0 -20px 40px rgba(0,0,0,.5)}
 .sheet.open .sheet-in{max-height:86vh}
 .srow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -2927,7 +2928,7 @@ function reveal(p,j,tries,timedOut){
   <div class="mouth"><div class="handles"><i></i><i></i></div><div class="zipline"></div><p class="mq">${esc(p.q)}</p></div>
   <div class="dlayers hidden" id="ly">${TIERS.slice(1,7).map((t,k)=>`<div class="dlayer" style="--c:${t.c};background:${ZONES[k].bg}"><div class="junk">${zoneJunk(k)}</div>${ghostHtml(ghosts[k+1])}<div class="zone">${ZONES[k].name}</div><div class="dlab">${spr(ICON[t.i])}<span>${t.n}</span><b>${t.p} PTS</b></div></div>`).join('')+(isOx?oxLayer():'')}</div>
   <div class="dnote" id="note" style="--c:${tier?tier.c:'#59648a'}">${word}</div>
-  <div class="dstamp" id="dstamp" style="--c:${tier?tier.c:'#59648a'}">${tier?spr(ICON[tier.i])+tier.n.toUpperCase():''}</div>
+  <div class="dstamp" id="dstamp" style="--c:${tier?tier.c:'#59648a'}"></div>
  </section>
  <div class="depthc" id="depthc"><b id="dm">0</b><span>metres deep</span><em id="dsh"></em></div>
  <button class="skip" id="skip">TAP TO SKIP ›</button>
@@ -2960,7 +2961,7 @@ function reveal(p,j,tries,timedOut){
  depthc.classList.add('on');
  const setNote=(x,y,rot)=>{note.style.transform=`translate(calc(-50% + ${x.toFixed(1)}px),${y.toFixed(1)}px) rotate(${rot.toFixed(1)}deg)`;window.scrollTo(0,Math.max(0,diveTop+y-window.innerHeight*.36));dm.textContent=Math.round(Math.max(0,y-startY)/(dist||1)*finalDepth).toLocaleString('en-GB');const ny=y+nh/2;for(const sp of sprites)if(!sp.done&&ny>=sp.y&&sp.y<lineY(j.t-1)+hitL.offsetHeight){sp.done=true;sp.s.classList.add('nudge')}for(const ln of lines)if(!ln.done&&ny>=ln.y){ln.done=true;ln.l.classList.add('pass');setTimeout(()=>ln.l.classList.remove('pass'),500)}};
  const pw=1.8+j.t*.3,ease=t=>Math.pow(t,pw);
- const oxl=isOx?layers[6]:null,floor=isOx?stage.querySelector('#floor'):null,floorY=isOx?lineY(6)-nh*.55:0,dur1=reduced?1:3400,dur2=reduced?1:1500;
+ const oxl=isOx?layers[6]:null,floor=isOx?stage.querySelector('#floor'):null,floorY=isOx?lineY(6)-nh*.55:0,dur1=reduced?1:3400,dur2=reduced?1:2600,hit=reduced?0:220;
  let broke=false,tb=0,lastSpark=0;
  const smash=()=>{
   broke=true;SFX.smash();floor.classList.add('gone');oxl.classList.add('open');layers[5].classList.add('crack');
@@ -2979,8 +2980,8 @@ function reveal(p,j,tries,timedOut){
   else{const e1=el-hold;
    if(e1<dur1){const t=e1/dur1,e=Math.pow(t,3.6),fade=1-t;setNote(Math.sin(t*Math.PI*2.5)*amp*fade,startY+(floorY-startY)*e,Math.sin(t*Math.PI*2.5+.5)*8*fade)}
    else{if(!broke){smash();tb=ts;setNote(0,floorY,0)}
-    const t2=(ts-tb-90)/dur2;
-    if(t2>=0){const t=Math.min(1,t2),e=1-Math.pow(1-t,3);const y=floorY+(target-floorY)*e;setNote(Math.sin(t*Math.PI*3)*14*(1-t),y,Math.sin(t*Math.PI*3)*4*(1-t));if(!reduced&&ts-lastSpark>40){lastSpark=ts;sparkAt(y)}if(t>=1){land();return}}}}
+    const t2=(ts-tb-hit)/dur2;
+    if(t2>=0){const t=Math.min(1,t2),e=1.2*(t-2*t*t+t*t*t)+3*t*t-2*t*t*t;const y=floorY+(target-floorY)*e;setNote(Math.sin(t*Math.PI*3)*14*(1-t),y,Math.sin(t*Math.PI*3)*4*(1-t));if(!reduced&&ts-lastSpark>40){lastSpark=ts;sparkAt(y)}if(t>=1){land();return}}}}
   requestAnimationFrame(frame);
  };
  const land=()=>{
@@ -2994,12 +2995,12 @@ function reveal(p,j,tries,timedOut){
    if(!reduced)for(let i=0;i<10;i++){const c=document.createElement('div');c.className='oxcap';c.innerHTML=spr(ICON.cap);c.style.cssText=`left:calc(50% - 20px);top:${(target).toFixed(0)}px`;dive.appendChild(c);
     const dx=(i-4.5)*(28+Math.random()*30),up=-(180+Math.random()*260);
     c.animate([{transform:'translate(0,0) rotate(0deg) scale(.6)',opacity:0},{transform:`translate(${(dx*.6).toFixed(0)}px,${up.toFixed(0)}px) rotate(${(Math.random()*540-270).toFixed(0)}deg) scale(1)`,opacity:1,offset:.45},{transform:`translate(${dx.toFixed(0)}px,${(up*.35).toFixed(0)}px) rotate(${(Math.random()*900-450).toFixed(0)}deg) scale(1)`,opacity:0}],{duration:1800+Math.random()*600,delay:150+i*40,easing:'cubic-bezier(.2,.7,.4,1)',fill:'forwards'}).onfinish=()=>c.remove()}}
-  stamp.style.top=(target+nh+16)+'px';stamp.classList.add('show');
+  stamp.innerHTML=spr(ICON[tier.i])+tier.n.toUpperCase();stamp.style.top=(target+nh+16)+'px';requestAnimationFrame(()=>stamp.classList.add('show'));
   const ds=deepShare(p,j.t);stage.querySelector('#dsh').textContent=ds!=null?`Only ${ds}% of answers get this deep`:'';
   depthc.classList.add('landed');depthc.style.setProperty('--c',tier.c);
   {const sc=stage.querySelector('#shud .score');if(sc)sc.textContent=G.score+' PTS'}
   layers.forEach((l,k)=>setTimeout(()=>{l.querySelector('.dlab').style.opacity='1'},reduced?0:90*Math.abs(k-(j.t-1))));
-  setTimeout(()=>{ly.classList.remove('hidden');layers.forEach((l,k)=>{if(k>j.t-1)l.classList.add('gone')});openSheet()},reduced?0:isOx?1900:850);
+  setTimeout(()=>{ly.classList.remove('hidden');layers.forEach((l,k)=>{if(k>j.t-1)l.classList.add('gone')});openSheet()},reduced?0:isOx?2300:850);
  };
  skip.onclick=()=>{skipped=true};dive.onclick=()=>{if(!done)skipped=true};
  setNote(0,startY,-8);window.scrollTo(0,Math.max(0,diveTop-90));
