@@ -29,25 +29,25 @@ body{overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-
 input,textarea{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 img,svg{-webkit-user-drag:none}
 @media (display-mode:standalone){.a2hs{display:none}}
-.streak{--c:var(--line);display:flex;flex-wrap:wrap;align-items:center;gap:16px 26px;padding:18px 20px;margin:22px 4px 8px}
-.streak.on{--c:var(--gold)}
-.streak .sn{font-family:var(--px);font-size:30px;color:var(--gold);text-shadow:3px 3px 0 #5a4310;line-height:1}
-.streak .sn small{display:block;font-size:10px;color:var(--muted);text-shadow:none;margin-top:10px;letter-spacing:1px}
-.streak .sinfo{flex:1 1 220px;color:var(--muted);font-size:21px}
-.streak .sinfo b{color:var(--ink);font-weight:normal}
-.slots{display:flex;gap:8px}
-.slot{width:44px;display:grid;justify-items:center;gap:6px;font:9px var(--px);color:var(--dim)}
-.slot i{width:44px;height:44px;display:grid;place-items:center;background:#0b0f1d;box-shadow:0 0 0 3px var(--line)}
-.slot.today i{box-shadow:0 0 0 3px var(--gold);animation:slotp 1.6s ease-in-out infinite}
-.slot.today{color:var(--gold)}
-.slot svg{width:30px;height:30px;transform:rotate(var(--r,0deg));filter:drop-shadow(2px 0 0 #fffbe6) drop-shadow(-2px 0 0 #fffbe6) drop-shadow(0 2px 0 #fffbe6) drop-shadow(0 -2px 0 #fffbe6) drop-shadow(3px 3px 0 rgba(0,0,0,.4))}
-@keyframes slotp{0%,100%{box-shadow:0 0 0 3px var(--gold)}50%{box-shadow:0 0 0 3px var(--gold),0 0 18px rgba(255,211,107,.55)}}
-.spop{--c:var(--gold);display:flex;align-items:center;gap:20px;padding:16px 20px;margin:6px 4px 26px}
-.spop svg{width:58px;height:58px;flex:none;filter:drop-shadow(3px 0 0 #fffbe6) drop-shadow(-3px 0 0 #fffbe6) drop-shadow(0 3px 0 #fffbe6) drop-shadow(0 -3px 0 #fffbe6) drop-shadow(4px 4px 0 rgba(0,0,0,.4));animation:stick .7s cubic-bezier(.2,1.6,.4,1) both .2s}
-.spop b{font:14px var(--px);color:var(--gold);display:block;margin-bottom:8px;line-height:1.5}
+.spop{--c:var(--gold);display:flex;align-items:center;gap:20px;padding:16px 20px;margin:6px 4px 26px;width:calc(100% - 8px);text-align:left;border:0;color:inherit;font:inherit;cursor:pointer}
+.spop svg{width:62px;height:62px;flex:none;filter:drop-shadow(3px 0 0 #fffbe6) drop-shadow(-3px 0 0 #fffbe6) drop-shadow(0 3px 0 #fffbe6) drop-shadow(0 -3px 0 #fffbe6) drop-shadow(4px 4px 0 rgba(0,0,0,.4));animation:stick .7s cubic-bezier(.2,1.6,.4,1) both .2s}
+.spop b{font:13px var(--px);color:var(--ink);display:block;margin-bottom:8px;line-height:1.6}
 .spop p{margin:0;color:var(--muted);font-size:21px}
 @keyframes stick{0%{transform:scale(2.4) rotate(-30deg);opacity:0}100%{transform:scale(1) rotate(-8deg);opacity:1}}
-@media (max-width:480px){.slots{gap:5px}.slot,.slot i{width:38px}.slot i{height:38px}.slot svg{width:26px;height:26px}.streak .sn{font-size:24px}}
+.sbhead{display:flex;align-items:center;gap:18px;margin:10px 0 6px}.sbhead svg{width:46px;height:46px;flex:none}
+.sbhead b{font:14px var(--px);color:var(--gold);display:block;margin-bottom:8px}.sbhead p{margin:0;color:var(--muted);font-size:21px}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:16px;margin:4px 3px 8px}
+.scard{position:relative;display:grid;justify-items:center;align-content:start;gap:10px;padding:16px 8px 12px;background:#0b0f1d;box-shadow:0 0 0 3px var(--c);color:var(--ink);font-size:19px;text-align:center;line-height:1}
+.scard svg{width:56px;height:56px;filter:drop-shadow(2px 0 0 #fffbe6) drop-shadow(-2px 0 0 #fffbe6) drop-shadow(0 2px 0 #fffbe6) drop-shadow(0 -2px 0 #fffbe6) drop-shadow(3px 3px 0 rgba(0,0,0,.4))}
+.scard em{position:absolute;top:6px;right:8px;font:9px var(--px);font-style:normal;color:var(--muted)}
+.scard.miss{--c:#262c45;color:#3d4566}.scard.miss i{width:56px;height:56px;display:grid;place-items:center;background:#1a1f33;font:13px var(--px);font-style:normal;color:#4a5378}
+button.stk{background:none;border:0;cursor:pointer}
+@media (max-width:480px){.sgrid{grid-template-columns:repeat(3,1fr);gap:12px}.scard{font-size:16px;padding:12px 4px 10px}.scard svg,.scard.miss i{width:44px;height:44px}.sbhead p{font-size:19px}}
+.stk{display:inline-flex;align-items:center;gap:7px;font:13px var(--px);color:var(--dim);padding:0 10px;align-self:center}
+.stk svg{width:22px;height:22px;opacity:.45;filter:grayscale(.6)}
+.stk.on{color:var(--ink)}.stk.on svg{opacity:1;filter:none}
+.stk.bump svg{animation:bump .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.6) rotate(-10deg)}100%{transform:scale(1)}}
 body{margin:0;min-height:100vh;background:radial-gradient(120% 900px at 50% 0%,#2a3352 0%,#1a2034 45%,#0d1120 100%) no-repeat;color:var(--ink);font:24px/1.2 var(--vt);overflow-x:clip}
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px)}
 .dust{position:fixed;inset:0;pointer-events:none;z-index:-1;background-image:radial-gradient(#3a4670 1px,transparent 1.5px);background-size:46px 46px;opacity:.5}
@@ -1330,6 +1330,7 @@ function mergeInto(remote){
  for(const k in SUBJ){const a=store.subj[k],b=Object.assign(blank(),remote.subj[k]||{});
   a.dives=Math.max(a.dives,b.dives||0);a.best=Math.max(a.best,b.best||0);a.g10=Math.max(a.g10,b.g10||0);
   for(const d in b.daily)if(a.daily[d]==null)a.daily[d]=b.daily[d]}
+ store.stkDay=store.stkDay||{};for(const d in remote.stkDay||{})if(!store.stkDay[d])store.stkDay[d]=remote.stkDay[d];
  const seen=new Set(store.hist.map(h=>h.t));for(const h of remote.hist||[])if(!seen.has(h.t))store.hist.push(h);
  store.hist.sort((x,y)=>y.t-x.t);store.hist=store.hist.slice(0,60);
 }
@@ -1370,13 +1371,15 @@ async function initAccount(){
  try{const {data}=await sb.auth.getSession();clearTimeout(slow);if(data&&data.session)await onSignedIn(data.session.user);else{ACC.state='out';navRender();rerender()}}
  catch(e){clearTimeout(slow);ACC.state='out';navRender();rerender()}
 }
-const rerender=()=>view==='locker'?locker():view==='home'?home():null;
+const rerender=()=>view==='locker'?locker():view==='home'?home():view==='stickers'?stickers():null;
 function navRender(){
  const ini=ACC.state==='in'?esc((ACC.name||'?').trim().charAt(0).toUpperCase()):'?';
- document.getElementById('nav').innerHTML=Object.entries(SUBJ).map(([k,s])=>`<button class="tag ${k===store.subject?'on':''}" data-s="${k}" aria-pressed="${k===store.subject}">${s.n.toUpperCase()}</button>`).join('')+
+ const sk=streakInfo();
+ document.getElementById('nav').innerHTML=`<button class="stk ${sk.todayDone?'on':''}" id="stk" title="${sk.cur} day streak · sticker book" aria-label="${sk.cur} day streak, open sticker book">${spr(STICK.apple)}${sk.cur}</button>`+Object.entries(SUBJ).map(([k,s])=>`<button class="tag ${k===store.subject?'on':''}" data-s="${k}" aria-pressed="${k===store.subject}">${s.n.toUpperCase()}</button>`).join('')+
  `<button class="tag" id="sndBtn" aria-pressed="${sfxOn()}">SOUND ${sfxOn()?'ON':'OFF'}</button>`+`<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='in'?'LOCKER':'LOG IN'}</button>`;
  document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(G&&!confirmLeave())return;store.subject=b.dataset.s;saveLocal();navRender();view==='locker'?locker():home()});
  document.getElementById('sndBtn').onclick=()=>{store.sound=!sfxOn();saveLocal();navRender();if(sfxOn()){ensureAudio();tone(660,.12,'square',.05)}};
+ document.getElementById('stk').onclick=stickers;
  document.getElementById('lockBtn').onclick=()=>{if(G&&!confirmLeave())return;locker()};
 }
 const confirmLeave=()=>{clearInterval(timer);G=null;return true};
@@ -1403,13 +1406,90 @@ function streakInfo(){
 // position in the streak decides the sticker; every 7th day in a row is a gold crown
 function stickerFor(d,set){let n=0,x=d;while(set.has(x)){n++;x=shiftDay(x,-1)}return n&&n%7===0?'crown':STICK_DAY[dHash(d)%STICK_DAY.length]}
 const stickSvg=(d,set)=>spr(STICK[stickerFor(d,set)],'','style="--r:'+((dHash(d)%17)-8)+'deg"');
-function streakStrip(){
- const {cur,best,todayDone,set}=streakInfo(),t=today(),L=['S','M','T','W','T','F','S'];
- const slots=[];for(let k=6;k>=0;k--){const d=shiftDay(t,-k),wd=L[new Date(d+'T12:00:00Z').getUTCDay()];
-  slots.push(`<div class="slot ${k===0&&!todayDone?'today':''}"><i>${set.has(d)?stickSvg(d,set):''}</i>${k===0?'TODAY':wd}</div>`)}
- const msg=todayDone?`Today’s sticker is in the bag. Come back tomorrow for the next one.`
-  :cur?`Finish any daily pack today to keep your streak going.`:`Finish any daily pack to earn your first sticker. Every 7th day in a row is a gold crown.`;
- return `<div class="streak px ${cur?'on':''}"><div class="sn">${cur}<small>DAY STREAK</small></div><div class="slots">${slots.join('')}</div><div class="sinfo">${msg}${best>1?` <b>Best: ${best} days.</b>`:''}</div></div>`;
+// ---------- sticker book ----------
+Object.assign(PAL,{C:'#d9dde8',D:'#2f8f4e',U:'#ff6fd8'});
+const RAR=[{n:'Common',c:'#8a95b4',w:52},{n:'Uncommon',c:'#5fd8ff',w:27},{n:'Rare',c:'#b6f36b',w:13},{n:'Epic',c:'#c79bff',w:6},{n:'Legendary',c:'#ffd36b',w:2}];
+const recol=(m,map)=>m.map(r=>[...r].map(c=>map[c]||c).join(''));
+const STK=[
+ // common
+ ['apple',"Teacher's Apple",0,STICK.apple],
+ ['pencil','HB Pencil',0,JUNK[0]],
+ ['ruler','30cm Ruler',0,JUNK[1]],
+ ['rubber','Rubber',0,JUNK[2]],
+ ['calc','Calculator',0,JUNK[4]],
+ ['sandwich','Soggy Sandwich',0,["........","..KKKK..",".KWWWWK.","KggggggK","KXXXXXXK","KWWWWWWK",".KKKKKK.","........"]],
+ ['juice','Juice Box',0,[".....K..","....K...",".KKKKKK.",".KBBBBK.",".KBWWBK.",".KBBBBK.",".KBBBBK.",".KKKKKK."]],
+ ['note','Sticky Note',0,["YYYYYYYY","YYYYYYYY","YKKKKKYY","YYYYYYYY","YKKKKYYY","YYYYYYYY","YYYYYYOO","YYYYYYO."]],
+ ['clip','Paperclip',0,["..CCCC..",".C....C.",".C.CC.C.",".C.C..C.",".C.C..C.",".C.C.C..",".C...C..","..CCC..."]],
+ ['exbook','Exercise Book',0,["KKKKKKK.","KXXXXXXK","KXWWWWXK","KXWWWWXK","KXXXXXXK","KXXXXXXK","KXXXXXXK","KKKKKKKK"]],
+ ['highlighter','Highlighter',0,ICON.pen],
+ ['sharpener','Sharpener',0,["........","KKKKKKK.","KBBBBBKK","KBCCBBKC","KBCCBBKC","KBBBBBKK","KKKKKKK.","........"]],
+ ['smile','Smiley',0,STICK.smile],
+ ['scissors','Scissors',0,JUNK[8]],
+ // uncommon
+ ['heart','Heart',1,STICK.heart],
+ ['bolt','Lightning Bolt',1,STICK.bolt],
+ ['leaf','Leaf',1,STICK.leaf],
+ ['flask','Conical Flask',1,STICK.flask],
+ ['magnet','Magnet',1,["CC....CC","CC....CC","XX....XX","XX....XX","XXX..XXX",".XXXXXX.","..XXXX..","........"]],
+ ['battery','Battery',1,["...CC...",".KKKKKK.",".KgggWK.",".KgggWK.",".KKKKKK.",".KCCCCK.",".KCCCCK.",".KKKKKK."]],
+ ['bulb','Light Bulb',1,["..YYYY..",".YYWWYY.",".YWYYYY.",".YYYYYY.","..YYYY..","..CCCC..","..KCCK..","...KK..."]],
+ ['tube','Test Tube',1,[".KKKKK..","..CWC...","..CWC...","..CCC...","..VVV...","..VVV...","..VVV...","...V...."]],
+ ['thermo','Thermometer',1,["...CC...","..CWC...","..CWC...","..CXC...","..CXC...","..CXC...",".XXXXX..","..XXX..."]],
+ ['star','Gold Star',1,STICK.star],
+ // rare
+ ['atom','Atom',2,["..BBBB..",".B....B.","B..BB..B","B.BXXB.B","B.BXXB.B","B..BB..B",".B....B.","..BBBB.."]],
+ ['dna','DNA',2,["X......B",".XC..CB.","..X..B..","...XB...","...BX...","..B..X..",".BC..CX.","B......X"]],
+ ['planet','Ringed Planet',2,["........","..OOOO..",".OOOOOO.","YYYYYYYY",".OOOOOO.","..OOOO..","........"]],
+ ['prism','Prism',2,["...WW...","..WCCW..","..WCCW.X",".WCCCCWO",".WCCCCWY","WCCCCCCg","WWWWWWWB",".......V"]],
+ ['cell','Plant Cell',2,["..gggg..",".gDDDDg.","gDDDDDDg","gDDVVDDg","gDDVVDDg","gDDDDDDg",".gDDDDg.","..gggg.."]],
+ ['rocket','Rocket',2,["...WW...","..WCCW..","..CBBC..","..CBBC..","..CCCC..",".XCCCCX.",".X.OO.X.","...YY..."]],
+ ['bunsen','Bunsen Burner',2,["...B....","..BYB...","..BYB...","...C....","...C....","...C....","..CCC...",".KKKKK.."]],
+ ['moon','Crescent Moon',2,["..WWW...",".WWC....","WWC.....","WWC.....","WWC.....",".WWC....","..WWW...","........"]],
+ // epic
+ ['comet','Comet',3,["......WY",".....YYY","....OYYW","...OO.Y.","..XO....",".XO.....","X.......","........"]],
+ ['blackhole','Black Hole',3,["..VVVV..",".VUKKUV.","VUKKKKUV","VKKKKKKV","VKKKKKKV","VUKKKKUV",".VUKKUV.","..VVVV.."]],
+ ['trophy','Trophy',3,["Y.YYYY.Y","YYYYYYYY",".YYWYYY.","..YYYY..","...YY...","...YY...","..OOOO..",".OOOOOO."]],
+ ['crystal','Crystal',3,["..VVVV..",".VWVVCV.","VVWVVVCV",".VVVVVV.","..VVVV..","...VV...","........"]],
+ ['goggles','Lab Goggles',3,["........","KKKKKKKK","KBBKKBBK","KBWKKBWK","KBBKKBBK","KKK..KKK","........"]],
+ ['sun','The Sun',3,["Y..Y...Y",".Y.Y..Y.","..OOOO..","YYOYYOYY","..OYYO..","..OOOO..",".Y.Y..Y.","Y..Y...Y"]],
+ // legendary
+ ['crown','Grade 10 Crown',4,["Y..Y..Y","YY.Y.YY","YYYYYYY","YXYBYXY","YYYYYYY"]],
+ ['goldapple','Golden Apple',4,recol(STICK.apple,{X:'Y',N:'O'})],
+ ['fullmarks','Full Marks',4,["KKKKKKKK","KWWWWWWK","KWWWWXWK","KWWWXXWK","KXWXXWWK","KXXXWWWK","KWXWWWWK","KKKKKKKK"]],
+ ['goldbag','Golden Backpack',4,recol(BAG,{R:'Y',r:'O',L:'W',P:'O',S:'N'})]
+].map(([id,n,r,m])=>({id,n,r,m}));
+const STKID=Object.fromEntries(STK.map(x=>[x.id,x]));
+store.stkDay=store.stkDay||{};
+const stkCounts=()=>{const c={};for(const d in store.stkDay){const id=store.stkDay[d];if(STKID[id])c[id]=(c[id]||0)+1}return c};
+// roll a sticker: pick a rarity by weight, then usually one you don't have yet
+function rollSticker(minR=0,r=Math.random){
+ const pool=RAR.map((x,i)=>i>=minR?x.w:0),tot=pool.reduce((a,b)=>a+b,0);
+ let x=r()*tot,ri=0;while(x>=pool[ri]){x-=pool[ri];ri++}
+ const own=stkCounts(),all=STK.filter(s=>s.r===ri),fresh=all.filter(s=>!own[s.id]);
+ const list=fresh.length&&r()<.8?fresh:all;return list[Math.floor(r()*list.length)].id;
+}
+// days played before stickers existed get one too (same one on every device)
+for(const d of playedDays())if(!store.stkDay[d])store.stkDay[d]=rollSticker(0,rng('stk'+d));
+const stkSvg=(s,extra='')=>spr(s.m,'',extra);
+function awardSticker(){
+ const t=today();if(store.stkDay[t])return null;
+ const si=streakInfo(),ms=si.cur>0&&si.cur%7===0;
+ const before=stkCounts(),id=rollSticker(ms?2:0);store.stkDay[t]=id;
+ return{s:STKID[id],isNew:!before[id],n:(before[id]||0)+1,streak:si.cur,ms};
+}
+function stickers(){
+ if(G&&!confirmLeave())return;
+ view='stickers';clearInterval(timer);G=null;
+ const own=stkCounts(),si=streakInfo(),got=STK.filter(s=>own[s.id]).length;
+ stage.innerHTML=`<div class="hud"><span class="lbl pk">Sticker book</span><span class="lbl">${got} / ${STK.length} collected</span></div>
+ <div class="sbhead">${spr(STICK.apple)}<div><b>${si.cur} DAY STREAK</b><p>${si.todayDone?'Today’s sticker is in the book. Come back tomorrow for the next one.':'Finish any daily pack today to earn a sticker.'} Every 7th day in a row is Rare or better.${si.best>1?` Best: ${si.best} days.`:''}</p></div></div>
+ ${RAR.map((r,ri)=>{const list=STK.filter(s=>s.r===ri),n=list.filter(s=>own[s.id]).length;
+  return `<div class="rule"><span class="lbl" style="color:${r.c}">${r.n}</span><span class="lbl" style="color:var(--dim)">${n} / ${list.length}</span></div>
+  <div class="sgrid">${list.map(s=>own[s.id]?`<div class="scard" style="--c:${r.c}">${stkSvg(s)}<span>${esc(s.n)}</span>${own[s.id]>1?`<em>x${own[s.id]}</em>`:''}</div>`
+   :`<div class="scard miss"><i>???</i><span>???</span></div>`).join('')}</div>`}).join('')}
+ <div style="margin-top:28px"><button class="btn alt" id="hm">HOME</button></div>`;
+ stage.querySelector('#hm').onclick=home;scrollTo(0,0);
 }
 // stop pinch-zoom on iPhone/iPad so the page holds still like an app
 ['gesturestart','gesturechange'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
@@ -1422,7 +1502,7 @@ function home(){
  const counts={};for(const p of pool())counts[p.t]=(counts[p.t]||0)+1;
  const banner=ACC.state==='in'?`<p>Signed in as <b>${esc(ACC.name)}</b>. Progress saves to your account.</p><button class="btn alt" id="bLock">LOCKER</button>`
   :ACC.state==='checking'?`<p>Checking your login…</p>`:`<p>Playing as a guest, so progress is saved on this device only. Log in to save it everywhere.</p><button class="btn gold" id="bLock">LOG IN</button>`;
- stage.innerHTML=`<div class="banner px">${banner}</div>${streakStrip()}
+ stage.innerHTML=`<div class="banner px">${banner}</div>
  <section class="hero">${spr(BAG,'bagart')}<div><p class="lbl pk">${sj.n} · ${sj.code} · day #${dayNo()}</p><h1 style="margin-top:12px">THE DAILY PACK</h1><p class="sub">7 prompts · 25 seconds each · rarer answers sink deeper into the bag</p></div></section>
  <div class="modes"><button class="mode px main" id="daily"><b>DAILY PACK</b><span>${d!=null?`Today: ${d} pts · ${rankOf(d)[1]}. Replay for practice.`:`Same seven ${sj.n} prompts for everyone today.`}</span></button>
  <button class="mode px" id="unl"><b>UNLIMITED</b><span>A fresh random pack from ${pool().length} prompts.</span></button></div>
@@ -1431,7 +1511,7 @@ function home(){
  ${sj.p2?`<label class="toggle"><input type="checkbox" id="p2" ${store.p2?'checked':''}> Include Paper 2-only content (bold in the spec)</label>`:''}
  <div class="rule"><span class="lbl">How deep it sinks</span></div>${tierRows()}
  <div class="rule"><span class="lbl">Your ${sj.n} record</span></div>
- <div class="stats"><div><strong>${st.dives}</strong>packs played</div><div><strong>${st.best}</strong>best score</div><div><strong>${st.g10}</strong>Grade 10 answers</div><div><strong>${rankOf(st.best)[1]}</strong>best rank</div><div><strong>${streakInfo().best}</strong>best streak (days)</div></div>`;
+ <div class="stats"><div><strong>${st.dives}</strong>packs played</div><div><strong>${st.best}</strong>best score</div><div><strong>${st.g10}</strong>Grade 10 answers</div><div><strong>${rankOf(st.best)[1]}</strong>best rank</div></div>`;
  const bl=stage.querySelector('#bLock');if(bl)bl.onclick=locker;
  stage.querySelector('#daily').onclick=()=>start('daily',pickSeven(pool(),rng(store.subject+today())));
  stage.querySelector('#unl').onclick=()=>start('unlimited',pickSeven(pool()));
@@ -1619,12 +1699,14 @@ function end(){
  const firstToday=G.mode==='daily'&&!playedDays().has(today());
  if(G.mode==='daily'&&st.daily[today()]==null)st.daily[today()]=s;
  store.hist.unshift({t:Date.now(),d:today(),s:G.subject,m:G.mode,sc:s});runLog.push({subject:G.subject,mode:G.mode,score:s,day:today()});store.hist=store.hist.slice(0,60);
- saveLocal();pushAll();
  const sj=SUBJ[G.subject];
  const label=G.mode==='daily'?`Daily pack #${dayNo()}`:G.mode==='topic'?`${sj.packs[G.topic]} pack`:'Unlimited pack';
  const share=`GCSELLION · ${sj.n} · ${label}\n${G.res.map(x=>x.j?TIERS[x.j.t].e:'⬛').join('')}\n${s} pts · ${r[1]} (Grade ${r[2]})`;
  const n=G.res.length;
- let pop='';if(firstToday){const si=streakInfo();pop=`<div class="spop px">${stickSvg(today(),si.set)}<div><b>NEW STICKER · ${si.cur} DAY STREAK</b><p>${si.cur%7===0?'A full week in a row. Gold crown earned!':si.cur>1?'Come back tomorrow to keep it going.':'Your streak has started. Come back tomorrow for the next sticker.'}</p></div></div>`;setTimeout(()=>{ensureAudio();[523,659,784,1047].forEach((f,i)=>tone(f,.12,'square',.05,.25+i*.08))},0)}
+ let pop='';const aw=firstToday?awardSticker():null;
+ if(aw){const rc=RAR[aw.s.r];pop=`<button class="spop px" id="spop" style="--c:${rc.c}">${stkSvg(aw.s)}<div><b>${aw.isNew?'NEW STICKER!':'DUPLICATE · x'+aw.n} <span style="color:${rc.c}">${rc.n.toUpperCase()}</span></b><p><span style="color:var(--ink)">${esc(aw.s.n)}</span> · ${aw.streak} day streak${aw.ms?' · 7-day bonus':''}. Tap to open your sticker book.</p></div></button>`;
+  setTimeout(()=>{ensureAudio();const nn=aw.s.r>=3?[523,659,784,1047,1319]:[523,659,784,1047];nn.forEach((f,i)=>tone(f,.12,'square',.05,.25+i*.08));navRender();const b=document.getElementById('stk');if(b)b.classList.add('bump')},0)}
+ saveLocal();pushAll();
  stage.innerHTML=`<div class="hud"><span class="lbl pk">${esc(label)} complete</span><span class="lbl">${ACC.state==='in'?'Saved to your locker':'Saved on this device'}</span></div>
  ${pop}<div class="big">${s}</div><p class="depthbig">−${(G.depth||0).toLocaleString('en-GB')} m</p><p class="rank">${r[1].toUpperCase()} · GRADE ${r[2]}</p>
  <div class="rule"><span class="lbl">How you compare</span></div><div class="curve" id="curve"><p class="note-s">Loading the curve…</p></div>
@@ -1642,6 +1724,7 @@ function end(){
  drawCurve(G.subject,G.mode,s);
  stage.querySelector('#again').onclick=()=>mode==='topic'?start('topic',topicPick(topic),topic):start('unlimited',pickSeven(pool()));
  stage.querySelector('#hm').onclick=home;stage.querySelector('#lk').onclick=locker;
+ const sp=stage.querySelector('#spop');if(sp)sp.onclick=()=>stickers();
  G=null;scrollTo(0,0);
 }
 let boardTab='daily';
