@@ -388,6 +388,7 @@ tr.me td{color:var(--gold)}
 .srow2.tops .chip{font-size:19px;min-height:40px;padding:8px 12px;color:var(--dim)}.srow2.tops .chip.on{color:var(--ink);box-shadow:0 0 0 2px var(--cyan)}
 .clstart{margin-top:6px;width:100%}.clstart:disabled{opacity:.45;cursor:not-allowed}
 .clsum{font-size:22px}
+.clsum2{flex-basis:100%;font-size:20px;color:var(--muted)}.clsum2 b{color:var(--cyan)}
 .clstrip{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 2px}
 .clc{position:relative;display:flex;align-items:center;gap:8px;padding:6px 10px;background:#0b0f1d;box-shadow:0 0 0 2px var(--c);font-size:19px;transition:box-shadow .3s,background .3s}
 .clc .nm{max-width:9em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.clc .sc{color:var(--gold);font-size:18px}
@@ -401,8 +402,10 @@ tr.me td{color:var(--gold)}
 .clr{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0b0f1d;box-shadow:inset 4px 0 0 var(--c),0 0 0 2px var(--line);font-size:21px}
 .clr.me{background:#141a30}.clr .nm{flex:0 1 9em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
 .clr .an{flex:1;display:flex;align-items:center;gap:8px;min-width:0;color:var(--c)}.clr .an svg{width:24px;height:24px;flex:none}
-.clr .pt{font:11px var(--px);color:var(--c);white-space:nowrap}.clr .pos{font:14px var(--px);color:var(--c);width:1.6em}
+.clr .pt{font:11px var(--px);color:var(--c);white-space:nowrap;flex:none}.clr .an span,.clr .an{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.clr .pos{font:14px var(--px);color:var(--c);width:1.6em}
 .clwin{text-align:center;margin-top:20px}.fin .clr .nm{flex:1 1 auto}.fin .clr .an{flex:none;white-space:nowrap;font-size:18px}
+.lbmore{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}.lbmore .note-s{margin:0}
+tr.flash td{animation:rowflash 1.6s ease-out}@keyframes rowflash{0%,40%{background:rgba(255,211,107,.35)}100%{background:transparent}}
 @keyframes quake{20%{transform:translate(0,6px)}40%{transform:translate(-4px,-3px)}60%{transform:translate(3px,2px)}80%{transform:translate(-1px,-1px)}}
 .out .card{margin-top:18px}
 .hint2{color:var(--muted);font-size:24px;margin:-12px 0 20px}
@@ -3630,31 +3633,35 @@ function showPack(info,onDone){
 // ---------- CLASSROOM: live rooms with a 4-character code (Supabase Realtime, no database tables needed) ----------
 // The host's device runs the game: it picks the questions, collects answers and keeps lives and scores.
 const CL_ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-const CL_OPT={lives:[1,2,3,5],max:[2,4,8,16,30],time:[10,15,20,30],qs:[10,20,0]};
+const CL_OPT={lives:[1,2,3,5],max:[2,4,8,16,30,40],time:[10,15,20,30],qs:[10,20,0]};
 let CL=null;
 let clTab='';            // a fresh id for every connection, so a quick leave-and-rejoin never clashes with the old one
 let clLeaving=Promise.resolve();
 const clName=()=>ACC.state==='in'?ACC.name:(store.clName||'');
 const clCode=()=>Array.from({length:4},()=>CL_ABC[Math.floor(Math.random()*CL_ABC.length)]).join('');
-const clDefSet=()=>({lives:3,max:8,time:15,qs:10,subs:[store.subject],tops:{},play:true});
+const clDefSet=()=>({lives:3,max:30,time:15,qs:10,subs:[store.subject],tops:{},play:true});
 const clTops=(set,s)=>set.tops&&set.tops[s]?set.tops[s]:Object.keys(SUBJ[s].packs);
 function clPool(set){const out=[];for(const s of set.subs){const on=new Set(clTops(set,s));for(const p of SUBJ[s].P)if(on.has(p.t))out.push({s,id:p.id})}return out}
 const clPrompt=q=>SUBJ[q.s].P[q.id];
 const clHearts=(n,max)=>`<span class="hearts">${'♥'.repeat(Math.max(0,n))}<i>${'♥'.repeat(Math.max(0,max-n))}</i></span>`;
+// Two channels per room keep messages down so big classes don't lag:
+//  room channel  - only the host talks; everyone listens (questions, results, the player list in a regular heartbeat)
+//  host channel  - players talk, only the host listens (joining, answers, "still here" pings), so each message reaches one device
 const clSend=(event,payload)=>{if(CL&&CL.ch)try{CL.ch.send({type:'broadcast',event,payload})}catch(e){}};
-// important messages go twice, in case one gets lost on a bad connection (repeats are ignored)
-const clSend2=(event,payload)=>{clSend(event,payload);const c=CL;setTimeout(()=>{if(CL===c)clSend(event,payload)},650)};
-const clMeta=()=>({n:clName(),h:!!(CL&&CL.host),at:CL?CL.at:Date.now(),u:ACC.state==='in'?ACC.id:null,...(CL&&CL.host?{set:CL.set,ph:CL.phase}:{})});
-const clTrack=(now)=>{if(!CL||!CL.ch||!CL.ready)return;clearTimeout(CL.trk);const c=CL;const go=()=>{if(CL===c)c.ch.track(clMeta()).catch(()=>{})};if(now)go();else CL.trk=setTimeout(go,1200)};
-const clPlayers=()=>Object.entries((CL&&CL.ps)||{}).map(([k,m])=>({k,...m})).sort((a,b)=>a.at-b.at||(a.k<b.k?-1:1));
+const clToHost=(event,payload)=>{if(!CL)return;if(CL.host){clOnHost(event,payload);return}const h=CL.hch;if(!h)return;
+ try{const r=h.httpSend?h.httpSend(event,payload):h.send({type:'broadcast',event,payload});if(r&&r.catch)r.catch(()=>{})}catch(e){}};
+const clSize=()=>CL&&CL.roster?CL.roster.size:1;
+const clHbGap=()=>2000+Math.min(2000,clSize()*50);           // heartbeat slows down a little in big rooms
+let clHbT=null;const clHb=()=>{if(!CL||!CL.host)return;clearTimeout(clHbT);clHbT=setTimeout(()=>{if(CL&&CL.host)clSend('hb',clSnap())},250)};
+const clPlayers=()=>[...((CL&&CL.roster)||new Map()).values()].sort((a,b)=>a.at-b.at||(a.k<b.k?-1:1));
 const clClear=()=>{if(!CL)return;clearInterval(CL.tm);clearInterval(CL.rs)};
 const clHostClear=()=>{if(!CL)return;clearTimeout(CL.to);clearTimeout(CL.to2)};
 function clLeave(){
- if(!CL)return;const c=CL;clClear();clHostClear();clearInterval(c.hw);clearInterval(c.hb);clearTimeout(c.trk);CL=null;
- clLeaving=(async()=>{try{await c.ch.untrack()}catch(e){}try{await sb.removeChannel(c.ch)}catch(e){}})();
+ if(!CL)return;const c=CL;clClear();clHostClear();clearInterval(c.hw);clearInterval(c.hb);clearInterval(c.pg);clearInterval(c.hi);clearInterval(c.sw);CL=null;
+ if(!c.host&&c.hch)try{const r=c.hch.httpSend?c.hch.httpSend('bye',{k:clTab}):c.hch.send({type:'broadcast',event:'bye',payload:{k:clTab}});if(r&&r.catch)r.catch(()=>{})}catch(e){}
+ clLeaving=(async()=>{for(const ch of [c.ch,c.hch])if(ch)try{await sb.removeChannel(ch)}catch(e){}})();
 }
 const clConfirmLeave=()=>{if(!CL)return true;if(CL.phase==='play'&&!confirm('Leave the Classroom game?'))return false;clLeave();return true};
-
 // ---------- entry screen ----------
 function classroom(pre,msg){
  clLeave();view='class';clearInterval(timer);G=null;
@@ -3683,30 +3690,38 @@ function clBusy(t){stage.innerHTML=`<div class="clwait"><p class="lbl">${esc(t)}
 async function clConnect(code,host){
  await Promise.race([clLeaving,new Promise(r=>setTimeout(r,2500))]);
  // drop any old connection to this room that's still hanging around
- for(const c of sb.getChannels?sb.getChannels():[])if(c.topic==='realtime:gcsellion-room-'+code){try{await sb.removeChannel(c)}catch(e){}}
+ for(const c of sb.getChannels?sb.getChannels():[])if(c.topic==='realtime:gcsellion-room-'+code||c.topic==='realtime:gcsellion-host-'+code){try{await sb.removeChannel(c)}catch(e){}}
  clTab=Math.random().toString(36).slice(2,10);
- return new Promise((res,rej)=>{
-  CL={hostSeen:0,code,host,at:Date.now(),ps:{},phase:'lobby',set:host?clDefSet():null,ready:false,sawHost:false,game:null,round:null};
-  const me=CL;
-  const ch=sb.channel('gcsellion-room-'+code,{config:{broadcast:{self:true},presence:{key:clTab}}});me.ch=ch;
-  ch.on('presence',{event:'sync'},()=>{if(CL!==me)return;const st=ch.presenceState(),ps={};for(const k in st){const m=st[k]&&st[k][st[k].length-1];if(m)ps[k]=m}me.ps=ps;clOnPresence()});
-  for(const ev of ['start','q','ans','got','res','end','lobby','hb'])ch.on('broadcast',{event:ev},({payload})=>{if(CL===me)clOn(ev,payload||{})});
-  const t=setTimeout(()=>rej(new Error('timeout')),9000);
-  ch.subscribe(async st=>{if(st==='SUBSCRIBED'){if(me.ready)return;clearTimeout(t);me.ready=true;try{await ch.track(clMeta())}catch(e){}
-    if(host)me.hb=setInterval(()=>{if(CL===me)clSend('hb',clSnap())},2000);
-    else me.hw=setInterval(()=>{if(CL!==me||!me.sawHost)return;if(Date.now()-me.hostSeen>(me.phase==='lobby'?8000:12000)){clLeave();classroom('','The host left, so the room closed.')}},1000);
-    res()}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'){clearTimeout(t);rej(new Error(st))}});
- });
+ const me={hostSeen:0,code,host,at:Date.now(),roster:new Map(),phase:'lobby',set:host?clDefSet():null,ready:false,sawHost:false,inRoom:host,game:null,round:null};CL=me;
+ if(host)me.roster.set(clTab,{k:clTab,n:clName(),h:true,at:me.at,u:ACC.state==='in'?ACC.id:null,seen:Date.now()});
+ const sub=(ch)=>new Promise((res,rej)=>{const t=setTimeout(()=>rej(new Error('timeout')),9000);ch.subscribe(st=>{if(st==='SUBSCRIBED'){clearTimeout(t);res()}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'){clearTimeout(t);rej(new Error(st))}})});
+ me.ch=sb.channel('gcsellion-room-'+code,{config:{broadcast:{self:true}}});
+ for(const ev of ['start','q','got','res','end','lobby','hb','full','busy'])me.ch.on('broadcast',{event:ev},({payload})=>{if(CL===me)clOn(ev,payload||{})});
+ me.hch=sb.channel('gcsellion-host-'+code,{config:{broadcast:{self:false}}});
+ if(host){for(const ev of ['hi','ans','ping','bye'])me.hch.on('broadcast',{event:ev},({payload})=>{if(CL===me)clOnHost(ev,payload||{})});
+  await Promise.all([sub(me.ch),sub(me.hch)]);}
+ else await sub(me.ch);
+ if(CL!==me)throw new Error('left');
+ me.ready=true;
+ if(host){
+  const beat=()=>{if(CL!==me)return;clSend('hb',clSnap());me.hb=setTimeout(beat,clHbGap())};me.hb=setTimeout(beat,600);
+  me.sw=setInterval(()=>clSweep(me),3000);
+ }else{
+  const hi=()=>{if(CL===me&&!me.inRoom)clToHost('hi',{k:clTab,n:clName(),u:ACC.state==='in'?ACC.id:null,at:me.at})};hi();me.hi=setInterval(hi,2000);
+  me.pg=setInterval(()=>{if(CL===me&&me.inRoom)clToHost('ping',{k:clTab})},5000);
+  me.hw=setInterval(()=>{if(CL!==me||!me.sawHost)return;if(Date.now()-me.hostSeen>(me.phase==='lobby'?9000:13000)){clLeave();classroom('','The host left, so the room closed.')}},1000);
+ }
 }
 async function clCreate(){
  clBusy('Making a room…');
  for(let tries=0;tries<4;tries++){
   const code=clCode();
-  try{await clConnect(code,true)}catch(e){clLeave();classroom('', 'Couldn’t reach the Classroom server. Check your connection and try again.');return}
-  await new Promise(r=>setTimeout(r,700));
-  if(!CL)return;
-  if(clPlayers().some(p=>p.h&&p.k!==clTab)){clLeave();continue}
-  SFX_cl.join();clRender();return;
+  try{await clConnect(code,true)}catch(e){clLeave();classroom('','Couldn’t reach the Classroom server. Check your connection and try again.');return}
+  // listen briefly: if another host is already using this code, pick a new one
+  const me=CL;me.clash=false;await new Promise(r=>setTimeout(r,2300));
+  if(CL!==me)return;
+  if(me.clash){clLeave();continue}
+  SFX_cl.join();clRender();clHb();return;
  }
  classroom('','Couldn’t make a room just now. Try again.');
 }
@@ -3714,31 +3729,30 @@ async function clJoin(code){
  clBusy('Joining '+code+'…');
  try{await clConnect(code,false)}catch(e){clLeave();classroom(code,'Couldn’t reach the Classroom server. Check your connection and try again.');return}
  const me=CL;
- setTimeout(()=>{if(CL===me&&!me.sawHost){clLeave();classroom(code,`There’s no room with the code ${code}. Check it and try again.`)}},3500);
+ setTimeout(()=>{if(CL===me&&!me.sawHost){clLeave();classroom(code,`There’s no room with the code ${code}. Check it and try again.`)}},5000);
 }
-function clOnPresence(){
- const ps=clPlayers(),hostP=ps.find(p=>p.h);
- if(!CL.host){
-  if(hostP){
-   CL.hostSeen=Date.now();
-   if(!CL.sawHost){
-    CL.sawHost=true;
-    if(hostP.ph==='play'){const c=CL.code;clLeave();classroom(c,'That room is already in the middle of a game. Wait for it to finish, then join again.');return}
-    SFX_cl.join();
-   }
-   CL.set=hostP.set||CL.set;
-   // first come, first served: if the room is over its limit, the latest joiners leave
-   if(CL.phase==='lobby'&&CL.set){const idx=ps.findIndex(p=>p.k===clTab);if(idx>=CL.set.max+(CL.set.play?0:1)){const c=CL.code;clLeave();classroom(c,'That room is full.');return}}
-  }
- }else if(CL.game&&CL.phase==='play'){
-  // players who drop out mid-game are out
-  const here=new Set(ps.map(p=>p.k));let ch=false;
-  for(const k of CL.game.order)if(!here.has(k)&&CL.game.lives[k]>0){CL.game.lives[k]=0;CL.game.outAt[k]=CL.game.r;CL.game.left[k]=1;ch=true}
-  if(ch)clHostCheckRound();
- }
- if(CL&&CL.phase==='lobby'&&(CL.host||CL.sawHost))clRender();
- else if(CL&&CL.phase==='play')clStrip();
+// host: players arriving, answering, pinging and leaving
+function clOnHost(ev,m){
+ const k=m&&m.k;if(!k)return;const r=CL.roster;
+ if(ev==='hi'){
+  const was=r.get(k);if(was){was.seen=Date.now();if(m.n)was.n=String(m.n).slice(0,24);clHb();return}
+  if(CL.phase!=='lobby'){clSend('busy',{k});return}
+  const players=clPlayers().filter(p=>!(p.h&&!CL.set.play)).length;
+  if(players>=CL.set.max){clSend('full',{k});return}
+  r.set(k,{k,n:String(m.n||'Player').slice(0,24),u:m.u||null,at:Date.now(),seen:Date.now()});SFX_cl.join();clHb();if(CL.phase==='lobby')clRender();return}
+ if(ev==='ping'){const p=r.get(k);if(p)p.seen=Date.now();return}
+ if(ev==='bye'){if(!r.has(k)||r.get(k).h)return;r.delete(k);clDropped(k);clHb();if(CL.phase==='lobby')clRender();return}
+ if(ev==='ans'){const g=CL.game;const p=r.get(k);if(p)p.seen=Date.now();
+  if(g&&m.r===g.r&&!g.ended&&g.lives[k]>0&&!g.ans[k]&&TIERS[m.t]){g.ans[k]={t:m.t,a:String(m.a||'').slice(0,60)};clHostGot();clHostCheckRound()}
+  else if(g&&g.ans[k])clHostGot();return}
 }
+function clDropped(k){const g=CL.game;if(g&&CL.phase==='play'&&g.lives[k]>0){g.lives[k]=0;g.outAt[k]=g.r;g.left[k]=1;clHostCheckRound()}}
+// host: anyone silent for too long has gone
+function clSweep(me){if(CL!==me)return;const now=Date.now();let ch=false;
+ for(const p of [...me.roster.values()]){if(p.h)continue;if(now-p.seen>(me.phase==='lobby'?16000:22000)){me.roster.delete(p.k);clDropped(p.k);ch=true}}
+ if(ch){clHb();if(me.phase==='lobby')clRender()}}
+// host: when lowering the player limit, the latest joiners have to leave
+function clTrim(){const ps=clPlayers().filter(p=>!(p.h&&!CL.set.play));for(const p of ps.slice(CL.set.max)){if(p.h)continue;CL.roster.delete(p.k);clSend('full',{k:p.k})}}
 
 // ---------- lobby ----------
 function clSetText(set){
@@ -3771,7 +3785,7 @@ function clRender(){
  stage.querySelector('#lv').onclick=()=>{clLeave();classroom()};
  stage.querySelector('#cpi').onclick=async e=>{const url=location.origin+location.pathname+'?room='+CL.code;try{await navigator.clipboard.writeText(url);e.target.textContent='COPIED'}catch(err){e.target.textContent=url}};
  if(host){
-  const upd=()=>{ensureAudio();tone(150,.09,'triangle',.08,0,-50);clSend('hb',{set:CL.set,ph:CL.phase});clTrack();clRender()};
+  const upd=()=>{ensureAudio();tone(150,.09,'triangle',.08,0,-50);clTrim();clHb();clRender()};
   stage.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{set[b.dataset.k]=Number(b.dataset.v);upd()});
   stage.querySelectorAll('[data-sub]').forEach(b=>b.onclick=()=>{const k=b.dataset.sub,i=set.subs.indexOf(k);if(i>=0){if(set.subs.length>1)set.subs.splice(i,1)}else{set.subs.push(k);delete set.tops[k]}upd()});
   stage.querySelectorAll('[data-tk]').forEach(b=>b.onclick=()=>{const s=b.dataset.ts,k=b.dataset.tk,cur=new Set(clTops(set,s));if(cur.has(k)){if(cur.size>1)cur.delete(k)}else cur.add(k);set.tops[s]=[...cur];if(set.tops[s].length===Object.keys(SUBJ[s].packs).length)delete set.tops[s];upd()});
@@ -3789,8 +3803,8 @@ function clHostStart(){
  for(const p of ps)names[p.k]=p.n||'Player';for(const k of order){lives[k]=set.lives;score[k]=0}
  const pool=shuffle(clPool(set));
  CL.game={order,names,lives,score,outAt,left:{},r:0,pool,ans:{},set:JSON.parse(JSON.stringify(set))};
- CL.phase='play';clTrack(true);
- CL.game.gid=Math.random().toString(36).slice(2,8);clSend2('start',{gid:CL.game.gid,order,names,lives,set:CL.game.set});
+ CL.phase='play';
+ CL.game.gid=Math.random().toString(36).slice(2,8);clSend('start',{gid:CL.game.gid,order,names,lives,set:CL.game.set});clHb();
  CL.to=setTimeout(clHostNext,3200);
 }
 const clAlive=g=>g.order.filter(k=>g.lives[k]>0);
@@ -3804,7 +3818,7 @@ function clHostNext(){
 }
 let clGotAt=0,clGotT=null;
 function clHostGot(){const g=CL.game;const send=()=>{clGotAt=Date.now();clGotT=null;if(CL&&CL.game===g)clSend('got',{r:g.r,ks:Object.keys(g.ans)})};
- if(Date.now()-clGotAt>400)send();else if(!clGotT)clGotT=setTimeout(send,400)}
+ const gap=Math.max(600,clSize()*45);if(Date.now()-clGotAt>gap)send();else if(!clGotT)clGotT=setTimeout(send,gap-(Date.now()-clGotAt))}
 function clHostCheckRound(){const g=CL.game;if(!g||g.ended)return;if(clAlive(g).every(k=>g.ans[k])){clearTimeout(CL.to);CL.to=setTimeout(()=>clHostEndRound(g.r),700)}}
 function clHostEndRound(r){
  const g=CL&&CL.game;if(!g||g.r!==r||g.ended)return;g.ended=true;
@@ -3812,26 +3826,33 @@ function clHostEndRound(r){
  for(const k of g.order){if(g.lives[k]<=0&&!g.ans[k]){continue}
   const a=g.ans[k];if(a){res[k]=a;g.score[k]+=TIERS[a.t].p}else{g.lives[k]--;res[k]={t:0};if(g.lives[k]<=0)g.outAt[k]=r}}
  const alive=clAlive(g),over=(g.order.length>1&&alive.length<=1)||alive.length===0||(g.set.qs&&r>=g.set.qs);
- g.lastRes={r,res,lives:{...g.lives},score:{...g.score},over:!!over};clSend2('res',g.lastRes);
+ g.lastRes={r,res,lives:{...g.lives},score:{...g.score},over:!!over};clSend('res',g.lastRes);
  clearTimeout(CL.to);
- CL.to=setTimeout(()=>{if(!CL||CL.game!==g)return;if(over){g.endMsg={order:g.order,names:g.names,lives:g.lives,score:g.score,outAt:g.outAt,r};clSend2('end',g.endMsg)}else clHostNext()},over?2600:3600);
+ CL.to=setTimeout(()=>{if(!CL||CL.game!==g)return;if(over){g.endMsg={order:g.order,names:g.names,lives:g.lives,score:g.score,outAt:g.outAt,r};clSend('end',g.endMsg)}else clHostNext()},over?2600:3600);
 }
 // everything a player needs to catch up if they missed a message
-function clSnap(){const g=CL.game,o={set:CL.set,ph:CL.phase};if(!g||CL.phase==='lobby')return o;
+function clSnap(){const g=CL.game,o={hk:clTab,set:CL.set,ph:CL.phase,roster:clPlayers().map(p=>({k:p.k,n:p.n,h:!!p.h,u:p.u||null}))};if(!g||CL.phase==='lobby')return o;
  Object.assign(o,{gid:g.gid,order:g.order,names:g.names,lives:g.lives,score:g.score,gset:g.set});
  if(g.cur)Object.assign(o,{r:g.r,q:g.cur,dur:g.set.time,total:g.set.qs,el:Date.now()-g.qAt});
  if(g.lastRes&&g.lastRes.r===g.r)o.res=g.lastRes;if(g.endMsg)o.end=g.endMsg;return o}
-function clHostAgain(){clHostClear();CL.phase='lobby';CL.game=null;clTrack(true);clSend2('lobby',{});}
+function clHostAgain(){clHostClear();CL.phase='lobby';CL.game=null;clSend('lobby',{});clHb();}
 
 // ---------- everyone: incoming events ----------
 function clOn(ev,m){
  const host=CL.host;
  if(ev!=='ans')CL.hostSeen=Date.now();   // any message from the host proves it's still here
+ if(!host&&!CL.inRoom&&ev!=='hb'&&ev!=='full'&&ev!=='busy')return;   // not let in yet
  if(ev==='start'){if(CL.g&&CL.g.gid===m.gid)return;CL.phase='play';CL.g={gid:m.gid,order:m.order,names:m.names,lives:m.lives,score:Object.fromEntries(m.order.map(k=>[k,0])),set:m.set,got:new Set(),res:null};
   CL.round=null;clCountdown();return}
- if(ev==='hb'){if(host)return;
-  if(m.set&&JSON.stringify(m.set)!==JSON.stringify(CL.set)){CL.set=m.set;if(CL.phase==='lobby'&&CL.sawHost)clRender()}
-  if(m.ph==='lobby'||!m.gid)return;
+ if(ev==='full'||ev==='busy'){if(host||m.k!==clTab)return;const c=CL.code;clLeave();classroom(c,ev==='full'?'That room is full.':'That room is in the middle of a game. Wait for it to finish, then join again.');return}
+ if(ev==='hb'){if(host){if(m.hk&&m.hk!==clTab)CL.clash=true;return}
+  if(!m.roster)return;
+  const sig=JSON.stringify([m.roster,m.set]),changed=sig!==CL.sig;CL.sig=sig;
+  CL.roster=new Map(m.roster.map((p,i)=>[p.k,{...p,at:i}]));CL.set=m.set||CL.set;CL.sawHost=true;
+  if(!CL.inRoom&&CL.roster.has(clTab)){CL.inRoom=true;clearInterval(CL.hi);SFX_cl.join();if(CL.phase==='lobby')clRender()}
+  else if(changed&&CL.inRoom&&CL.phase==='lobby')clRender();
+  if(CL.phase==='play'&&changed)clStrip();
+  if(m.ph==='lobby'||!m.gid||!CL.inRoom)return;
   if(!CL.g||CL.g.gid!==m.gid){if(!CL.sawHost)return;CL.phase='play';CL.round=null;CL.g={gid:m.gid,order:m.order,names:m.names,lives:m.lives,score:m.score,set:m.gset,got:new Set(),res:null}}
   if(m.r&&m.q&&(!CL.round||CL.round.r<m.r)&&!(m.res&&m.res.r===m.r&&m.res.over)&&m.el<m.dur*1000)clOn('q',{r:m.r,s:m.q.s,id:m.q.id,dur:m.dur,total:m.total,el:m.el});
   if(m.res&&CL.round&&CL.round.r===m.res.r&&!CL.g.res)clOn('res',m.res);
@@ -3840,10 +3861,9 @@ function clOn(ev,m){
  if(ev==='lobby'){if(CL.phase==='lobby'&&!CL.g)return;if(!host){CL.phase='lobby';CL.g=null;CL.round=null}clClear();clRender();return}
  if(!CL.g)return;
  if(ev==='q'){if(CL.round&&CL.round.r>=m.r)return;CL.g.got=new Set();CL.g.res=null;CL.round={r:m.r,q:{s:m.s,id:m.id},dur:m.dur,total:m.total,t0:Date.now()-(m.el||0),locked:null,tries:[]};clAsk();return}
- if(ev==='ans'){if(host&&CL.game&&m.r===CL.game.r&&!CL.game.ended&&CL.game.lives[m.k]>0&&!CL.game.ans[m.k]&&TIERS[m.t]){CL.game.ans[m.k]={t:m.t,a:String(m.a||'').slice(0,60)};clHostGot();clHostCheckRound()}return}
  if(ev==='got'){if(CL.round&&m.r===CL.round.r){CL.g.got=new Set(m.ks||[]);if(CL.g.got.has(clTab))clearInterval(CL.rs);clStrip()}return}
  if(ev==='res'){if(!CL.round||m.r!==CL.round.r||CL.g.res)return;clearInterval(CL.rs);clearInterval(CL.tm);Object.assign(CL.g,{lives:m.lives,score:m.score,res:m.res});clReveal(m);return}
- if(ev==='end'){if(CL.phase==='done')return;CL.phase='done';if(host)clTrack(true);clEnd(m);return}
+ if(ev==='end'){if(CL.phase==='done')return;CL.phase='done';if(host)clHb();clEnd(m);return}
 }
 function clCountdown(){
  clClear();view='class';let n=3;
@@ -3851,10 +3871,16 @@ function clCountdown(){
  ensureAudio();draw();CL.tm=setInterval(()=>{n--;if(n<=0){clearInterval(CL.tm);stage.innerHTML='<div class="clwait"><div class="big">GO!</div></div>';tone(880,.15,'square',.05);return}draw()},1000);
 }
 const clIn=()=>CL.g&&CL.g.order.includes(clTab)&&CL.g.lives[clTab]>0;
+const CL_BIG=8;   // above this many players, show a compact summary instead of everyone's name tag
 function clStripHtml(){
  const g=CL.g;if(!g)return '';const max=g.set.lives;
- return g.order.map(k=>{const r=g.res&&g.res[k],out=g.lives[k]<=0,c=r?(r.t?TIERS[r.t].c:'#59648a'):'var(--line)';
-  return `<div class="clc ${k===clTab?'me':''} ${out?'out':''} ${g.got.has(k)&&!r?'done':''}" style="--c:${c}"><span class="nm">${esc(g.names[k]||'Player')}</span>${clHearts(g.lives[k],max)}<span class="sc">${g.score[k]||0}</span>${g.got.has(k)&&!r?'<b class="tick">✓</b>':''}</div>`}).join('');
+ let ks=g.order;
+ if(ks.length>CL_BIG){const alive=ks.filter(k=>g.lives[k]>0),done=alive.filter(k=>g.got.has(k)).length;
+  const lead=ks.slice().sort((a,b)=>(g.score[b]||0)-(g.score[a]||0)).slice(0,3);ks=[...new Set([...(ks.includes(clTab)?[clTab]:[]),...lead])];
+  return `<div class="clsum2">${g.res?`<b>${alive.length}</b> still in`:`<b>${done}/${alive.length}</b> answered`} · ${ks.length?'leaders:':''}</div>`+ks.map(k=>chip(k)).join('')}
+ return ks.map(k=>chip(k)).join('');
+ function chip(k){const r=g.res&&g.res[k],out=g.lives[k]<=0,c=r?(r.t?TIERS[r.t].c:'#59648a'):'var(--line)';
+  return `<div class="clc ${k===clTab?'me':''} ${out?'out':''} ${g.got.has(k)&&!r?'done':''}" style="--c:${c}"><span class="nm">${esc(g.names[k]||'Player')}</span>${clHearts(g.lives[k],max)}<span class="sc">${g.score[k]||0}</span>${g.got.has(k)&&!r?'<b class="tick">✓</b>':''}</div>`}
 }
 function clStrip(){const el=document.getElementById('clstrip');if(el)el.innerHTML=clStripHtml()}
 function clAsk(){
@@ -3882,7 +3908,7 @@ function clAsk(){
    f.querySelector('button').outerHTML=`<span class="lockt">${spr(ICON[T.i])}${T.n.toUpperCase()}</span>`;
    fb.innerHTML=`<p class="why">Locked in for <b style="color:${T.c}">+${T.p} PTS</b>. Waiting for everyone else…</p>`;
    const nn=[392,440,523,587,659,784,988];tone(nn[t-1],.1,'square',.05);tone(nn[t-1]*1.5,.14,'square',.05,.08);if(t>=6)tone(nn[t-1]*2,.2,'triangle',.04,.18);
-   const send=()=>clSend('ans',{r:R.r,k:clTab,t,a:R.locked.a});send();clearInterval(CL.rs);CL.rs=setInterval(()=>{if(!CL||CL.round!==R||CL.g.res)return clearInterval(CL.rs);send()},1500);return}
+   const send=()=>clToHost('ans',{r:R.r,k:clTab,t,a:R.locked.a});send();clearInterval(CL.rs);CL.rs=setInterval(()=>{if(!CL||CL.round!==R||CL.g.res)return clearInterval(CL.rs);send()},1500);return}
   if(j.fix&&norm(v)!==R.asked){R.asked=norm(v);inp.classList.add('fixed');shake();
    fb.innerHTML=dymHtml(j,v,'LOCK IT');wireDym(fb,j,inp,stage.querySelector('#f'));return}
   R.asked=null;R.tries.push(v);inp.value='';inp.classList.remove('fixed');shake();SFX.wrong();
@@ -3893,10 +3919,15 @@ function clReveal(m){
  const tm=document.getElementById('tm');if(tm)[...tm.children].forEach(s=>s.classList.add('off'));
  const f=document.getElementById('f');if(f&&!R.locked){f.querySelector('input').disabled=true;f.querySelector('button').disabled=true;const fb=document.getElementById('fb');if(fb)fb.innerHTML='<p class="bad" style="animation:none">NO ANSWER · −1 LIFE</p>'}
  const mine=m.res[clTab];if(mine&&!mine.t)SFX.wrong();
- const rows=g.order.filter(k=>m.res[k]).map(k=>{const r=m.res[k],T=r.t?TIERS[r.t]:null;
+ let list=g.order.filter(k=>m.res[k]),extra='';
+ if(list.length>CL_BIG){const ok=list.filter(k=>m.res[k].t).sort((a,b)=>m.res[b].t-m.res[a].t),miss=list.length-ok.length;
+  const show=[...new Set([...ok.slice(0,6),...(m.res[clTab]?[clTab]:[])])];
+  extra=`<p class="why">${ok.length-ok.slice(0,6).filter(k=>k!==clTab).length>0?`+${Math.max(0,ok.length-show.filter(k=>m.res[k].t).length)} more answered · `:''}${miss} lost a life</p>`;
+  list=show.sort((a,b)=>(m.res[b].t||0)-(m.res[a].t||0))}
+ const rows=list.map(k=>{const r=m.res[k],T=r.t?TIERS[r.t]:null;
   return `<div class="clr ${k===clTab?'me':''}" style="--c:${T?T.c:'#59648a'}"><span class="nm">${esc(g.names[k]||'Player')}</span><span class="an">${T?`${spr(ICON[T.i])}${esc(r.a)}`:'No answer'}</span><span class="pt">${T?'+'+T.p:(g.lives[k]>0?'−1 ♥':'OUT')}</span></div>`}).join('');
  const el=document.getElementById('clrev');
- if(el){el.innerHTML=`<div class="rule"><span class="lbl">Everyone’s answers</span></div><div class="clrows">${rows}</div>${m.over?'<p class="why">That’s the game…</p>':'<p class="why">Next question coming up…</p>'}`;el.scrollIntoView({behavior:reduced?'auto':'smooth',block:'nearest'})}
+ if(el){el.innerHTML=`<div class="rule"><span class="lbl">Everyone’s answers</span></div><div class="clrows">${rows}</div>${extra}${m.over?'<p class="why">That’s the game…</p>':'<p class="why">Next question coming up…</p>'}`;el.scrollIntoView({behavior:reduced?'auto':'smooth',block:'nearest'})}
 }
 function clEnd(m){
  clClear();view='class';
@@ -4585,7 +4616,7 @@ function end(){
   setTimeout(()=>showPack({...aw,why:whyToday(aw.streak,aw.ms)},()=>{navRender();const b=document.getElementById('stk');if(b)b.classList.add('bump');const w=document.getElementById('spopw');if(w){w.innerHTML=stkPopHtml(aw);w.querySelector('#spop').onclick=()=>stickers()}}),Math.max(0,500-(Date.now()-t0)))})();
  G=null;scrollTo(0,0);
 }
-let boardTab='daily';
+let boardTab='daily',boardN=10,boardRows=null;
 function authForm(){
  if(!sb)return `<h2>LOGIN NOT SET UP YET</h2><p>Add your Supabase project URL and anon key at the top of the game’s code to switch on logins. Until then, scores save on this device only.</p>`;
  if(recovery)return `<h2>SET A NEW PASSWORD</h2><form id="af" class="authf"><label>New password<input id="pw" type="password" minlength="6" required autocomplete="new-password"></label><button class="btn gold">SAVE PASSWORD</button></form><p id="amsg"></p>`;
@@ -4652,11 +4683,19 @@ async function loadBoard(){
   if(error)({data,error}=await mk('user_id,best,daily,day,profiles(username)'));if(error)throw error;
   rows=(data||[]).map(d=>({id:d.user_id,name:(d.profiles&&d.profiles.username)||'Someone',stk:d.profiles&&d.profiles.sticker_style!=='none'&&STKID[d.profiles.sticker],v:boardTab==='daily'?(d.daily||{})[k]:(d.best||{})[k]})).filter(r=>typeof r.v==='number'&&(boardTab==='daily'||r.v>0));
  }catch(e){if(el.isConnected)el.innerHTML='<p class="note-s">The leaderboard can’t be reached right now.</p>';return}
- rows.sort((a,b)=>b.v-a.v);const top=rows.slice(0,10);const meIdx=rows.findIndex(r=>r.id===ACC.id);
- if(!document.getElementById('board'))return;
+ rows.sort((a,b)=>b.v-a.v);boardRows=rows;renderBoard();
+}
+function renderBoard(focusMe){
+ const el=document.getElementById('board');if(!el||!boardRows)return;const rows=boardRows;
+ const top=rows.slice(0,boardN);const meIdx=rows.findIndex(r=>r.id===ACC.id);
  el.innerHTML=`<div class="tabs"><button class="tag ${boardTab==='daily'?'on':''}" data-b="daily">TODAY’S DAILY</button><button class="tag ${boardTab==='best'?'on':''}" data-b="best">ALL-TIME BEST</button></div>
- ${top.length?`<div class="scroll"><table><thead><tr><th>#</th><th>Player</th><th class="n">Score</th><th class="n">Grade</th></tr></thead><tbody>${top.map((r,i)=>`<tr class="lbr ${r.id===ACC.id?'me':''}" data-u="${r.id}" tabindex="0"><td>${i+1}</td><td><span class="lbn">${avatar(r.name,'pav xs')}${esc(r.name)}${r.stk?stkSvg(r.stk):''}${r.id===ACC.id?' (you)':''}</span></td><td class="n">${r.v}</td><td class="n">G${rankOf(r.v)[2]}</td></tr>`).join('')}</tbody></table></div>${meIdx>=10?`<p class="note-s">You’re #${meIdx+1} of ${rows.length}.</p>`:''}`:`<p class="note-s">${boardTab==='daily'?'Nobody has played today’s '+S().n+' daily pack yet. Be first.':'No scores yet.'}</p>`}`;
- el.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{boardTab=b.dataset.b;loadBoard()});
+ ${top.length?`<div class="scroll"><table><thead><tr><th>#</th><th>Player</th><th class="n">Score</th><th class="n">Grade</th></tr></thead><tbody>${top.map((r,i)=>`<tr class="lbr ${r.id===ACC.id?'me':''}" data-u="${r.id}" tabindex="0"><td>${i+1}</td><td><span class="lbn">${avatar(r.name,'pav xs')}${esc(r.name)}${r.stk?stkSvg(r.stk):''}${r.id===ACC.id?' (you)':''}</span></td><td class="n">${r.v}</td><td class="n">G${rankOf(r.v)[2]}</td></tr>`).join('')}</tbody></table></div>${rows.length>10?`<div class="lbmore">${rows.length>boardN?`<button class="tag" id="lbm">SHOW MORE ↓</button>`:''}${boardN>10?`<button class="tag" id="lbl">SHOW LESS ↑</button>`:''}${meIdx>=boardN?`<button class="tag" id="lbme">FIND ME (#${meIdx+1})</button>`:''}<span class="note-s">Showing ${Math.min(boardN,rows.length)} of ${rows.length}</span></div>`:''}`:`<p class="note-s">${boardTab==='daily'?'Nobody has played today’s '+S().n+' daily pack yet. Be first.':'No scores yet.'}</p>`}`;
+ el.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{boardTab=b.dataset.b;boardN=10;loadBoard()});
+ const thud=()=>{ensureAudio();tone(150,.09,'triangle',.08,0,-50)};
+ {const b=el.querySelector('#lbm');if(b)b.onclick=()=>{thud();const y=scrollY;boardN+=25;renderBoard();scrollTo(0,y)}}
+ {const b=el.querySelector('#lbl');if(b)b.onclick=()=>{thud();boardN=10;renderBoard();el.scrollIntoView({block:'nearest'})}}
+ {const b=el.querySelector('#lbme');if(b)b.onclick=()=>{thud();boardN=Math.ceil((meIdx+1+5)/25)*25;renderBoard(true)}}
+ if(focusMe){const r=el.querySelector('tr.me');if(r){r.scrollIntoView({block:'center',behavior:reduced?'auto':'smooth'});r.classList.add('flash')}}
  el.querySelectorAll('tr[data-u]').forEach(t=>{t.onclick=()=>profile(t.dataset.u);t.onkeydown=e=>{if(e.key==='Enter')profile(t.dataset.u)}});
  if(top.length)el.insertAdjacentHTML('beforeend','<p class="note-s">Tap a player to see their profile.</p>');
 }
