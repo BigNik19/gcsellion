@@ -42,6 +42,48 @@ img,svg{-webkit-user-drag:none}
 .scard em{position:absolute;top:6px;right:8px;font:9px var(--px);font-style:normal;color:var(--muted)}
 .scard.miss{--c:#262c45;color:#3d4566}.scard.miss i{width:56px;height:56px;display:grid;place-items:center;background:#1a1f33;font:13px var(--px);font-style:normal;color:#4a5378}
 button.stk{background:none;border:0;cursor:pointer}
+.navav{width:42px;height:42px;border:0;cursor:pointer;display:grid;place-items:center;font:16px var(--px);color:#0d1120;background:var(--a);box-shadow:0 0 0 2px #0d1120,0 0 0 4px var(--a);margin-left:4px}
+.navav:focus-visible{outline:3px solid var(--gold);outline-offset:6px}
+.pav{width:88px;height:88px;flex:none;display:grid;place-items:center;font:38px var(--px);color:#0d1120;background:var(--a);box-shadow:0 0 0 4px #0d1120,0 0 0 7px var(--a),7px 7px 0 4px rgba(0,0,0,.35)}
+.pav.sm{width:40px;height:40px;font-size:16px;box-shadow:0 0 0 2px #0d1120,0 0 0 4px var(--a)}
+.pav.xs{width:26px;height:26px;font-size:11px;box-shadow:none}
+.avatar{background:var(--a,var(--gold))}
+.phero{position:relative;overflow:hidden;display:flex;align-items:center;gap:26px;min-height:170px}
+.phero>*:not(.pbg){position:relative;z-index:1}
+.pbg{position:absolute;right:-20px;top:50%;width:230px;height:230px;transform:translateY(-50%) rotate(-12deg);opacity:.3;pointer-events:none}
+.pbg.two{right:auto;left:42%;top:-30px;width:90px;height:90px;transform:rotate(14deg);opacity:.14}
+.pbg svg{width:100%;height:100%}
+.pname{font:20px/1.4 var(--px);color:var(--ink);display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:8px 0 0;word-break:break-all}
+.pbadge svg,.lbn svg,.pn svg{filter:drop-shadow(2px 0 0 #fffbe6) drop-shadow(-2px 0 0 #fffbe6) drop-shadow(0 2px 0 #fffbe6) drop-shadow(0 -2px 0 #fffbe6)}
+.pbadge svg{width:38px;height:38px;transform:rotate(-8deg);display:block}
+.psince{color:var(--muted);margin:10px 0 0;font-size:20px}
+.ptiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin:24px 3px 6px}
+.ptile{background:#0b0f1d;box-shadow:0 0 0 3px var(--line);padding:16px 16px 14px}
+.ptile b{display:block;font:22px var(--px);color:var(--c);margin-bottom:12px}
+.ptile span{color:var(--muted);font-size:20px;line-height:1.1}
+.ptop{display:flex;gap:16px;align-items:center;margin:22px 3px 0;padding:14px 16px;background:#0b0f1d;box-shadow:0 0 0 3px var(--c)}
+.ptop svg{width:34px;height:34px;flex:none;filter:brightness(0) saturate(100%) invert(1);opacity:.9}
+.ptop em{display:block;font:9px/1.6 var(--px);font-style:normal;color:var(--c);letter-spacing:.1em;text-transform:uppercase}
+.ptop b{display:block;font-weight:normal;font-size:26px;color:var(--ink);margin:4px 0 2px}.ptop span{color:var(--muted);font-size:19px}
+.prow{display:flex;flex-wrap:wrap;gap:14px}
+.pst{width:64px;height:64px;display:grid;place-items:center;background:#0b0f1d;box-shadow:0 0 0 3px var(--c)}
+.pst svg{width:44px;height:44px;filter:drop-shadow(2px 0 0 #fffbe6) drop-shadow(-2px 0 0 #fffbe6) drop-shadow(0 2px 0 #fffbe6) drop-shadow(0 -2px 0 #fffbe6)}
+.ppick{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.spick{width:60px;height:60px;border:0;cursor:pointer;display:grid;place-items:center;background:#0b0f1d;box-shadow:0 0 0 2px var(--line)}
+.spick svg{width:40px;height:40px}
+.spick.on{box-shadow:0 0 0 3px var(--c),0 0 14px var(--c)}
+.pact{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:22px}
+.pact .note-s{margin:0}
+.pfind{display:flex;gap:12px;flex-wrap:wrap}
+.pfind input{flex:1 1 200px;min-width:0;font:24px var(--vt);color:var(--ink);background:#0b0f1d;border:0;box-shadow:0 0 0 2px var(--line);padding:10px 14px}
+.plist{display:grid;gap:12px;margin-top:16px}
+.prs{display:flex;align-items:center;gap:16px;width:100%;text-align:left;border:0;cursor:pointer;background:#0b0f1d;box-shadow:0 0 0 2px var(--line);padding:12px 16px;color:var(--ink);font:22px var(--vt)}
+.prs:hover,.lbr:hover td{background:#141a30}
+.pn{display:flex;align-items:center;gap:10px;flex:1;min-width:0}.pn svg{width:24px;height:24px}
+.pm{color:var(--muted);font-size:19px;text-align:right}
+.lbr{cursor:pointer}
+.lbn{display:inline-flex;align-items:center;gap:10px}.lbn svg{width:20px;height:20px}
+@media (max-width:480px){.phero{gap:18px;min-height:140px}.pav{width:64px;height:64px;font-size:26px}.pname{font-size:15px}.pbg{width:170px;height:170px}.ptile b{font-size:18px}.navav{width:38px;height:38px}}
 @media (max-width:480px){.sgrid{grid-template-columns:repeat(3,1fr);gap:12px}.scard{font-size:16px;padding:12px 4px 10px}.scard svg,.scard.miss i{width:44px;height:44px}.sbhead p{font-size:19px}}
 .stk{display:inline-flex;align-items:center;gap:7px;font:13px var(--px);color:var(--dim);padding:0 10px;align-self:center}
 .stk svg{width:22px;height:22px;opacity:.45;filter:grayscale(.6)}
@@ -180,7 +222,7 @@ textarea.share{width:100%;min-height:110px;margin-top:14px;font:22px var(--vt);b
 /* locker */
 .card{padding:clamp(18px,3vw,28px);margin-top:18px}
 .card p{margin:10px 0 0;color:var(--muted)}
-.avatar{width:56px;height:56px;display:grid;place-items:center;background:var(--gold);color:#1a1406;font:20px var(--px);flex:none}
+.avatar{width:56px;height:56px;display:grid;place-items:center;background:var(--a,var(--gold));color:#1a1406;font:20px var(--px);flex:none}
 .who{display:flex;gap:16px;align-items:center}
 table{border-collapse:collapse;width:100%;font-size:21px}
 th{font:9px/1.6 var(--px);letter-spacing:.1em;color:var(--dim);text-align:left;padding:8px 6px;border-bottom:2px solid var(--line)}
@@ -1324,24 +1366,25 @@ const SUPABASE_ANON_KEY='sb_publishable_u_Mq64PXpVKpziXUiw8x1A_WZ9_uztp';
 // ▲▲▲ Only ever use the "anon public" key here, never the "service_role" key ▲▲▲
 const sb=(window.supabase&&/^https:\/\//.test(SUPABASE_URL)&&!/PASTE/.test(SUPABASE_ANON_KEY))?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
 const ACC={state:sb?'checking':'nocfg',name:'',id:null,err:''};
-let view='home',G=null,timer=null,writing=Promise.resolve(),answerLog=[],runLog=[],authMode='login',recovery=false;
+let profUid=null,view='home',G=null,timer=null,writing=Promise.resolve(),answerLog=[],runLog=[],authMode='login',recovery=false;
 function mergeInto(remote){
  if(!remote||!remote.subj)return;
  for(const k in SUBJ){const a=store.subj[k],b=Object.assign(blank(),remote.subj[k]||{});
   a.dives=Math.max(a.dives,b.dives||0);a.best=Math.max(a.best,b.best||0);a.g10=Math.max(a.g10,b.g10||0);
   for(const d in b.daily)if(a.daily[d]==null)a.daily[d]=b.daily[d]}
+ {const a=store.topAns,b=remote.topAns;if(b&&(!a||b.t>a.t||(b.t===a.t&&b.p>a.p)))store.topAns=b}
  store.stkDay=store.stkDay||{};for(const d in remote.stkDay||{})if(!store.stkDay[d])store.stkDay[d]=remote.stkDay[d];
  const seen=new Set(store.hist.map(h=>h.t));for(const h of remote.hist||[])if(!seen.has(h.t))store.hist.push(h);
  store.hist.sort((x,y)=>y.t-x.t);store.hist=store.hist.slice(0,60);
 }
-const scoreRow=()=>{const best={},daily={};let dives=0,g10=0;for(const k in SUBJ){const s=store.subj[k];best[k]=s.best;dives+=s.dives;g10+=s.g10;if(s.daily[today()]!=null)daily[k]=s.daily[today()]}return{user_id:ACC.id,best,daily,day:today(),dives,g10,updated_at:new Date().toISOString()}};
+const scoreRow=()=>{const best={},daily={};let dives=0,g10=0;for(const k in SUBJ){const s=store.subj[k];best[k]=s.best;dives+=s.dives;g10+=s.g10;if(s.daily[today()]!=null)daily[k]=s.daily[today()]}return{user_id:ACC.id,best,daily,day:today(),dives,g10,stats:publicStats(),updated_at:new Date().toISOString()}};
 function pushAll(){
  if(ACC.state!=='in')return writing;
  const body=JSON.parse(JSON.stringify(store)),row=scoreRow(),log=answerLog.splice(0),runs=runLog.splice(0);
  writing=writing.then(async()=>{
   try{
    let r=await sb.from('progress').upsert({user_id:ACC.id,data:body,updated_at:new Date().toISOString()});if(r.error)throw r.error;
-   r=await sb.from('scores').upsert(row);if(r.error)throw r.error;
+   r=await sb.from('scores').upsert(row);if(r.error&&/stats/.test(r.error.message||'')){delete row.stats;r=await sb.from('scores').upsert(row)}if(r.error)throw r.error;
    if(log.length){r=await sb.from('answers').upsert(log.map(x=>({...x,user_id:ACC.id})),{onConflict:'user_id,subject,prompt,answer',ignoreDuplicates:true});if(r.error)console.warn(r.error)}
    if(runs.length){r=await sb.from('runs').insert(runs.map(x=>({...x,user_id:ACC.id})));if(r.error)console.warn(r.error)}
    ACC.err='';
@@ -1351,14 +1394,16 @@ function pushAll(){
 async function onSignedIn(user){
  ACC.id=user.id;ACC.email=user.email||'';
  try{
-  let {data:prof}=await sb.from('profiles').select('username').eq('id',user.id).maybeSingle();
+  let pq=await sb.from('profiles').select('username,created_at,sticker,sticker_style').eq('id',user.id).maybeSingle();
+  if(pq.error)pq=await sb.from('profiles').select('username,created_at').eq('id',user.id).maybeSingle();
+  let prof=pq.data;
   if(!prof){const u=(user.user_metadata&&user.user_metadata.username)||('player_'+user.id.slice(0,6));await sb.from('profiles').upsert({id:user.id,username:u});prof={username:u}}
-  ACC.name=prof.username;
+  ACC.name=prof.username;ACC.created=prof.created_at||null;ACC.sticker=prof.sticker||null;ACC.style=prof.sticker_style||'badge';
   const {data:pr}=await sb.from('progress').select('data').eq('user_id',user.id).maybeSingle();
   if(pr&&pr.data)mergeInto(pr.data);
   ACC.state='in';saveLocal();pushAll();
  }catch(e){ACC.state='in';ACC.name=ACC.name||'Player';ACC.err='Signed in, but your saved data couldn’t be loaded just now.'}
- navRender();if(view==='home'||view==='locker')rerender();
+ navRender();if(view==='home'||view==='locker'||view==='profile')rerender();
 }
 async function initAccount(){
  if(!sb){navRender();return}
@@ -1371,16 +1416,16 @@ async function initAccount(){
  try{const {data}=await sb.auth.getSession();clearTimeout(slow);if(data&&data.session)await onSignedIn(data.session.user);else{ACC.state='out';navRender();rerender()}}
  catch(e){clearTimeout(slow);ACC.state='out';navRender();rerender()}
 }
-const rerender=()=>view==='locker'?locker():view==='home'?home():view==='stickers'?stickers():null;
+const rerender=()=>view==='locker'?locker():view==='home'?home():view==='stickers'?stickers():view==='profile'?profile(profUid):null;
 function navRender(){
  const ini=ACC.state==='in'?esc((ACC.name||'?').trim().charAt(0).toUpperCase()):'?';
  const sk=streakInfo();
  document.getElementById('nav').innerHTML=`<button class="stk ${sk.todayDone?'on':''}" id="stk" title="${sk.cur} day streak · sticker book" aria-label="${sk.cur} day streak, open sticker book">${spr(STICK.apple)}${sk.cur}</button>`+Object.entries(SUBJ).map(([k,s])=>`<button class="tag ${k===store.subject?'on':''}" data-s="${k}" aria-pressed="${k===store.subject}">${s.n.toUpperCase()}</button>`).join('')+
- `<button class="tag" id="sndBtn" aria-pressed="${sfxOn()}">SOUND ${sfxOn()?'ON':'OFF'}</button>`+`<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='in'?'LOCKER':'LOG IN'}</button>`;
+ `<button class="tag" id="sndBtn" aria-pressed="${sfxOn()}">SOUND ${sfxOn()?'ON':'OFF'}</button>`+(ACC.state==='in'?`<button class="navav" id="lockBtn" style="--a:${avColor(ACC.name)}" title="Your profile" aria-label="Your profile">${ini}</button>`:`<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='checking'?'…':'LOG IN'}</button>`);
  document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(G&&!confirmLeave())return;store.subject=b.dataset.s;saveLocal();navRender();view==='locker'?locker():home()});
  document.getElementById('sndBtn').onclick=()=>{store.sound=!sfxOn();saveLocal();navRender();if(sfxOn()){ensureAudio();tone(660,.12,'square',.05)}};
  document.getElementById('stk').onclick=stickers;
- document.getElementById('lockBtn').onclick=()=>{if(G&&!confirmLeave())return;locker()};
+ document.getElementById('lockBtn').onclick=()=>{if(G&&!confirmLeave())return;ACC.state==='in'?profile():locker()};
 }
 const confirmLeave=()=>{clearInterval(timer);G=null;return true};
 // ---------- streaks (one sticker for each day you finish any daily pack) ----------
@@ -1490,6 +1535,156 @@ function stickers(){
    :`<div class="scard miss"><i>???</i><span>???</span></div>`).join('')}</div>`}).join('')}
  <div style="margin-top:28px"><button class="btn alt" id="hm">HOME</button></div>`;
  stage.querySelector('#hm').onclick=home;scrollTo(0,0);
+}
+// ---------- profiles + friends ----------
+const AVC=['#ff4f7a','#5fd8ff','#b6f36b','#c79bff','#ffd36b','#ff9a3c'];
+const avColor=n=>AVC[dHash(String(n||'?').toLowerCase())%AVC.length];
+const ini=n=>esc(String(n||'?').trim().charAt(0).toUpperCase()||'?');
+const avatar=(n,cls='pav')=>`<span class="${cls}" style="--a:${avColor(n)}" aria-hidden="true">${ini(n)}</span>`;
+const STYLES=[['badge','NEXT TO NAME'],['backdrop','BACKDROP'],['none','HIDDEN']];
+let profBack=null,profSeq=0,profHist=[],profCur=null;
+// best answer ever, kept for the profile
+function noteTopAnswer(res,subject){
+ for(const x of res){if(!x.j)continue;const t=store.topAns;
+  if(!t||x.j.t>t.t||(x.j.t===t.t&&x.pts>t.p))store.topAns={a:cap(x.j.a.name),t:x.j.t,p:x.pts,q:x.p.q,s:subject,d:today()}}
+}
+// the public summary that goes on the scores row
+function publicStats(){
+ const si=streakInfo(),days=[...si.set].sort(),own=stkCounts();
+ return{streak:si.cur,last:days[days.length-1]||null,bestStreak:si.best,stk:Object.keys(own),top:store.topAns||null};
+}
+function myProfileData(){
+ const best={};let dives=0,g10=0;for(const k in SUBJ){const s=store.subj[k];best[k]=s.best;dives+=s.dives;g10+=s.g10}
+ return{id:ACC.id,name:ACC.name,created:ACC.created,sticker:ACC.sticker,style:ACC.style||'badge',best,dives,g10,stats:publicStats()};
+}
+const liveStreak=st=>st&&st.last&&st.last>=shiftDay(today(),-1)?st.streak||0:0;
+function heroHtml(d){
+ const s=d.sticker&&STKID[d.sticker],style=d.style||'badge';
+ return `<section class="card px phero" style="--c:${s?RAR[s.r].c:'var(--line)'}">
+  ${s&&style==='backdrop'?`<div class="pbg">${stkSvg(s)}</div><div class="pbg two">${stkSvg(s)}</div>`:''}
+  ${avatar(d.name)}
+  <div><p class="lbl">${d.id===ACC.id?'Your profile':'Player'}</p>
+  <h2 class="pname">${esc(d.name)}${s&&style==='badge'?`<span class="pbadge" title="${esc(s.n)}">${stkSvg(s)}</span>`:''}</h2>
+  ${d.created?`<p class="psince">Playing since ${new Date(d.created).toLocaleDateString('en-GB',{month:'long',year:'numeric'})}</p>`:''}</div>
+ </section>`;
+}
+function statsHtml(d){
+ const st=d.stats||{},stk=(st.stk||[]).filter(id=>STKID[id]),top=st.top;
+ const bestOverall=Math.max(0,...Object.values(d.best||{}).map(Number).filter(n=>!isNaN(n)));
+ const rarest=[...stk].sort((a,b)=>STKID[b].r-STKID[a].r).slice(0,6);
+ return `<div class="ptiles">
+  <div class="ptile" style="--c:var(--gold)"><b>G${rankOf(bestOverall)[2]}</b><span>Best grade · ${esc(rankOf(bestOverall)[1])}</span></div>
+  <div class="ptile" style="--c:#ffd36b"><b>${d.g10||0}</b><span>Grade 10 answers</span></div>
+  <div class="ptile" style="--c:var(--pink)"><b>${liveStreak(st)}</b><span>Day streak · best ${st.bestStreak||0}</span></div>
+  <div class="ptile" style="--c:var(--cyan)"><b>${d.dives||0}</b><span>Packs played</span></div>
+ </div>
+ ${top?`<div class="ptop" style="--c:${TIERS[top.t].c}">${spr(ICON[TIERS[top.t].i])}<div><em>Deepest answer · ${TIERS[top.t].n}</em><b>${esc(top.a)}</b><span>${esc(top.q)}</span></div></div>`:''}
+ <div class="rule"><span class="lbl">Best scores</span></div>
+ <div class="scroll"><table><tbody>${Object.entries(SUBJ).map(([k,s])=>{const v=Number((d.best||{})[k])||0;return `<tr><td style="color:var(--ink)">${s.n}</td><td class="n">${v}</td><td class="n">${v?'G'+rankOf(v)[2]+' · '+esc(rankOf(v)[1]):'–'}</td></tr>`}).join('')}</tbody></table></div>
+ <div class="rule"><span class="lbl">Stickers · ${stk.length} / ${STK.length}</span></div>
+ ${rarest.length?`<div class="prow">${rarest.map(id=>{const s=STKID[id];return `<span class="pst" style="--c:${RAR[s.r].c}" title="${esc(s.n)} · ${RAR[s.r].n}">${stkSvg(s)}</span>`}).join('')}</div>`:`<p class="note-s">No stickers yet.</p>`}`;
+}
+async function profile(uid,isBack){
+ if(G&&!confirmLeave())return;
+ if(view!=='profile'){profBack=view;profHist=[]}else if(!isBack&&profCur!==(uid||ACC.id))profHist.push(profCur);
+ if(!uid&&ACC.state!=='in'){locker();return}
+ uid=uid||ACC.id;const me=uid===ACC.id,seq=++profSeq;profUid=me?null:uid;profCur=uid;
+ view='profile';clearInterval(timer);G=null;
+ const back=`<button class="link" id="back">← Back</button>`;
+ if(me){
+  const d=myProfileData(),own=stkCounts(),mine=STK.filter(s=>own[s.id]).sort((a,b)=>b.r-a.r);
+  stage.innerHTML=`<div class="hud"><span class="lbl pk">Profile</span>${back}</div>${heroHtml(d)}${statsHtml(d)}
+  <div class="rule"><span class="lbl">Show off a sticker</span></div>
+  ${mine.length?`<div class="tabs" id="pst">${STYLES.map(([k,n])=>`<button class="tag ${d.style===k?'on':''}" data-st="${k}">${n}</button>`).join('')}</div>
+  <div class="ppick">${mine.map(s=>`<button class="spick ${d.sticker===s.id?'on':''}" data-k="${s.id}" style="--c:${RAR[s.r].c}" title="${esc(s.n)}" aria-label="${esc(s.n)}">${stkSvg(s)}</button>`).join('')}</div><p class="note-s" id="pmsg"></p>`
+  :`<p class="note-s">Finish a daily pack to earn your first sticker, then you can show it here.</p>`}
+  <div class="rule"><span class="lbl">Friends</span></div>
+  <form class="pfind" id="pf"><input id="pq" maxlength="20" placeholder="Find a player by username" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="btn alt">FIND</button></form>
+  <div id="pres"></div><div id="flist"><p class="note-s">Loading friends…</p></div>
+  <div style="margin-top:30px;display:flex;flex-wrap:wrap;gap:12px"><button class="btn alt" id="lk">LOCKER &amp; LEADERBOARD</button><button class="btn alt" id="logout">LOG OUT</button></div>`;
+  bindProfileCommon();
+  const msg=t=>{const m=stage.querySelector('#pmsg');if(m)m.textContent=t};
+  const save=async(patch)=>{Object.assign(ACC,{sticker:patch.sticker!==undefined?patch.sticker:ACC.sticker,style:patch.sticker_style||ACC.style});profile();
+   if(!sb)return;const {error}=await sb.from('profiles').update(patch).eq('id',ACC.id);
+   msg(error?'Couldn’t save that. If this keeps happening, update-3.sql may not have been run yet.':'Saved. Everyone sees this on your profile.')};
+  stage.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>save({sticker:b.dataset.k===ACC.sticker?null:b.dataset.k}));
+  stage.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>save({sticker_style:b.dataset.st}));
+  stage.querySelector('#logout').onclick=async()=>{await writing;await sb.auth.signOut();Object.assign(ACC,{state:'out',id:null,name:''});navRender();locker()};
+  stage.querySelector('#pf').onsubmit=e=>{e.preventDefault();findPlayers(stage.querySelector('#pq').value.trim())};
+  loadFriends(seq);
+  scrollTo(0,0);return;
+ }
+ stage.innerHTML=`<div class="hud"><span class="lbl pk">Profile</span>${back}</div><p class="note-s">Loading…</p>`;bindProfileCommon();scrollTo(0,0);
+ let d;
+ try{
+  const sel=async(t,cols,fallback,col)=>{let r=await sb.from(t).select(cols).eq(col,uid).maybeSingle();if(r.error&&fallback)r=await sb.from(t).select(fallback).eq(col,uid).maybeSingle();if(r.error)throw r.error;return r.data};
+  const [p,sc]=await Promise.all([sel('profiles','id,username,created_at,sticker,sticker_style','id,username,created_at','id'),sel('scores','best,dives,g10,stats','best,dives,g10','user_id')]);
+  if(!p)throw new Error('gone');
+  d={id:p.id,name:p.username,created:p.created_at,sticker:p.sticker,style:p.sticker_style,best:(sc&&sc.best)||{},dives:sc&&sc.dives,g10:sc&&sc.g10,stats:(sc&&sc.stats)||{}};
+ }catch(e){if(seq===profSeq)stage.innerHTML=`<div class="hud"><span class="lbl pk">Profile</span>${back}</div><p class="note-s">That profile can’t be loaded right now.</p>`,bindProfileCommon();return}
+ if(seq!==profSeq)return;
+ const fr=await friendState(uid);if(seq!==profSeq)return;
+ stage.innerHTML=`<div class="hud"><span class="lbl pk">Profile</span>${back}</div>${heroHtml(d)}
+ <div class="pact">${ACC.state!=='in'?`<button class="btn alt" id="fadd">LOG IN TO ADD FRIENDS</button>`:fr.mine?`<button class="btn alt" id="fadd">✓ FRIENDS</button>`:`<button class="btn gold" id="fadd">+ ADD FRIEND</button>`}
+ ${fr.theirs?`<span class="note-s">${fr.mine?'You’ve added each other.':'Added you as a friend.'}</span>`:''}<p class="note-s" id="fmsg"></p></div>
+ ${statsHtml(d)}`;
+ bindProfileCommon();
+ stage.querySelector('#fadd').onclick=async e=>{
+  if(ACC.state!=='in'){locker();return}
+  e.target.disabled=true;
+  const r=fr.mine?await sb.from('friends').delete().eq('user_id',ACC.id).eq('friend_id',uid):await sb.from('friends').insert({user_id:ACC.id,friend_id:uid});
+  if(r.error){e.target.disabled=false;stage.querySelector('#fmsg').textContent='Couldn’t update friends just now.';return}
+  profile(uid);
+ };
+}
+function bindProfileCommon(){
+ const b=stage.querySelector('#back');if(b)b.onclick=()=>{if(profHist.length){profile(profHist.pop(),true);return}profBack==='locker'?locker():profBack==='stickers'?stickers():home()};
+ const lk=stage.querySelector('#lk');if(lk)lk.onclick=locker;
+}
+async function friendState(uid){
+ if(ACC.state!=='in'||!sb)return{};
+ try{const {data}=await sb.from('friends').select('user_id,friend_id').or(`and(user_id.eq.${ACC.id},friend_id.eq.${uid}),and(user_id.eq.${uid},friend_id.eq.${ACC.id})`);
+  return{mine:(data||[]).some(r=>r.user_id===ACC.id),theirs:(data||[]).some(r=>r.user_id===uid)}}catch(e){return{}}
+}
+async function peopleRows(ids){
+ if(!ids.length)return[];
+ let p=await sb.from('profiles').select('id,username,sticker,sticker_style').in('id',ids);
+ if(p.error)p=await sb.from('profiles').select('id,username').in('id',ids);
+ let s=await sb.from('scores').select('user_id,daily,day,stats').in('user_id',ids);
+ if(s.error)s=await sb.from('scores').select('user_id,daily,day').in('user_id',ids);
+ const sc=Object.fromEntries((s.data||[]).map(r=>[r.user_id,r]));
+ return (p.data||[]).map(r=>({...r,sc:sc[r.id]||{}})).sort((a,b)=>a.username.localeCompare(b.username));
+}
+function personRow(r,extra=''){
+ const s=r.sticker&&r.sticker_style!=='none'&&STKID[r.sticker],sc=r.sc||{},td=sc.day===today()?Object.values(sc.daily||{}):[];
+ const sub=[liveStreak(sc.stats)?`${liveStreak(sc.stats)} day streak`:'',td.length?`today: ${Math.max(...td)}`:''].filter(Boolean).join(' · ');
+ return `<button class="prs" data-u="${r.id}">${avatar(r.username,'pav sm')}<span class="pn">${esc(r.username)}${s?stkSvg(s):''}</span><span class="pm">${sub||extra}</span></button>`;
+}
+async function loadFriends(seq){
+ const el=()=>{const e=document.getElementById('flist');return seq===profSeq&&e?e:null};
+ if(!sb)return;
+ try{
+  const [a,b]=await Promise.all([sb.from('friends').select('friend_id').eq('user_id',ACC.id),sb.from('friends').select('user_id').eq('friend_id',ACC.id)]);
+  if(a.error)throw a.error;
+  const mine=(a.data||[]).map(r=>r.friend_id),mineS=new Set(mine),added=(b.data||[]).map(r=>r.user_id).filter(id=>!mineS.has(id));
+  const rows=await peopleRows([...mine,...added]),by=Object.fromEntries(rows.map(r=>[r.id,r]));
+  if(!el())return;
+  el().innerHTML=(mine.length?`<div class="plist">${mine.filter(id=>by[id]).map(id=>personRow(by[id])).join('')}</div>`:`<p class="note-s">No friends yet. Tap a name on the leaderboard, or find someone by username.</p>`)
+   +(added.length?`<div class="rule"><span class="lbl">Added you</span></div><div class="plist">${added.filter(id=>by[id]).map(id=>personRow(by[id],'tap to add back')).join('')}</div>`:'');
+  el().querySelectorAll('[data-u]').forEach(b=>b.onclick=()=>profile(b.dataset.u));
+ }catch(e){const x=el();if(x)x.innerHTML='<p class="note-s">Friends switch on once update-3.sql has been run in Supabase.</p>'}
+}
+async function findPlayers(q){
+ const el=document.getElementById('pres');if(!el)return;
+ if(q.length<2){el.innerHTML='<p class="note-s">Type at least 2 letters.</p>';return}
+ el.innerHTML='<p class="note-s">Searching…</p>';
+ const pat=q.replace(/[\\%_]/g,m=>'\\'+m)+'%';
+ const {data,error}=await sb.from('profiles').select('id').ilike('username',pat).neq('id',ACC.id).limit(8);
+ if(error){el.innerHTML='<p class="note-s">Search isn’t working right now.</p>';return}
+ const rows=await peopleRows((data||[]).map(r=>r.id));
+ if(!document.getElementById('pres'))return;
+ el.innerHTML=rows.length?`<div class="plist">${rows.map(r=>personRow(r)).join('')}</div>`:'<p class="note-s">No players found with that name.</p>';
+ el.querySelectorAll('[data-u]').forEach(b=>b.onclick=()=>profile(b.dataset.u));
 }
 // stop pinch-zoom on iPhone/iPad so the page holds still like an app
 ['gesturestart','gesturechange'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
@@ -1698,6 +1893,7 @@ function end(){
  st.dives++;st.best=Math.max(st.best,s);
  const firstToday=G.mode==='daily'&&!playedDays().has(today());
  if(G.mode==='daily'&&st.daily[today()]==null)st.daily[today()]=s;
+ noteTopAnswer(G.res,G.subject);
  store.hist.unshift({t:Date.now(),d:today(),s:G.subject,m:G.mode,sc:s});runLog.push({subject:G.subject,mode:G.mode,score:s,day:today()});store.hist=store.hist.slice(0,60);
  const sj=SUBJ[G.subject];
  const label=G.mode==='daily'?`Daily pack #${dayNo()}`:G.mode==='topic'?`${sj.packs[G.topic]} pack`:'Unlimited pack';
@@ -1764,8 +1960,8 @@ function bindAuth(){
 async function locker(){
  view='locker';clearInterval(timer);G=null;
  const days=[...Array(14)].map((_,i)=>shiftDay(today(),-i));
- const head=ACC.state==='in'?`<div class="who"><span class="avatar">${esc(ACC.name.charAt(0).toUpperCase())}</span><div><p class="lbl">Logged in</p><h2 style="margin-top:6px">${esc(ACC.name)}</h2></div></div>
-  <p>Your progress, high scores and daily packs save to your account, so they follow you to any device you log in on.</p>${ACC.err?`<p style="color:var(--pink)">${esc(ACC.err)}</p>`:''}<div style="margin-top:12px"><button class="btn alt" id="logout">LOG OUT</button></div>`
+ const head=ACC.state==='in'?`<div class="who">${avatar(ACC.name,'avatar')}<div><p class="lbl">Logged in</p><h2 style="margin-top:6px">${esc(ACC.name)}</h2></div></div>
+  <p>Your progress, high scores and daily packs save to your account, so they follow you to any device you log in on.</p>${ACC.err?`<p style="color:var(--pink)">${esc(ACC.err)}</p>`:''}<div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:12px"><button class="btn gold" id="myprof">MY PROFILE</button><button class="btn alt" id="logout">LOG OUT</button></div>`
   :ACC.state==='checking'?`<h2>CHECKING LOGIN…</h2>`:authForm()+(ACC.err?`<p style="color:var(--pink)">${esc(ACC.err)}</p>`:'');
  stage.innerHTML=`<div class="hud"><span class="lbl pk">Your locker</span><button class="link" id="back">← Back to the pack</button></div>
  <section class="card px" style="--c:${ACC.state==='in'?'var(--gold)':'var(--line)'}">${head}</section>
@@ -1780,6 +1976,7 @@ async function locker(){
  stage.querySelector('#back').onclick=home;
  const lo=stage.querySelector('#logout');if(lo)lo.onclick=async()=>{await writing;await sb.auth.signOut();Object.assign(ACC,{state:'out',id:null,name:''});navRender();locker()};
  if(ACC.state!=='in')bindAuth();
+ const mp=stage.querySelector('#myprof');if(mp)mp.onclick=()=>profile();
  scrollTo(0,0);
  if(sb)loadBoard();
 }
@@ -1787,16 +1984,18 @@ async function loadBoard(){
  const el=document.getElementById('board');if(!el)return;
  const k=store.subject;let rows=[];
  try{
-  let q=sb.from('scores').select('user_id,best,daily,day,profiles(username)').limit(1000);
-  if(boardTab==='daily')q=q.eq('day',today());
-  const {data,error}=await q;if(error)throw error;
-  rows=(data||[]).map(d=>({id:d.user_id,name:(d.profiles&&d.profiles.username)||'Someone',v:boardTab==='daily'?(d.daily||{})[k]:(d.best||{})[k]})).filter(r=>typeof r.v==='number'&&(boardTab==='daily'||r.v>0));
+  const mk=cols=>{let q=sb.from('scores').select(cols).limit(1000);if(boardTab==='daily')q=q.eq('day',today());return q};
+  let {data,error}=await mk('user_id,best,daily,day,profiles(username,sticker,sticker_style)');
+  if(error)({data,error}=await mk('user_id,best,daily,day,profiles(username)'));if(error)throw error;
+  rows=(data||[]).map(d=>({id:d.user_id,name:(d.profiles&&d.profiles.username)||'Someone',stk:d.profiles&&d.profiles.sticker_style!=='none'&&STKID[d.profiles.sticker],v:boardTab==='daily'?(d.daily||{})[k]:(d.best||{})[k]})).filter(r=>typeof r.v==='number'&&(boardTab==='daily'||r.v>0));
  }catch(e){if(el.isConnected)el.innerHTML='<p class="note-s">The leaderboard can’t be reached right now.</p>';return}
  rows.sort((a,b)=>b.v-a.v);const top=rows.slice(0,10);const meIdx=rows.findIndex(r=>r.id===ACC.id);
  if(!document.getElementById('board'))return;
  el.innerHTML=`<div class="tabs"><button class="tag ${boardTab==='daily'?'on':''}" data-b="daily">TODAY’S DAILY</button><button class="tag ${boardTab==='best'?'on':''}" data-b="best">ALL-TIME BEST</button></div>
- ${top.length?`<div class="scroll"><table><thead><tr><th>#</th><th>Player</th><th class="n">Score</th><th class="n">Grade</th></tr></thead><tbody>${top.map((r,i)=>`<tr class="${r.id===ACC.id?'me':''}"><td>${i+1}</td><td>${esc(r.name)}${r.id===ACC.id?' (you)':''}</td><td class="n">${r.v}</td><td class="n">G${rankOf(r.v)[2]}</td></tr>`).join('')}</tbody></table></div>${meIdx>=10?`<p class="note-s">You’re #${meIdx+1} of ${rows.length}.</p>`:''}`:`<p class="note-s">${boardTab==='daily'?'Nobody has played today’s '+S().n+' daily pack yet. Be first.':'No scores yet.'}</p>`}`;
+ ${top.length?`<div class="scroll"><table><thead><tr><th>#</th><th>Player</th><th class="n">Score</th><th class="n">Grade</th></tr></thead><tbody>${top.map((r,i)=>`<tr class="lbr ${r.id===ACC.id?'me':''}" data-u="${r.id}" tabindex="0"><td>${i+1}</td><td><span class="lbn">${avatar(r.name,'pav xs')}${esc(r.name)}${r.stk?stkSvg(r.stk):''}${r.id===ACC.id?' (you)':''}</span></td><td class="n">${r.v}</td><td class="n">G${rankOf(r.v)[2]}</td></tr>`).join('')}</tbody></table></div>${meIdx>=10?`<p class="note-s">You’re #${meIdx+1} of ${rows.length}.</p>`:''}`:`<p class="note-s">${boardTab==='daily'?'Nobody has played today’s '+S().n+' daily pack yet. Be first.':'No scores yet.'}</p>`}`;
  el.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{boardTab=b.dataset.b;loadBoard()});
+ el.querySelectorAll('tr[data-u]').forEach(t=>{t.onclick=()=>profile(t.dataset.u);t.onkeydown=e=>{if(e.key==='Enter')profile(t.dataset.u)}});
+ if(top.length)el.insertAdjacentHTML('beforeend','<p class="note-s">Tap a player to see their profile.</p>');
 }
 document.getElementById('home').onclick=()=>{confirmLeave();home()};
 navRender();home();
