@@ -111,7 +111,8 @@ button.stk{background:none;border:0;cursor:pointer}
 .tag.lock{position:relative}
 .rdot{position:absolute;top:-9px;right:-9px;min-width:20px;height:20px;padding:0 5px;display:grid;place-items:center;background:var(--pink);color:#fff;font:9px var(--px);box-shadow:0 0 0 2px #0d1120}
 #myprof{position:relative}#myprof:not([data-n=""])::after{content:attr(data-n);position:absolute;top:-10px;right:-10px;min-width:22px;height:22px;display:grid;place-items:center;background:var(--pink);color:#fff;font:9px var(--px);box-shadow:0 0 0 2px #0d1120}
-.preq{display:flex;gap:10px;align-items:stretch}.preq .prs{flex:1;min-width:0}.preq .btn{min-height:auto;padding:10px 14px}
+.preq{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.preq .prs{flex:1 1 220px;min-width:0}.preq .prs .pm{display:none}.preq .btn{min-height:46px;padding:10px 14px}
+@media(max-width:600px){.preq .prs{flex-basis:100%}.preq .btn.gold{flex:1}.preq .btn.alt{min-width:60px}}
 .navav{width:42px;height:42px;border:0;cursor:pointer;display:grid;place-items:center;font:16px var(--px);color:#0d1120;background:var(--a);box-shadow:0 0 0 2px #0d1120,0 0 0 4px var(--a);margin-left:4px}
 .navav:focus-visible{outline:3px solid var(--gold);outline-offset:6px}
 .pav{width:88px;height:88px;flex:none;display:grid;place-items:center;font:38px var(--px);color:#0d1120;background:var(--a);box-shadow:0 0 0 4px #0d1120,0 0 0 7px var(--a),7px 7px 0 4px rgba(0,0,0,.35)}
@@ -340,6 +341,29 @@ tr.me td{color:var(--gold)}
 .dstamp svg{width:24px;height:24px;filter:brightness(0) opacity(.75)}
 .dlayer.hit .dlab svg{filter:brightness(0) opacity(.75)}
 .quake{animation:quake .45s}
+.mpc{padding-top:22px}
+.mpk{position:relative;height:clamp(210px,50vw,250px);display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mpk .pk{position:relative;width:126px;animation:pbob 2.4s ease-in-out infinite}
+.mpk .pk svg{display:block;width:100%;height:auto;filter:drop-shadow(5px 5px 0 rgba(0,0,0,.25))}
+@keyframes pbob{50%{transform:translateY(-6px) rotate(1.5deg)}}
+.mpk .lid{position:absolute;left:0;top:0;width:100%}
+.mpk .st{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.mpk .st .sw{width:clamp(130px,38vw,170px);opacity:0}
+.mpk .st svg{width:100%;height:auto;display:block;filter:drop-shadow(5px 6px 0 rgba(0,0,0,.25))}
+.mpk .rays{position:absolute;left:50%;top:50%;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;opacity:0;pointer-events:none;
+ background:repeating-conic-gradient(from 0deg,var(--c) 0 9deg,transparent 9deg 24deg);-webkit-mask:radial-gradient(closest-side,#000 25%,transparent 100%);mask:radial-gradient(closest-side,#000 25%,transparent 100%)}
+.mpk .ring{position:absolute;left:50%;top:50%;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;border:5px solid var(--c);opacity:0;pointer-events:none}
+.mpk .sp{position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;background:var(--c);pointer-events:none}
+.mpc .mt{font:11px var(--px);letter-spacing:.12em;color:#6b5f80;margin:0}
+.mpc .mw{margin:8px 0 0;font-size:20px;line-height:1.25;color:#2a2238}
+.mpc .mh{margin:6px 0 0;font:10px/1.6 var(--px);color:#8a7f9c}
+.mpc .mres{display:none}.mpc.open .mres{display:block}.mpc.open .mpre{display:none}
+.mpc .mres .zr{margin-top:0}
+.mpc .mres .mnew{font:10px var(--px);letter-spacing:.1em;color:#2a2238;background:var(--c);display:inline-block;padding:6px 9px;margin-top:6px}
+.mpc .mb{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.mpc .mb .btn{min-height:48px}
+.mpc .tapo{margin-top:6px;font:11px var(--px);letter-spacing:.12em;color:#2a2238;animation:blink 1.2s steps(2) infinite}
+@keyframes blink{50%{opacity:.35}}
 @keyframes quake{20%{transform:translate(0,6px)}40%{transform:translate(-4px,-3px)}60%{transform:translate(3px,2px)}80%{transform:translate(-1px,-1px)}}
 .out .card{margin-top:18px}
 .hint2{color:var(--muted);font-size:24px;margin:-12px 0 20px}
@@ -2334,7 +2358,7 @@ function navRender(){
  `<button class="tag" id="sndBtn" aria-pressed="${sfxOn()}">SOUND ${sfxOn()?'ON':'OFF'}</button>`+`<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='in'?'LOCKER':ACC.state==='checking'?'…':'LOG IN'}${ACC.state==='in'&&ACC.reqs?`<b class="rdot" title="${ACC.reqs} friend request${ACC.reqs>1?'s':''}">${ACC.reqs}</b>`:''}</button>`;
  document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(G&&!confirmLeave())return;store.subject=b.dataset.s;saveLocal();navRender();view==='locker'?locker():home()});
  document.getElementById('sndBtn').onclick=()=>{store.sound=!sfxOn();saveLocal();navRender();if(sfxOn()){ensureAudio();tone(660,.12,'square',.05)}};
- document.getElementById('stk').onclick=()=>{if(view==='home'&&popQ.length)popDone();stickers()};
+ document.getElementById('stk').onclick=()=>stickers();
  document.getElementById('lockBtn').onclick=()=>{if(G&&!confirmLeave())return;locker()};
 }
 const confirmLeave=()=>{clearInterval(timer);G=null;return true};
@@ -2436,19 +2460,70 @@ function awardSticker(){
 }
 store.stkSeen=store.stkSeen||{};
 const stkPopHtml=(aw,head,msg)=>{const rc=RAR[aw.s.r];return `<button class="spop px" id="spop" style="--c:${rc.c}">${stkSvg(aw.s)}<div><b>${head||(aw.isNew?'NEW STICKER!':'DUPLICATE · x'+aw.n)} <span style="color:${rc.c}">${rc.n.toUpperCase()}</span></b><p>${msg||`<span style="color:var(--ink)">${esc(aw.s.n)}</span> · ${aw.streak} day streak${aw.ms?' · 7-day bonus':''}. Tap to open your sticker book.`}</p></div></button>`};
-const stkJingle=r=>setTimeout(()=>{ensureAudio();const nn=r>=3?[523,659,784,1047,1319]:[523,659,784,1047];nn.forEach((f,i)=>tone(f,.12,'square',.05,.25+i*.08));navRender();const b=document.getElementById('stk');if(b)b.classList.add('bump')},0);
 // a sticker that never got its pop-up (one-off make-up gift for earlier players, or today's sticker added in the background)
 const GIFT='~gift1';
 let popQ=[];
 const popDone=()=>{const x=popQ.shift();if(x){store.stkSeen[x.k]=1;saveLocal();pushAll()}};
+const whyToday=(streak,ms)=>`For finishing your first pack today${streak>1?` · ${streak} day streak`:''}${ms?' · 7-day bonus':''}`;
 function pendingSticker(){
  const t=today(),days=[...playedDays()].filter(d=>d<t),out=[],inQ=k=>popQ.some(x=>x.k===k);
  if(!store.stkDay[GIFT]&&days.length)store.stkDay[GIFT]=rollSticker(2);
  for(const k of [GIFT,t]){const id=store.stkDay[k];if(!id||!STKID[id]||store.stkSeen[k]||inQ(k))continue;
-  const s=STKID[id],n=stkCounts()[id],si=streakInfo();
-  out.push({k,s,html:k===GIFT?stkPopHtml({s,isNew:n===1,n},`MAKE-UP STICKER!`,`Sorry we missed you! <span style="color:var(--ink)">${esc(s.n)}</span> is on us. Your first pack each day earns a sticker.`)
-   :stkPopHtml({s,isNew:n===1,n},null,`<span style="color:var(--ink)">${esc(s.n)}</span> · today’s sticker for your ${si.cur} day streak. Tap to open your sticker book.`)})}
+  const s=STKID[id],n=stkCounts()[id];
+  out.push(k===GIFT?{k,s,isNew:n===1,n,gift:true,why:'Sorry we missed you! Some sticker packs never showed up, so here’s one on us.'}:{k,s,isNew:n===1,n,why:whyToday(streakInfo().cur)})}
  return out;
+}
+
+// ---------- mystery sticker pack: tap to open, rarer = a bit more fanfare ----------
+const PACKMAP=["g.g.g.g.g.g.g.","gggggggggggggg","gddddddddddddg","gppppppppppppg","gpppppWWWWpppg","gppppWWppWWppg","gpppppppWWpppg","gppppppWWppppg","gppppppWWppppg","gppppppppppppg","gppppppWWppppg","gppppppppppppg","gggggggggggggg",".g.g.g.g.g.g.g"];
+const PACKPAL={g:'#ffd36b',d:'#b8892e',p:'#3a2f6b',W:'#fffbe6'};
+const packSvg=(from,to)=>{const rows=PACKMAP.slice(from,to);return `<svg viewBox="0 0 14 ${rows.length}" shape-rendering="crispEdges" aria-hidden="true">${rows.map((r,y)=>[...r].map((c,x)=>c==='.'?'':`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${PACKPAL[c]}"/>`).join('')).join('')}</svg>`};
+function showPack(info,onDone){
+ if(document.getElementById('mpack'))return;
+ const s=info.s,r=RAR[s.r],R=s.r,rm=RM();
+ const z=document.createElement('div');z.id='mpack';z.className='zoom';
+ z.innerHTML=`<div class="zcard mpc" role="dialog" aria-modal="true" aria-label="Sticker pack" style="--c:${r.c}">
+  <div class="mpre"><p class="mt">${info.gift?'MAKE-UP STICKER PACK':'DAILY STICKER PACK'}</p><p class="mw">${info.why}</p></div>
+  <div class="mres"><p class="zr" style="color:${r.c}">${r.n.toUpperCase()}</p><h3 class="zn">${esc(s.n)}</h3><span class="mnew">${info.isNew?'NEW!':'DUPLICATE · x'+info.n}</span></div>
+  <div class="mpk" id="mpk"><div class="rays"></div><div class="ring"></div>
+   <div class="pk" id="pkb"><div style="position:relative">${packSvg(0,14)}<div class="lid" id="lid" style="display:none">${packSvg(0,3)}</div></div></div>
+   <div class="st"><div class="sw" id="sw">${bigSticker(s)}</div></div></div>
+  <div class="mpre"><p class="tapo">TAP TO OPEN</p><p class="mh">You get a sticker pack for the first pack you finish each day</p></div>
+  <div class="mres"><div class="mb"><button class="btn gold" id="mbook">OPEN STICKER BOOK</button><button class="btn alt" id="mok">NICE</button></div></div></div>`;
+ document.body.appendChild(z);
+ const card=z.querySelector('.mpc'),mpk=z.querySelector('#mpk'),pkb=z.querySelector('#pkb'),sw=z.querySelector('#sw');
+ let opened=false,closed=false;
+ const close=book=>{if(closed)return;closed=true;removeEventListener('keydown',onKey);z.classList.add('out');setTimeout(()=>{z.remove();onDone&&onDone(book);if(book)stickers()},book?0:200)};
+ const onKey=e=>{if(e.key==='Escape'&&opened)close(false);if((e.key==='Enter'||e.key===' ')&&!opened){e.preventDefault();open()}};addEventListener('keydown',onKey);
+ ensureAudio();tone(392,.08,'square',.03);tone(523,.1,'square',.03,.07);
+ const open=()=>{
+  if(opened)return;opened=true;pkb.style.animation='none';
+  const build=rm?0:380+R*140;
+  // build-up: a little shake, longer and stronger for rarer stickers
+  if(!rm){const k=[];const n=3+R;for(let i=0;i<=n;i++)k.push({transform:`rotate(${i===n?0:(i%2?1:-1)*(3+R*1.2)}deg) scale(${1+i/n*.06*(R+1)})`});pkb.animate(k,{duration:build,easing:'ease-in-out',fill:'forwards'});
+   for(let i=0;i<3+R;i++)tone(300+i*40+R*20,.05,'square',.025,i*build/(3+R)/1000)}
+  if(R>=4&&!rm)pkb.animate([{filter:'drop-shadow(0 0 0 #ffd36b)'},{filter:'drop-shadow(0 0 22px #ffd36b)'}],{duration:build,fill:'forwards'});
+  setTimeout(()=>{
+   // tear: lid flies off, pack drops away
+   const lid=z.querySelector('#lid');lid.style.display='block';pkb.querySelector('svg').style.clipPath='inset(21.5% 0 0 0)';
+   if(!rm){lid.animate([{transform:'none',opacity:1},{transform:'translate(30px,-130px) rotate(28deg)',opacity:0}],{duration:520,easing:'cubic-bezier(.2,.7,.4,1)',fill:'forwards'});
+    pkb.animate([{transform:'none',opacity:1},{transform:'translateY(70px) scale(.9)',opacity:0}],{duration:380,delay:60,easing:'ease-in',fill:'forwards'})}else pkb.style.opacity=0;
+   card.classList.add('open');
+   const nn=[[523,659],[523,659,784],[523,659,784,1047],[523,659,784,1047,1319],[523,659,784,1047,1319,1568]][R];nn.forEach((f,i)=>tone(f,.13,'square',.05,.05+i*.08));
+   if(R>=4)tone(1568,.5,'triangle',.04,.05+nn.length*.08);
+   if(rm){sw.style.opacity=1;return}
+   sw.animate([{transform:'scale(.2) rotate(-14deg)',opacity:0},{transform:'scale(1.12) rotate(-2deg)',opacity:1,offset:.6},{transform:'scale(1) rotate(-4deg)',opacity:1}],{duration:520,delay:80,easing:'cubic-bezier(.2,1.2,.4,1)',fill:'forwards'});
+   if(R>=1)mpk.querySelector('.ring').animate([{transform:'scale(.4)',opacity:.9},{transform:`scale(${2+R*.4})`,opacity:0}],{duration:600+R*80,delay:80,easing:'ease-out'});
+   if(R>=2){const ry=mpk.querySelector('.rays');ry.animate([{opacity:0,transform:'scale(.6) rotate(0deg)'},{opacity:R>=4?.55:R>=3?.42:.3,transform:'scale(1) rotate(40deg)'}],{duration:700,delay:80,easing:'ease-out',fill:'forwards'}).onfinish=()=>ry.animate([{transform:'rotate(40deg)'},{transform:'rotate(400deg)'}],{duration:R>=4?9000:14000,iterations:Infinity})}
+   if(R>=3)for(let i=0;i<(R>=4?16:10);i++){const d=document.createElement('i');d.className='sp';mpk.appendChild(d);const a=i/(R>=4?16:10)*Math.PI*2+Math.random()*.3,dist=90+Math.random()*60;
+    d.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${(Math.cos(a)*dist).toFixed(0)}px,${(Math.sin(a)*dist).toFixed(0)}px) scale(.3)`,opacity:0}],{duration:700+Math.random()*300,delay:100,easing:'cubic-bezier(.2,.7,.4,1)',fill:'forwards'}).onfinish=()=>d.remove()}
+   if(R>=4)card.animate([{transform:'none'},{transform:'translate(0,6px)'},{transform:'translate(-4px,-3px)'},{transform:'translate(3px,2px)'},{transform:'none'}],{duration:420,delay:60})
+   setTimeout(()=>{const b=z.querySelector('#mbook');if(b)b.focus({preventScroll:true})},500);
+  },build);
+ };
+ mpk.onclick=open;z.querySelector('.mpre .tapo').onclick=open;
+ z.querySelector('#mbook').onclick=()=>close(true);z.querySelector('#mok').onclick=()=>close(false);
+ z.onclick=e=>{if(e.target===z&&opened)close(false)};
 }
 // ---------- sticker book: a real book ----------
 let bookFin=null,bookAnims=[],bookPage=0,bookBusy=false,bookBack='home',bookWide=null,bookResize=null;
@@ -2782,23 +2857,43 @@ function personRow(r,extra=''){
  const sub=[liveStreak(sc.stats)?`${liveStreak(sc.stats)} day streak`:'',td.length?`today: ${Math.max(...td)}`:''].filter(Boolean).join(' · ');
  return `<button class="prs" data-u="${r.id}">${avatar(r.username,'pav sm')}<span class="pn">${esc(r.username)}${s?stkSvg(s):''}</span><span class="pm">${sub||extra}</span></button>`;
 }
+async function friendLists(){
+ const [a,b]=await Promise.all([sb.from('friends').select('friend_id').eq('user_id',ACC.id),sb.from('friends').select('user_id').eq('friend_id',ACC.id)]);
+ if(a.error)throw a.error;
+ const out=(a.data||[]).map(r=>r.friend_id),inc=(b.data||[]).map(r=>r.user_id),outS=new Set(out),incS=new Set(inc);
+ return{friends:out.filter(id=>incS.has(id)),reqs:inc.filter(id=>!outS.has(id)),sent:out.filter(id=>!incS.has(id))};
+}
+const reqHtml=(reqs,by)=>`<div class="rule"><span class="lbl" style="color:var(--gold)">${reqs.length>1?reqs.length+' people want':'Someone wants'} to be friends</span></div><div class="plist">${reqs.filter(id=>by[id]).map(id=>`<div class="preq">${personRow(by[id])}<button class="btn gold" data-acc="${id}">ACCEPT</button><button class="btn alt" data-dec="${id}" aria-label="Decline">✕</button></div>`).join('')}</div>`;
+function wireReqs(el,after){
+ el.querySelectorAll('[data-acc],[data-dec]').forEach(b=>b.onclick=async()=>{const acc=!!b.dataset.acc,id=b.dataset.acc||b.dataset.dec;b.parentNode.querySelectorAll('button').forEach(x=>x.disabled=true);
+  const res=await friendAction(acc?'accept':'decline',id);ensureAudio();tone(acc?660:330,.1,'square',.05);if(acc)tone(880,.12,'square',.05,.08);if(!res)after()});
+ el.querySelectorAll('[data-u]').forEach(b=>b.onclick=()=>profile(b.dataset.u));
+}
+// requests at the top of the locker, so they can't be missed
+async function lockerReqs(){
+ const el=()=>view==='locker'?document.getElementById('lreqs'):null;
+ if(!sb||ACC.state!=='in'||!el())return;
+ try{const {reqs}=await friendLists();if(!el())return;
+  if(ACC.reqs!==reqs.length){ACC.reqs=reqs.length;navRender();const mp=document.getElementById('myprof');if(mp)mp.dataset.n=reqs.length||''}
+  if(!reqs.length){el().innerHTML='';return}
+  const rows=await peopleRows(reqs),by=Object.fromEntries(rows.map(r=>[r.id,r]));if(!el())return;
+  el().innerHTML=reqHtml(reqs,by);wireReqs(el(),lockerReqs)}catch(e){}
+}
+// check for new requests now and then, and whenever the app comes back to the front
+setInterval(()=>{if(document.visibilityState==='visible')view==='locker'?lockerReqs():refreshReqs()},60000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')view==='locker'?lockerReqs():refreshReqs()});
 async function loadFriends(seq){
  const el=()=>{const e=document.getElementById('flist');return seq===profSeq&&e?e:null};
  if(!sb)return;
  try{
-  const [a,b]=await Promise.all([sb.from('friends').select('friend_id').eq('user_id',ACC.id),sb.from('friends').select('user_id').eq('friend_id',ACC.id)]);
-  if(a.error)throw a.error;
-  const out=(a.data||[]).map(r=>r.friend_id),inc=(b.data||[]).map(r=>r.user_id),outS=new Set(out),incS=new Set(inc);
-  const friends=out.filter(id=>incS.has(id)),reqs=inc.filter(id=>!outS.has(id)),sent=out.filter(id=>!incS.has(id));
+  const {friends,reqs,sent}=await friendLists();
   const rows=await peopleRows([...friends,...reqs,...sent]),by=Object.fromEntries(rows.map(r=>[r.id,r]));
   if(!el())return;
   ACC.reqs=reqs.length;navRender();
-  el().innerHTML=(reqs.length?`<div class="rule"><span class="lbl" style="color:var(--gold)">Friend requests · ${reqs.length}</span></div><div class="plist">${reqs.filter(id=>by[id]).map(id=>`<div class="preq">${personRow(by[id],'wants to be friends')}<button class="btn gold" data-acc="${id}">ACCEPT</button><button class="btn alt" data-dec="${id}" aria-label="Decline">✕</button></div>`).join('')}</div>`:'')
+  el().innerHTML=(reqs.length?reqHtml(reqs,by):'')
    +(friends.length?`<div class="plist">${friends.filter(id=>by[id]).map(id=>personRow(by[id])).join('')}</div>`:`<p class="note-s">No friends yet. Tap a name on the leaderboard, or find someone by username, and send them a request.</p>`)
    +(sent.length?`<div class="rule"><span class="lbl">Requests you’ve sent</span></div><div class="plist">${sent.filter(id=>by[id]).map(id=>personRow(by[id],'waiting for them to accept')).join('')}</div>`:'');
-  el().querySelectorAll('[data-acc],[data-dec]').forEach(b=>b.onclick=async()=>{const acc=!!b.dataset.acc,id=b.dataset.acc||b.dataset.dec;b.parentNode.querySelectorAll('button').forEach(x=>x.disabled=true);
-   const res=await friendAction(acc?'accept':'decline',id);ensureAudio();tone(acc?660:330,.1,'square',.05);if(acc)tone(880,.12,'square',.05,.08);if(!res)loadFriends(profSeq)});
-  el().querySelectorAll('[data-u]').forEach(b=>b.onclick=()=>profile(b.dataset.u));
+  wireReqs(el(),()=>loadFriends(profSeq));
  }catch(e){const x=el();if(x)x.innerHTML='<p class="note-s">Friends switch on once update-3.sql has been run in Supabase.</p>'}
 }
 async function findPlayers(q){
@@ -2824,9 +2919,9 @@ function home(){
  const counts={};for(const p of pool())counts[p.t]=(counts[p.t]||0)+1;
  const banner=ACC.state==='in'?`<p>Signed in as <b>${esc(ACC.name)}</b>. Progress saves to your account.</p><button class="btn alt" id="bLock">LOCKER</button>`
   :ACC.state==='checking'?`<p>Checking your login…</p>`:`<p>Playing as a guest, so progress is saved on this device only. Log in to save it everywhere.</p><button class="btn gold" id="bLock">LOG IN</button>`;
- {const nw=pendingSticker();if(nw.length){popQ.push(...nw);saveLocal();pushAll();if(popQ.length===nw.length)stkJingle(nw[0].s.r)}}
- const pend=popQ[0];
- stage.innerHTML=`${pend?pend.html:''}<div class="banner px">${banner}</div>
+ {const nw=pendingSticker();if(nw.length){popQ.push(...nw);saveLocal();pushAll()}}
+ if(popQ.length)setTimeout(()=>{if(view==='home'&&popQ.length)showPack(popQ[0],book=>{popDone();navRender();if(!book&&popQ.length&&view==='home')home()})},350);
+ stage.innerHTML=`<div class="banner px">${banner}</div>
  <section class="hero">${spr(BAG,'bagart')}<div><p class="lbl pk">${sj.n} · ${sj.code} · day #${dayNo()}</p><h1 style="margin-top:12px">THE DAILY PACK</h1><p class="sub">7 prompts · 25 seconds each · rarer answers sink deeper into the bag</p></div></section>
  <div class="modes"><button class="mode px main" id="daily"><b>DAILY PACK</b><span>${d!=null?`Today: ${d} pts · ${rankOf(d)[1]}. Replay for practice.`:`Same seven ${sj.n} prompts for everyone today.`}</span></button>
  <button class="mode px" id="unl"><b>UNLIMITED</b><span>A fresh random pack from ${pool().length} prompts.</span></button></div>
@@ -2837,14 +2932,13 @@ function home(){
  <div class="rule"><span class="lbl">Your ${sj.n} record</span></div>
  <div class="stats"><div><strong>${st.dives}</strong>packs played</div><div><strong>${st.best}</strong>best score</div><div><strong>${st.g10}</strong>Grade 10 answers</div><div><strong>${rankOf(st.best)[1]}</strong>best rank</div></div>`;
  const bl=stage.querySelector('#bLock');if(bl)bl.onclick=locker;
- {const sp=stage.querySelector('#spop');if(sp)sp.onclick=()=>{popDone();stickers()}}
  stage.querySelector('#daily').onclick=()=>start('daily',pickSeven(pool(),rng(store.subject+today())));
  stage.querySelector('#unl').onclick=()=>start('unlimited',pickSeven(pool()));
  stage.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>start('topic',topicPick(b.dataset.t),b.dataset.t));
  const p2=stage.querySelector('#p2');if(p2)p2.onchange=e=>{store.p2=e.target.checked;saveLocal();home()};
  scrollTo(0,0);
 }
-function start(mode,list,topic){if(!list.length)return;popDone();view='play';G={mode,list,topic,i:0,score:0,depth:0,res:[],subject:store.subject};ask()}
+function start(mode,list,topic){if(!list.length)return;view='play';G={mode,list,topic,i:0,score:0,depth:0,res:[],subject:store.subject};ask()}
 const hud=()=>`<div class="hud"><div class="pips">${G.list.map((_,k)=>`<span class="pip ${k<G.i?'d':k===G.i?'n':''}"></span>`).join('')}</div><span class="lbl">Prompt ${G.i+1}/${G.list.length}</span><span class="score">${G.score} PTS</span></div>`;
 function ask(){
  const p=G.list[G.i],tries=[];const t0=Date.now();fetchCounts(G.subject,p);
@@ -3069,7 +3163,7 @@ function end(){
  const share=`GCSELLION · ${sj.n} · ${label}\n${G.res.map(x=>x.j?TIERS[x.j.t].e:'⬛').join('')}\n${s} pts · ${r[1]} (Grade ${r[2]})`;
  const n=G.res.length;
  let pop='';const aw=firstToday?awardSticker():null;
- if(aw){store.stkSeen[today()]=1;pop=stkPopHtml(aw);stkJingle(aw.s.r)}
+ if(aw){store.stkSeen[today()]=1;pop='<div id="spopw"></div>'}
  saveLocal();pushAll();
  stage.innerHTML=`<div class="hud"><span class="lbl pk">${esc(label)} complete</span><span class="lbl">${ACC.state==='in'?'Saved to your locker':'Saved on this device'}</span></div>
  ${pop}<div class="big">${s}</div><p class="depthbig">−${(G.depth||0).toLocaleString('en-GB')} m</p><p class="rank">${r[1].toUpperCase()} · GRADE ${r[2]}</p>
@@ -3088,7 +3182,7 @@ function end(){
  drawCurve(G.subject,G.mode,s);
  stage.querySelector('#again').onclick=()=>mode==='topic'?start('topic',topicPick(topic),topic):start('unlimited',pickSeven(pool()));
  stage.querySelector('#hm').onclick=home;stage.querySelector('#lk').onclick=locker;
- const sp=stage.querySelector('#spop');if(sp)sp.onclick=()=>stickers();
+ if(aw)setTimeout(()=>showPack({...aw,why:whyToday(aw.streak,aw.ms)},()=>{navRender();const b=document.getElementById('stk');if(b)b.classList.add('bump');const w=document.getElementById('spopw');if(w){w.innerHTML=stkPopHtml(aw);w.querySelector('#spop').onclick=()=>stickers()}}),500);
  G=null;scrollTo(0,0);
 }
 let boardTab='daily';
@@ -3133,6 +3227,7 @@ async function locker(){
   :ACC.state==='checking'?`<h2>CHECKING LOGIN…</h2>`:authForm()+(ACC.err?`<p style="color:var(--pink)">${esc(ACC.err)}</p>`:'');
  stage.innerHTML=`<div class="hud"><span class="lbl pk">Your locker</span><button class="link" id="back">← Back to the pack</button></div>
  <section class="card px" style="--c:${ACC.state==='in'?'var(--gold)':'var(--line)'}">${head}</section>
+ <div id="lreqs"></div>
  <div class="rule"><span class="lbl">High scores</span></div>
  <div class="scroll"><table><thead><tr><th>Subject</th><th class="n">Packs</th><th class="n">Best</th><th class="n">Grade 10s</th><th class="n">Today</th></tr></thead><tbody>
  ${Object.entries(SUBJ).map(([k,s])=>{const v=store.subj[k];return `<tr><td style="color:var(--ink)">${s.n}</td><td class="n">${v.dives}</td><td class="n">${v.best}</td><td class="n">${v.g10}</td><td class="n">${v.daily[today()]??'–'}</td></tr>`}).join('')}</tbody></table></div>
@@ -3144,7 +3239,7 @@ async function locker(){
  stage.querySelector('#back').onclick=home;
  const lo=stage.querySelector('#logout');if(lo)lo.onclick=async()=>{await writing;await sb.auth.signOut();Object.assign(ACC,{state:'out',id:null,name:''});navRender();locker()};
  if(ACC.state!=='in')bindAuth();
- const mp=stage.querySelector('#myprof');if(mp)mp.onclick=()=>profile();
+ const mp=stage.querySelector('#myprof');if(mp)mp.onclick=()=>profile();lockerReqs();
  scrollTo(0,0);
  if(sb)loadBoard();
 }
