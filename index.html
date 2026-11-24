@@ -96,7 +96,8 @@ img,svg{-webkit-user-drag:none}
 @keyframes zin{from{opacity:0}}@keyframes zout{to{opacity:0}}
 .zcard{position:relative;width:min(420px,100%);background:#f4ecd6;color:#2a2238;padding:26px 24px 22px;text-align:center;box-shadow:0 0 0 4px #10131f,0 0 0 8px var(--c),10px 10px 0 8px rgba(0,0,0,.4);animation:zpop .35s cubic-bezier(.2,1.5,.4,1)}
 @keyframes zpop{from{transform:scale(.8) rotate(-3deg);opacity:0}}
-.zx{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;background:none;font:16px var(--px);color:#7d7058;cursor:pointer}
+.zx{position:absolute;top:10px;right:10px;width:54px;height:54px;border:0;background:#e6dbbf;box-shadow:0 0 0 3px #10131f,3px 3px 0 3px rgba(0,0,0,.25);font:22px var(--px);color:#2a2238;cursor:pointer;display:grid;place-items:center;padding:0}
+.zx:active{transform:translate(2px,2px)}
 .zstage{position:relative;height:clamp(200px,52vw,260px);perspective:700px;display:grid;place-items:center;touch-action:none;cursor:grab}
 .zt{width:clamp(170px,46vw,220px);height:clamp(170px,46vw,220px);transform-style:preserve-3d;will-change:transform;position:relative;z-index:1}
 .zt svg{width:100%;height:100%;display:block}
@@ -107,6 +108,10 @@ img,svg{-webkit-user-drag:none}
 .zh{margin:14px 0 0;font:9px var(--px);color:#a1957a;letter-spacing:.08em}
 @media (max-width:480px){.book.single{height:clamp(540px,calc(100svh - 250px),620px)}.single .bp-in,.bk-flip.single .bp-in{gap:7px}.single .bp-bar{font-size:16px;grid-template-columns:84px 1fr 40px}.single .bp-big svg{width:36px;height:36px}.single .bp-big b{font-size:28px}.single .bp-note{font-size:16px}.bk-nav{margin-top:18px}.bp{padding:16px 14px 30px}.bp-s{min-height:88px;font-size:16px}.bp-s svg,.bp-s.miss i{width:44px;height:44px}.bk-nav .lbl{min-width:140px;font-size:9px}}
 button.stk{background:none;border:0;cursor:pointer}
+.tag.lock{position:relative}
+.rdot{position:absolute;top:-9px;right:-9px;min-width:20px;height:20px;padding:0 5px;display:grid;place-items:center;background:var(--pink);color:#fff;font:9px var(--px);box-shadow:0 0 0 2px #0d1120}
+#myprof{position:relative}#myprof:not([data-n=""])::after{content:attr(data-n);position:absolute;top:-10px;right:-10px;min-width:22px;height:22px;display:grid;place-items:center;background:var(--pink);color:#fff;font:9px var(--px);box-shadow:0 0 0 2px #0d1120}
+.preq{display:flex;gap:10px;align-items:stretch}.preq .prs{flex:1;min-width:0}.preq .btn{min-height:auto;padding:10px 14px}
 .navav{width:42px;height:42px;border:0;cursor:pointer;display:grid;place-items:center;font:16px var(--px);color:#0d1120;background:var(--a);box-shadow:0 0 0 2px #0d1120,0 0 0 4px var(--a);margin-left:4px}
 .navav:focus-visible{outline:3px solid var(--gold);outline-offset:6px}
 .pav{width:88px;height:88px;flex:none;display:grid;place-items:center;font:38px var(--px);color:#0d1120;background:var(--a);box-shadow:0 0 0 4px #0d1120,0 0 0 7px var(--a),7px 7px 0 4px rgba(0,0,0,.35)}
@@ -1471,7 +1476,7 @@ async function onSignedIn(user){
   ACC.name=prof.username;ACC.created=prof.created_at||null;ACC.sticker=prof.sticker||null;ACC.style=prof.sticker_style||'badge';
   const {data:pr}=await sb.from('progress').select('data').eq('user_id',user.id).maybeSingle();
   if(pr&&pr.data)mergeInto(pr.data);
-  ACC.state='in';saveLocal();pushAll();
+  ACC.state='in';saveLocal();pushAll();refreshReqs();
  }catch(e){ACC.state='in';ACC.name=ACC.name||'Player';ACC.err='Signed in, but your saved data couldn’t be loaded just now.'}
  navRender();if(view==='home'||view==='locker'||view==='profile')rerender();
 }
@@ -1491,7 +1496,7 @@ function navRender(){
  const ini=ACC.state==='in'?esc((ACC.name||'?').trim().charAt(0).toUpperCase()):'?';
  const sk=streakInfo();
  document.getElementById('nav').innerHTML=`<button class="stk ${sk.todayDone?'on':''}" id="stk" title="${sk.cur} day streak · sticker book" aria-label="${sk.cur} day streak, open sticker book">${spr(STICK.apple)}${sk.cur}</button>`+Object.entries(SUBJ).map(([k,s])=>`<button class="tag ${k===store.subject?'on':''}" data-s="${k}" aria-pressed="${k===store.subject}">${s.n.toUpperCase()}</button>`).join('')+
- `<button class="tag" id="sndBtn" aria-pressed="${sfxOn()}">SOUND ${sfxOn()?'ON':'OFF'}</button>`+`<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='in'?'LOCKER':ACC.state==='checking'?'…':'LOG IN'}</button>`;
+ `<button class="tag" id="sndBtn" aria-pressed="${sfxOn()}">SOUND ${sfxOn()?'ON':'OFF'}</button>`+`<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='in'?'LOCKER':ACC.state==='checking'?'…':'LOG IN'}${ACC.state==='in'&&ACC.reqs?`<b class="rdot" title="${ACC.reqs} friend request${ACC.reqs>1?'s':''}">${ACC.reqs}</b>`:''}</button>`;
  document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(G&&!confirmLeave())return;store.subject=b.dataset.s;saveLocal();navRender();view==='locker'?locker():home()});
  document.getElementById('sndBtn').onclick=()=>{store.sound=!sfxOn();saveLocal();navRender();if(sfxOn()){ensureAudio();tone(660,.12,'square',.05)}};
  document.getElementById('stk').onclick=()=>stickers();
@@ -1863,22 +1868,46 @@ async function profile(uid,isBack){
  }catch(e){if(seq===profSeq)stage.innerHTML=`<div class="hud"><span class="lbl pk">Profile</span>${back}</div><p class="note-s">That profile can’t be loaded right now.</p>`,bindProfileCommon();return}
  if(seq!==profSeq)return;
  const fr=await friendState(uid);if(seq!==profSeq)return;
- stage.innerHTML=`<div class="hud"><span class="lbl pk">Profile</span>${back}</div>${heroHtml(d)}
- <div class="pact">${ACC.state!=='in'?`<button class="btn alt" id="fadd">LOG IN TO ADD FRIENDS</button>`:fr.mine?`<button class="btn alt" id="fadd">✓ FRIENDS</button>`:`<button class="btn gold" id="fadd">+ ADD FRIEND</button>`}
- ${fr.theirs?`<span class="note-s">${fr.mine?'You’ve added each other.':'Added you as a friend.'}</span>`:''}<p class="note-s" id="fmsg"></p></div>
- ${statsHtml(d)}`;
+
+ const st=ACC.state!=='in'?'out':fr.mine&&fr.theirs?'friends':fr.mine?'sent':fr.theirs?'incoming':'none';
+ const act={out:`<button class="btn alt" data-f="login">LOG IN TO ADD FRIENDS</button>`,
+  none:`<button class="btn gold" data-f="add">+ ADD FRIEND</button>`,
+  sent:`<button class="btn alt" data-f="cancel">REQUEST SENT</button><span class="note-s">Waiting for them to accept. Tap to cancel.</span>`,
+  incoming:`<button class="btn gold" data-f="accept">ACCEPT REQUEST</button><button class="btn alt" data-f="decline">DECLINE</button><span class="note-s">Wants to be your friend.</span>`,
+  friends:`<button class="btn alt" data-f="remove">✓ FRIENDS</button>`}[st];
+ stage.innerHTML=`<div class="hud"><span class="lbl pk">Profile</span>${back}</div>${heroHtml(d)}<div class="pact">${act}<p class="note-s" id="fmsg"></p></div>${statsHtml(d)}`;
  bindProfileCommon();
- stage.querySelector('#fadd').onclick=async e=>{
-  if(ACC.state!=='in'){locker();return}
-  e.target.disabled=true;
-  const r=fr.mine?await sb.from('friends').delete().eq('user_id',ACC.id).eq('friend_id',uid):await sb.from('friends').insert({user_id:ACC.id,friend_id:uid});
-  if(r.error){e.target.disabled=false;stage.querySelector('#fmsg').textContent='Couldn’t update friends just now.';return}
+ let armed=false;
+ stage.querySelectorAll('[data-f]').forEach(b=>b.onclick=async()=>{
+  const k=b.dataset.f,msg=t=>{const m=stage.querySelector('#fmsg');if(m)m.textContent=t};
+  if(k==='login'){locker();return}
+  if(k==='remove'&&!armed){armed=true;b.textContent='TAP AGAIN TO REMOVE';msg('This removes you from each other’s friends.');return}
+  stage.querySelectorAll('[data-f]').forEach(x=>x.disabled=true);
+  const res=await friendAction(k,uid);
+  if(res){msg(res);stage.querySelectorAll('[data-f]').forEach(x=>x.disabled=false);return}
+  ensureAudio();tone(k==='decline'||k==='remove'||k==='cancel'?330:660,.1,'square',.05);if(k==='accept')tone(880,.12,'square',.05,.08);
   profile(uid);
- };
+ });
 }
 function bindProfileCommon(){
  const b=stage.querySelector('#back');if(b)b.onclick=()=>{if(profHist.length){profile(profHist.pop(),true);return}profBack==='locker'?locker():profBack==='stickers'?stickers():home()};
  const lk=stage.querySelector('#lk');if(lk)lk.onclick=locker;
+}
+async function friendAction(k,uid){
+ if(!sb||ACC.state!=='in')return 'Log in first.';
+ const F=()=>sb.from('friends');let r;
+ if(k==='add'||k==='accept')r=await F().insert({user_id:ACC.id,friend_id:uid});
+ else if(k==='cancel')r=await F().delete().eq('user_id',ACC.id).eq('friend_id',uid);
+ else if(k==='decline')r=await F().delete().eq('user_id',uid).eq('friend_id',ACC.id);
+ else if(k==='remove'){r=await F().delete().eq('user_id',ACC.id).eq('friend_id',uid);if(!r.error)r=await F().delete().eq('user_id',uid).eq('friend_id',ACC.id)}
+ if(r&&r.error)return /duplicate|unique/i.test(r.error.message||'')?'Already done.':/full/i.test(r.error.message||'')?'Your friend list is full.':'Couldn’t update friends just now.';
+ refreshReqs();return null;
+}
+async function refreshReqs(){
+ if(!sb||ACC.state!=='in')return;
+ try{const [a,b]=await Promise.all([sb.from('friends').select('friend_id').eq('user_id',ACC.id),sb.from('friends').select('user_id').eq('friend_id',ACC.id)]);
+  if(a.error||b.error)return;const mine=new Set((a.data||[]).map(r=>r.friend_id));
+  const n=(b.data||[]).filter(r=>!mine.has(r.user_id)).length;if(n!==ACC.reqs){ACC.reqs=n;navRender();const mp=document.getElementById('myprof');if(mp)mp.dataset.n=n||''}}catch(e){}
 }
 async function friendState(uid){
  if(ACC.state!=='in'||!sb)return{};
@@ -1905,11 +1934,16 @@ async function loadFriends(seq){
  try{
   const [a,b]=await Promise.all([sb.from('friends').select('friend_id').eq('user_id',ACC.id),sb.from('friends').select('user_id').eq('friend_id',ACC.id)]);
   if(a.error)throw a.error;
-  const mine=(a.data||[]).map(r=>r.friend_id),mineS=new Set(mine),added=(b.data||[]).map(r=>r.user_id).filter(id=>!mineS.has(id));
-  const rows=await peopleRows([...mine,...added]),by=Object.fromEntries(rows.map(r=>[r.id,r]));
+  const out=(a.data||[]).map(r=>r.friend_id),inc=(b.data||[]).map(r=>r.user_id),outS=new Set(out),incS=new Set(inc);
+  const friends=out.filter(id=>incS.has(id)),reqs=inc.filter(id=>!outS.has(id)),sent=out.filter(id=>!incS.has(id));
+  const rows=await peopleRows([...friends,...reqs,...sent]),by=Object.fromEntries(rows.map(r=>[r.id,r]));
   if(!el())return;
-  el().innerHTML=(mine.length?`<div class="plist">${mine.filter(id=>by[id]).map(id=>personRow(by[id])).join('')}</div>`:`<p class="note-s">No friends yet. Tap a name on the leaderboard, or find someone by username.</p>`)
-   +(added.length?`<div class="rule"><span class="lbl">Added you</span></div><div class="plist">${added.filter(id=>by[id]).map(id=>personRow(by[id],'tap to add back')).join('')}</div>`:'');
+  ACC.reqs=reqs.length;navRender();
+  el().innerHTML=(reqs.length?`<div class="rule"><span class="lbl" style="color:var(--gold)">Friend requests · ${reqs.length}</span></div><div class="plist">${reqs.filter(id=>by[id]).map(id=>`<div class="preq">${personRow(by[id],'wants to be friends')}<button class="btn gold" data-acc="${id}">ACCEPT</button><button class="btn alt" data-dec="${id}" aria-label="Decline">✕</button></div>`).join('')}</div>`:'')
+   +(friends.length?`<div class="plist">${friends.filter(id=>by[id]).map(id=>personRow(by[id])).join('')}</div>`:`<p class="note-s">No friends yet. Tap a name on the leaderboard, or find someone by username, and send them a request.</p>`)
+   +(sent.length?`<div class="rule"><span class="lbl">Requests you’ve sent</span></div><div class="plist">${sent.filter(id=>by[id]).map(id=>personRow(by[id],'waiting for them to accept')).join('')}</div>`:'');
+  el().querySelectorAll('[data-acc],[data-dec]').forEach(b=>b.onclick=async()=>{const acc=!!b.dataset.acc,id=b.dataset.acc||b.dataset.dec;b.parentNode.querySelectorAll('button').forEach(x=>x.disabled=true);
+   const res=await friendAction(acc?'accept':'decline',id);ensureAudio();tone(acc?660:330,.1,'square',.05);if(acc)tone(880,.12,'square',.05,.08);if(!res)loadFriends(profSeq)});
   el().querySelectorAll('[data-u]').forEach(b=>b.onclick=()=>profile(b.dataset.u));
  }catch(e){const x=el();if(x)x.innerHTML='<p class="note-s">Friends switch on once update-3.sql has been run in Supabase.</p>'}
 }
@@ -2200,7 +2234,7 @@ async function locker(){
  view='locker';clearInterval(timer);G=null;
  const days=[...Array(14)].map((_,i)=>shiftDay(today(),-i));
  const head=ACC.state==='in'?`<div class="who">${avatar(ACC.name,'avatar')}<div><p class="lbl">Logged in</p><h2 style="margin-top:6px">${esc(ACC.name)}</h2></div></div>
-  <p>Your progress, high scores and daily packs save to your account, so they follow you to any device you log in on.</p>${ACC.err?`<p style="color:var(--pink)">${esc(ACC.err)}</p>`:''}<div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:12px"><button class="btn gold" id="myprof">MY PROFILE</button><button class="btn alt" id="logout">LOG OUT</button></div>`
+  <p>Your progress, high scores and daily packs save to your account, so they follow you to any device you log in on.</p>${ACC.err?`<p style="color:var(--pink)">${esc(ACC.err)}</p>`:''}<div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:12px"><button class="btn gold" id="myprof" data-n="${ACC.reqs||''}">MY PROFILE</button><button class="btn alt" id="logout">LOG OUT</button></div>`
   :ACC.state==='checking'?`<h2>CHECKING LOGIN…</h2>`:authForm()+(ACC.err?`<p style="color:var(--pink)">${esc(ACC.err)}</p>`:'');
  stage.innerHTML=`<div class="hud"><span class="lbl pk">Your locker</span><button class="link" id="back">← Back to the pack</button></div>
  <section class="card px" style="--c:${ACC.state==='in'?'var(--gold)':'var(--line)'}">${head}</section>
