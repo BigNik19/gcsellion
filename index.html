@@ -170,6 +170,7 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;bac
 header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:20px 0 10px}
 .logo{font:20px/1 var(--px);color:#ffd0dc;text-shadow:-3px 0 var(--pink),3px 0 var(--cyan);background:none;border:0;cursor:pointer;padding:4px 0;display:flex;align-items:center;gap:12px}
 .logo svg{width:44px;height:44px;filter:drop-shadow(0 0 10px rgba(255,79,122,.35))}
+.logo .lg1+.lg2{margin-left:-10px}.logo .lg2{color:var(--gold);text-shadow:-3px 0 #b8892e,3px 0 #ff9f43}
 .nav{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .tag{font:10px/1 var(--px);letter-spacing:.12em;color:var(--muted);padding:12px 10px;border:0;background:var(--panel);box-shadow:0 0 0 2px var(--line);cursor:pointer;min-height:40px}
 .tag.on{color:#0d1120;background:var(--cyan);box-shadow:0 0 0 2px var(--cyan)}
@@ -492,7 +493,7 @@ footer a{color:var(--cyan)}
 <div class="dust"></div>
 <div class="wrap">
 <header>
- <button class="logo" id="home" aria-label="GCSELLION home"><span id="logoBag"></span>GCSELLION</button>
+ <button class="logo" id="home" aria-label="GCSELLION home"><span id="logoBag"></span><span class="lg1">GCSE</span><span class="lg2">LLION</span></button>
  <nav class="nav" id="nav" aria-label="Subject and account"></nav>
 </header>
 <main id="stage" aria-live="polite"></main>
