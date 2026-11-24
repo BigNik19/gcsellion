@@ -2283,6 +2283,7 @@ function mergeInto(remote){
   for(const d in b.daily)if(a.daily[d]==null)a.daily[d]=b.daily[d]}
  {const a=store.topAns,b=remote.topAns;if(b&&(!a||b.t>a.t||(b.t===a.t&&b.p>a.p)))store.topAns=b}
  store.stkDay=store.stkDay||{};for(const d in remote.stkDay||{})if(!store.stkDay[d])store.stkDay[d]=remote.stkDay[d];
+ store.stkSeen=store.stkSeen||{};Object.assign(store.stkSeen,remote.stkSeen||{});
  const seen=new Set(store.hist.map(h=>h.t));for(const h of remote.hist||[])if(!seen.has(h.t))store.hist.push(h);
  store.hist.sort((x,y)=>y.t-x.t);store.hist=store.hist.slice(0,60);
 }
@@ -2333,11 +2334,11 @@ function navRender(){
  `<button class="tag" id="sndBtn" aria-pressed="${sfxOn()}">SOUND ${sfxOn()?'ON':'OFF'}</button>`+`<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='in'?'LOCKER':ACC.state==='checking'?'…':'LOG IN'}${ACC.state==='in'&&ACC.reqs?`<b class="rdot" title="${ACC.reqs} friend request${ACC.reqs>1?'s':''}">${ACC.reqs}</b>`:''}</button>`;
  document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(G&&!confirmLeave())return;store.subject=b.dataset.s;saveLocal();navRender();view==='locker'?locker():home()});
  document.getElementById('sndBtn').onclick=()=>{store.sound=!sfxOn();saveLocal();navRender();if(sfxOn()){ensureAudio();tone(660,.12,'square',.05)}};
- document.getElementById('stk').onclick=()=>stickers();
+ document.getElementById('stk').onclick=()=>{if(view==='home'&&popQ.length)popDone();stickers()};
  document.getElementById('lockBtn').onclick=()=>{if(G&&!confirmLeave())return;locker()};
 }
 const confirmLeave=()=>{clearInterval(timer);G=null;return true};
-// ---------- streaks (one sticker for each day you finish any daily pack) ----------
+// ---------- streaks (one sticker for the first pack you finish each day, any mode) ----------
 const STICK={
  star:["...Y...","..YYY..","YYYYYYY",".YYYYY.","..YYY..",".YY.YY.","Y.....Y"],
  heart:[".XX.XX.","XXXXXXX","XXWXXXX","XXXXXXX",".XXXXX.","..XXX..","...X..."],
@@ -2350,7 +2351,8 @@ const STICK={
 };
 const STICK_DAY=['star','heart','bolt','smile','flask','leaf','apple'];
 const dHash=d=>{let h=0;for(const c of d)h=(h*31+c.charCodeAt(0))>>>0;return h};
-function playedDays(){const s=new Set();for(const k in store.subj)for(const d in store.subj[k].daily)s.add(d);return s}
+const isDay=d=>/^\d{4}-\d\d-\d\d$/.test(d);
+function playedDays(){const s=new Set();for(const k in store.subj)for(const d in store.subj[k].daily)s.add(d);for(const d in store.stkDay||{})if(isDay(d))s.add(d);return s}
 function streakInfo(){
  const set=playedDays(),t=today(),todayDone=set.has(t);
  let cur=0,d=todayDone?t:shiftDay(t,-1);while(set.has(d)){cur++;d=shiftDay(d,-1)}
@@ -2428,14 +2430,30 @@ for(const d of playedDays())if(!store.stkDay[d])store.stkDay[d]=rollSticker(0,rn
 const stkSvg=(s,extra='')=>spr(s.m,'',extra);
 function awardSticker(){
  const t=today();if(store.stkDay[t])return null;
- const si=streakInfo(),ms=si.cur>0&&si.cur%7===0;
+ const si=streakInfo(),cur=si.todayDone?si.cur:si.cur+1,ms=cur%7===0;
  const before=stkCounts(),id=rollSticker(ms?2:0);store.stkDay[t]=id;
- return{s:STKID[id],isNew:!before[id],n:(before[id]||0)+1,streak:si.cur,ms};
+ return{s:STKID[id],isNew:!before[id],n:(before[id]||0)+1,streak:cur,ms};
+}
+store.stkSeen=store.stkSeen||{};
+const stkPopHtml=(aw,head,msg)=>{const rc=RAR[aw.s.r];return `<button class="spop px" id="spop" style="--c:${rc.c}">${stkSvg(aw.s)}<div><b>${head||(aw.isNew?'NEW STICKER!':'DUPLICATE · x'+aw.n)} <span style="color:${rc.c}">${rc.n.toUpperCase()}</span></b><p>${msg||`<span style="color:var(--ink)">${esc(aw.s.n)}</span> · ${aw.streak} day streak${aw.ms?' · 7-day bonus':''}. Tap to open your sticker book.`}</p></div></button>`};
+const stkJingle=r=>setTimeout(()=>{ensureAudio();const nn=r>=3?[523,659,784,1047,1319]:[523,659,784,1047];nn.forEach((f,i)=>tone(f,.12,'square',.05,.25+i*.08));navRender();const b=document.getElementById('stk');if(b)b.classList.add('bump')},0);
+// a sticker that never got its pop-up (one-off make-up gift for earlier players, or today's sticker added in the background)
+const GIFT='~gift1';
+let popQ=[];
+const popDone=()=>{const x=popQ.shift();if(x){store.stkSeen[x.k]=1;saveLocal();pushAll()}};
+function pendingSticker(){
+ const t=today(),days=[...playedDays()].filter(d=>d<t),out=[],inQ=k=>popQ.some(x=>x.k===k);
+ if(!store.stkDay[GIFT]&&days.length)store.stkDay[GIFT]=rollSticker(2);
+ for(const k of [GIFT,t]){const id=store.stkDay[k];if(!id||!STKID[id]||store.stkSeen[k]||inQ(k))continue;
+  const s=STKID[id],n=stkCounts()[id],si=streakInfo();
+  out.push({k,s,html:k===GIFT?stkPopHtml({s,isNew:n===1,n},`MAKE-UP STICKER!`,`Sorry we missed you! <span style="color:var(--ink)">${esc(s.n)}</span> is on us. Your first pack each day earns a sticker.`)
+   :stkPopHtml({s,isNew:n===1,n},null,`<span style="color:var(--ink)">${esc(s.n)}</span> · today’s sticker for your ${si.cur} day streak. Tap to open your sticker book.`)})}
+ return out;
 }
 // ---------- sticker book: a real book ----------
 let bookFin=null,bookAnims=[],bookPage=0,bookBusy=false,bookBack='home',bookWide=null,bookResize=null;
 const RM=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
-function stkInfo(id){const days=Object.keys(store.stkDay||{}).filter(d=>store.stkDay[d]===id).sort();return{n:days.length,first:days[0]||null,last:days[days.length-1]||null}}
+function stkInfo(id){const ks=Object.keys(store.stkDay||{}).filter(d=>store.stkDay[d]===id),days=ks.filter(isDay).sort();return{n:ks.length,gift:ks.length>days.length,first:days[0]||null,last:days[days.length-1]||null}}
 const fmtDay=d=>new Date(d+'T12:00:00Z').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
 const PAGE_NAMES=['Contents',...RAR.map(r=>r.n)];
 function bookPages(){
@@ -2444,7 +2462,7 @@ function bookPages(){
   <div class="bp-big">${spr(STICK.apple)}<b>${si.cur}</b><span>day<br>streak</span></div>
   <p class="bp-k">${got} of ${STK.length} stickers</p>
   ${RAR.map((r,i)=>{const l=STK.filter(s=>s.r===i),n=l.filter(s=>own[s.id]).length;return `<div class="bp-bar"><span>${r.n}</span><i><em style="width:${(n/l.length*100).toFixed(0)}%;background:${r.c}"></em></i><span>${n}/${l.length}</span></div>`}).join('')}
-  <p class="bp-note">Finish any daily pack to stick in a new sticker. Every 7th day in a row is Rare or better.${si.best>1?` Best streak: ${si.best} days.`:''} Tap a sticker to look closer.</p></div>`;
+  <p class="bp-note">Finish your first pack of the day (any mode) to stick in a new sticker. Every 7th day in a row is Rare or better.${si.best>1?` Best streak: ${si.best} days.`:''} Tap a sticker to look closer.</p></div>`;
  const out=[`<div class="bp intro">${intro}<span class="bp-no">1</span></div>`];
  RAR.forEach((r,ri)=>{const l=STK.filter(s=>s.r===ri),n=l.filter(s=>own[s.id]).length;
   out.push(`<div class="bp" style="--c:${r.c}"><div class="bp-head"><b>${r.n}</b><span>${n} / ${l.length}</span></div>
@@ -2581,7 +2599,7 @@ function stickerZoom(id){
   <button class="zx" id="zx" aria-label="Close">✕</button>
   <div class="zstage"><div class="zt" id="zt">${bigSticker(s)}</div><div class="zsh" id="zsh"></div></div>
   <p class="zr" style="color:${r.c}">${r.n.toUpperCase()}</p><h3 class="zn">${esc(s.n)}</h3>
-  <p class="zd">${inf.first?`First stuck in on ${fmtDay(inf.first)}.`:''}${inf.n>1?` Collected ${inf.n} times, most recently on ${fmtDay(inf.last)}.`:''}</p>
+  <p class="zd">${inf.first?`First stuck in on ${fmtDay(inf.first)}.`:''}${inf.gift?' One came as a make-up gift.':''}${inf.n>1?` Collected ${inf.n} times, most recently on ${fmtDay(inf.last)}.`:''}</p>
   <p class="zh">${touch?'Tilt your phone or drag the sticker':'Move your mouse over the sticker'}</p></div>`;
  document.body.appendChild(z);
  const close=()=>{cancelAnimationFrame(zoomRaf);removeEventListener('deviceorientation',onOri);removeEventListener('keydown',onKey);z.classList.add('out');setTimeout(()=>z.remove(),200)};
@@ -2671,7 +2689,7 @@ async function profile(uid,isBack){
   <div class="rule"><span class="lbl">Show off a sticker</span></div>
   ${mine.length?`<div class="tabs" id="pst">${STYLES.map(([k,n])=>`<button class="tag ${d.style===k?'on':''}" data-st="${k}">${n}</button>`).join('')}</div>
   <div class="ppick">${mine.map(s=>`<button class="spick ${d.sticker===s.id?'on':''}" data-k="${s.id}" style="--c:${RAR[s.r].c}" title="${esc(s.n)}" aria-label="${esc(s.n)}">${stkSvg(s)}</button>`).join('')}</div><p class="note-s" id="pmsg"></p>`
-  :`<p class="note-s">Finish a daily pack to earn your first sticker, then you can show it here.</p>`}
+  :`<p class="note-s">Finish any pack to earn your first sticker, then you can show it here.</p>`}
   <div class="rule"><span class="lbl">Friends</span></div>
   <form class="pfind" id="pf"><input id="pq" maxlength="20" placeholder="Find a player by username" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="btn alt">FIND</button></form>
   <div id="pres"></div><div id="flist"><p class="note-s">Loading friends…</p></div>
@@ -2806,7 +2824,9 @@ function home(){
  const counts={};for(const p of pool())counts[p.t]=(counts[p.t]||0)+1;
  const banner=ACC.state==='in'?`<p>Signed in as <b>${esc(ACC.name)}</b>. Progress saves to your account.</p><button class="btn alt" id="bLock">LOCKER</button>`
   :ACC.state==='checking'?`<p>Checking your login…</p>`:`<p>Playing as a guest, so progress is saved on this device only. Log in to save it everywhere.</p><button class="btn gold" id="bLock">LOG IN</button>`;
- stage.innerHTML=`<div class="banner px">${banner}</div>
+ {const nw=pendingSticker();if(nw.length){popQ.push(...nw);saveLocal();pushAll();if(popQ.length===nw.length)stkJingle(nw[0].s.r)}}
+ const pend=popQ[0];
+ stage.innerHTML=`${pend?pend.html:''}<div class="banner px">${banner}</div>
  <section class="hero">${spr(BAG,'bagart')}<div><p class="lbl pk">${sj.n} · ${sj.code} · day #${dayNo()}</p><h1 style="margin-top:12px">THE DAILY PACK</h1><p class="sub">7 prompts · 25 seconds each · rarer answers sink deeper into the bag</p></div></section>
  <div class="modes"><button class="mode px main" id="daily"><b>DAILY PACK</b><span>${d!=null?`Today: ${d} pts · ${rankOf(d)[1]}. Replay for practice.`:`Same seven ${sj.n} prompts for everyone today.`}</span></button>
  <button class="mode px" id="unl"><b>UNLIMITED</b><span>A fresh random pack from ${pool().length} prompts.</span></button></div>
@@ -2817,13 +2837,14 @@ function home(){
  <div class="rule"><span class="lbl">Your ${sj.n} record</span></div>
  <div class="stats"><div><strong>${st.dives}</strong>packs played</div><div><strong>${st.best}</strong>best score</div><div><strong>${st.g10}</strong>Grade 10 answers</div><div><strong>${rankOf(st.best)[1]}</strong>best rank</div></div>`;
  const bl=stage.querySelector('#bLock');if(bl)bl.onclick=locker;
+ {const sp=stage.querySelector('#spop');if(sp)sp.onclick=()=>{popDone();stickers()}}
  stage.querySelector('#daily').onclick=()=>start('daily',pickSeven(pool(),rng(store.subject+today())));
  stage.querySelector('#unl').onclick=()=>start('unlimited',pickSeven(pool()));
  stage.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>start('topic',topicPick(b.dataset.t),b.dataset.t));
  const p2=stage.querySelector('#p2');if(p2)p2.onchange=e=>{store.p2=e.target.checked;saveLocal();home()};
  scrollTo(0,0);
 }
-function start(mode,list,topic){if(!list.length)return;view='play';G={mode,list,topic,i:0,score:0,depth:0,res:[],subject:store.subject};ask()}
+function start(mode,list,topic){if(!list.length)return;popDone();view='play';G={mode,list,topic,i:0,score:0,depth:0,res:[],subject:store.subject};ask()}
 const hud=()=>`<div class="hud"><div class="pips">${G.list.map((_,k)=>`<span class="pip ${k<G.i?'d':k===G.i?'n':''}"></span>`).join('')}</div><span class="lbl">Prompt ${G.i+1}/${G.list.length}</span><span class="score">${G.score} PTS</span></div>`;
 function ask(){
  const p=G.list[G.i],tries=[];const t0=Date.now();fetchCounts(G.subject,p);
@@ -3039,7 +3060,7 @@ function end(){
  view='end';
  const s=G.score,r=rankOf(s),st=store.subj[G.subject];
  st.dives++;st.best=Math.max(st.best,s);
- const firstToday=G.mode==='daily'&&!playedDays().has(today());
+ const firstToday=!store.stkDay[today()];
  if(G.mode==='daily'&&st.daily[today()]==null)st.daily[today()]=s;
  noteTopAnswer(G.res,G.subject);
  store.hist.unshift({t:Date.now(),d:today(),s:G.subject,m:G.mode,sc:s});runLog.push({subject:G.subject,mode:G.mode,score:s,day:today()});store.hist=store.hist.slice(0,60);
@@ -3048,8 +3069,7 @@ function end(){
  const share=`GCSELLION · ${sj.n} · ${label}\n${G.res.map(x=>x.j?TIERS[x.j.t].e:'⬛').join('')}\n${s} pts · ${r[1]} (Grade ${r[2]})`;
  const n=G.res.length;
  let pop='';const aw=firstToday?awardSticker():null;
- if(aw){const rc=RAR[aw.s.r];pop=`<button class="spop px" id="spop" style="--c:${rc.c}">${stkSvg(aw.s)}<div><b>${aw.isNew?'NEW STICKER!':'DUPLICATE · x'+aw.n} <span style="color:${rc.c}">${rc.n.toUpperCase()}</span></b><p><span style="color:var(--ink)">${esc(aw.s.n)}</span> · ${aw.streak} day streak${aw.ms?' · 7-day bonus':''}. Tap to open your sticker book.</p></div></button>`;
-  setTimeout(()=>{ensureAudio();const nn=aw.s.r>=3?[523,659,784,1047,1319]:[523,659,784,1047];nn.forEach((f,i)=>tone(f,.12,'square',.05,.25+i*.08));navRender();const b=document.getElementById('stk');if(b)b.classList.add('bump')},0)}
+ if(aw){store.stkSeen[today()]=1;pop=stkPopHtml(aw);stkJingle(aw.s.r)}
  saveLocal();pushAll();
  stage.innerHTML=`<div class="hud"><span class="lbl pk">${esc(label)} complete</span><span class="lbl">${ACC.state==='in'?'Saved to your locker':'Saved on this device'}</span></div>
  ${pop}<div class="big">${s}</div><p class="depthbig">−${(G.depth||0).toLocaleString('en-GB')} m</p><p class="rank">${r[1].toUpperCase()} · GRADE ${r[2]}</p>
