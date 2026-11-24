@@ -242,6 +242,7 @@ form.ans input.fixed{box-shadow:0 0 0 3px var(--gold);color:var(--gold)}
 @keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
 .fb{min-height:48px;margin-top:10px}
 .bad{font:12px/1.6 var(--px);color:var(--pink);letter-spacing:.08em;animation:blink .5s steps(2) 2}
+.dym{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}.dyb{border:0;cursor:pointer;font:22px var(--vt);color:var(--ink);background:#0b0f1d;box-shadow:0 0 0 2px var(--gold);padding:8px 14px;min-height:44px}.dyb.on{background:var(--gold);color:#10131f}.dyb:hover{background:#2a2410}.dyb.on:hover{background:#ffe08f}
 .fixmsg{font:12px/1.6 var(--px);color:var(--gold);letter-spacing:.06em}
 @keyframes blink{50%{opacity:0}}
 .why{color:var(--muted);font-size:22px;margin-top:4px}
@@ -2146,6 +2147,137 @@ const RENAME={
 'Name any word from the Biology spec':['Name any word from GCSE Biology','any biology word counts'],
 };
 
+// Science equivalents: every entry in a group counts as the same thing when an answer is checked.
+// Applied to both what the player types and the stored answers, so it only ever links true equivalents.
+const SCI_SYN=[
+// ---- physics: energy, forces, motion
+['kinetic energy','ke','movement energy','motion energy'],['gravitational potential energy','gpe','gravitational potential','gravitational energy','gravity energy','gravitational store'],
+['elastic potential energy','epe','elastic energy','strain energy','elastic potential','elastic store'],['thermal','heat'],['chemical energy','chemical potential energy'],
+['gravity','gravitational force','force of gravity','gravitational pull','pull of gravity','gravitational attraction'],['air resistance','drag','air friction','wind resistance'],
+['upthrust','buoyancy','buoyant force','upward thrust','up thrust'],['normal contact force','normal force','reaction force','normal reaction','support force'],
+['friction','frictional force','frictional'],['centre of mass','centre of gravity','com','center of gravity'],['resultant force','net force','overall force','unbalanced force'],
+['stopping distance','total stopping distance'],['thinking distance','reaction distance'],['braking distance','stopping distance after braking'],
+['terminal velocity','terminal speed'],['gravitational field strength','acceleration due to gravity','free fall acceleration'],['momentum','linear momentum'],
+['potential difference','voltage','pd','p d','volt drop'],['electromotive force','emf','e m f'],['alternating current','ac','a c'],['direct current','dc','d c'],
+['light emitting diode','led'],['light dependent resistor','ldr','photoresistor'],['thermistor','temperature dependent resistor'],['variable resistor','rheostat'],
+['residual current device','rcd','rccb'],['circuit breaker','trip switch','mcb'],['earth wire','ground wire'],['cathode ray oscilloscope','cro','oscilloscope'],
+['geiger muller tube','gm tube','geiger counter','geiger muller','geiger tube','geiger muller counter'],['carbon dating','radiocarbon dating','carbon 14 dating','c14 dating','radio carbon dating'],
+['cosmic microwave background','cmb','cmbr','cosmic microwave background radiation','microwave background'],['hertzsprung russell diagram','hr diagram','h r diagram'],
+['fission','nuclear fission'],['fusion','nuclear fusion'],['magnetic field','b field'],['electric field','e field'],['left hand rule','fleming left hand rule','flemming left hand rule'],
+['right hand rule','fleming right hand rule','flemming right hand rule'],['refractive index','index of refraction','ri'],['total internal reflection','tir'],
+['infrared','ir','infra red'],['ultraviolet','uv','ultra violet'],['x ray','xray','roentgen ray'],['gamma ray','gamma radiation','gamma wave'],['alpha particle','alpha radiation','helium nucleus'],
+['beta particle','beta radiation','fast electron'],['electromagnetic','em'],['electromagnetic spectrum','em spectrum'],['electromagnetic wave','em wave','em radiation','electromagnetic radiation'],
+['national grid','grid'],['step up transformer','step up'],['step down transformer','step down'],['specific heat capacity','shc','specific heat'],['specific latent heat','slh','latent heat'],
+['wavelength','lambda'],['red shift','redshift'],['blue shift','blueshift'],['big bang','big bang theory'],['solar system'],['milky way','our galaxy'],
+['main sequence star','main sequence'],['nebula','stellar nebula','dust cloud'],['sun','our star','sol'],['moon','the moon','luna'],['kilowatt hour','kwh','unit of electricity'],
+['efficiency','energy efficiency'],['renewable','renewable energy','renewable resource'],['non renewable','nonrenewable','non renewable energy'],['photovoltaic','pv'],
+['solar panel','solar cell','photovoltaic panel','pv panel','photovoltaic cell'],['hydroelectric','hydroelectricity','hydro electric','hydro','hydropower','hydro power'],
+['geothermal','geothermal energy','geothermal power'],['tidal','tidal power','tidal energy','tidal barrage'],['wave power','wave energy'],['biofuel','bio fuel','biomass fuel'],
+['nuclear','nuclear power','nuclear energy','atomic power','atomic energy'],['fossil fuel','fossil'],['half life','halflife'],['background radiation','background count'],
+['irradiation','irradiate'],['contamination','radioactive contamination'],['ionising radiation','ionizing radiation','ionising'],['electron volt','ev'],
+['density','mass per unit volume'],['pressure','force per unit area'],['moment','turning effect','turning force','torque'],['pivot','fulcrum'],['newton meter','forcemeter','force meter','spring balance'],
+['hooke law','hookes law'],['limit of proportionality','elastic limit'],['spring constant','stiffness'],['extension','stretch'],
+// ---- units and symbols that only count when they're the whole answer are in SCI_WHOLE below
+// ---- chemistry
+['carbon dioxide','co2'],['carbon monoxide'],['oxygen','o2','oxygen gas'],['hydrogen','h2','hydrogen gas'],['nitrogen','n2','nitrogen gas'],['chlorine','cl2','chlorine gas'],
+['water','h2o','dihydrogen monoxide'],['methane','ch4','natural gas'],['ammonia','nh3'],['sodium chloride','nacl','table salt','common salt'],['hydrochloric acid','hcl','hydrogen chloride'],
+['sulfuric acid','h2so4'],['nitric acid','hno3'],['sodium hydroxide','naoh','caustic soda','lye'],['potassium hydroxide','koh','caustic potash'],['calcium hydroxide','caoh2','slaked lime','hydrated lime'],
+['limewater','lime water','calcium hydroxide solution'],['calcium carbonate','caco3'],['calcium oxide','cao','quicklime','quick lime'],['copper sulfate','cuso4','copper ii sulfate','blue vitriol'],
+['copper oxide','cuo','copper ii oxide'],['iron oxide','fe2o3','iron iii oxide'],['magnesium oxide','mgo'],['sodium carbonate','na2co3','washing soda'],
+['sodium hydrogen carbonate','sodium bicarbonate','nahco3','baking soda','bicarbonate of soda','bicarb'],['silver nitrate','agno3'],['barium chloride','bacl2'],['silver chloride','agcl'],
+['ethanol','c2h5oh','ethyl alcohol'],['ethene','c2h4','ethylene'],['ethane','c2h6'],['propane','c3h8'],['butane','c4h10'],['propene','c3h6','propylene'],['methanol','ch3oh','methyl alcohol'],
+['polyethene','polythene','polyethylene','poly ethene','poly ethylene'],['polypropene','polypropylene','poly propene'],['polyvinyl chloride','pvc','polychloroethene','poly chloroethene','vinyl'],
+['polytetrafluoroethene','ptfe','teflon'],['polystyrene','styrofoam','poly styrene'],['sulfur dioxide','so2'],['sulfur trioxide','so3'],['nitrogen dioxide','no2'],['nitrogen oxide','nox'],['nitric oxide','nitrogen monoxide'],
+['hydrogen peroxide','h2o2'],['potassium manganate','kmno4','potassium permanganate','potassium manganate vii'],['ammonium chloride','nh4cl'],['ammonium nitrate','nh4no3'],['ammonium sulfate','nh42so4'],
+['zinc oxide','zno'],['aluminium oxide','al2o3','alumina'],['silicon dioxide','sio2','silica'],['iron sulfide'],['lead bromide','pbbr2'],['potassium iodide','ki'],['sodium iodide','nai'],
+['relative atomic mass','ram','atomic mass'],['relative formula mass','rfm','formula mass','relative molecular mass','molecular mass','molar mass'],['mole','mol'],
+['avogadro constant','avogadro number','avogadros constant','avogadros number','avogadro'],['atomic number','proton number'],['mass number','nucleon number'],
+['group 1','alkali metal','group i'],['group 2','alkaline earth metal','group ii'],['group 7','halogen','group vii'],['group 0','noble gas','group 8','inert gas','group viii','rare gas'],
+['transition metal','transition element','d block','d block element'],['periodic table','table of elements'],['electron shell','energy level','shell'],
+['electronic configuration','electron configuration','electron arrangement','electronic structure'],['cathode','negative electrode'],['anode','positive electrode'],
+['oxidation','oxidisation','oxidising'],['reduction','reducing'],['redox','redox reaction','reduction oxidation'],['electrolyte'],['electrolysis'],
+['exothermic','exothermic reaction','exotherm'],['endothermic','endothermic reaction','endotherm'],['neutralisation','neutralization','neutralising'],['precipitate','ppt','precipitation'],
+['universal indicator','ui','universal indicator paper','universal indicator solution'],['litmus','litmus paper'],['phenolphthalein','phenolphthalien','phenol red'],
+['bunsen burner','bunsen'],['measuring cylinder','graduated cylinder'],['conical flask','erlenmeyer flask'],['test tube','boiling tube'],['evaporating basin','evaporating dish'],
+['crude oil','petroleum'],['fractional distillation','fractionation','fractionating','fractional distilation'],['simple distillation','distillation'],['paper chromatography','chromatography'],
+['catalytic converter','catalytic convertor','cat converter'],['rate of reaction','reaction rate','speed of reaction'],['activation energy','ea'],['enthalpy change','delta h','heat of reaction'],
+['dynamic equilibrium','equilibrium'],['haber process','haber bosch process','haber bosch'],['contact process'],['flame test'],['flame emission spectroscopy','flame photometry'],
+['global warming','enhanced greenhouse effect'],['acid rain'],['greenhouse gas','ghg'],['particulate','particulates','soot','smoke particle','particulate matter'],
+['ionic bond','ionic bonding','electrovalent bond'],['covalent bond','covalent bonding'],['metallic bond','metallic bonding'],['giant covalent','giant covalent structure','macromolecule','giant molecular'],
+['simple molecular','simple covalent','simple molecule','simple molecular structure'],['intermolecular force','intermolecular bond','van der waals','van der waals force'],
+['state symbol'],['aqueous','aq','dissolved in water','solution'],['gas','gaseous'],['sublimation','subliming','sublime'],['diffusion','diffusing'],
+['displacement','displacement reaction'],['thermal decomposition','heat decomposition','decomposition by heating'],['combustion','burning','burn'],['incomplete combustion','partial combustion'],
+['cracking','thermal cracking','catalytic cracking'],['addition polymerisation','addition polymerization','addition polymer'],['condensation polymerisation','condensation polymerization','condensation polymer'],
+['alkane','paraffin'],['alkene','olefin'],['carboxylic acid','organic acid'],['ester'],['homologous series'],['functional group'],['isomer','structural isomer'],
+['empirical formula','simplest formula'],['molecular formula'],['titration','titrating'],['concordant result','concordant'],['meniscus'],['anhydrous'],['hydrated','water of crystallisation'],
+['rust','rusting','hydrated iron oxide'],['galvanising','galvanizing','galvanisation','galvanised'],['sacrificial protection','sacrificial anode'],['alloy','alloys'],['steel'],['stainless steel'],
+['brass'],['bronze'],['solder'],['amalgam'],['ore','metal ore'],['blast furnace'],['reactivity series','activity series','reactivity table'],
+// ---- biology
+['red blood cell','rbc','erythrocyte','red cell','red corpuscle','red blood corpuscle'],['white blood cell','wbc','leucocyte','leukocyte','white cell','white corpuscle'],['platelet','thrombocyte'],
+['plasma','blood plasma'],['phagocyte','phagocytic cell'],['lymphocyte'],['antibody','antibodies','immunoglobulin'],['antigen'],['antitoxin','anti toxin'],['pathogen','germ','disease causing organism'],
+['deoxyribonucleic acid','dna'],['ribonucleic acid','rna'],['messenger rna','mrna'],['transfer rna','trna'],['adenosine triphosphate','atp'],['antidiuretic hormone','adh','vasopressin'],
+['follicle stimulating hormone','fsh'],['luteinising hormone','lh','luteinizing hormone'],['thyroid stimulating hormone','tsh'],['adrenaline','epinephrine','adrenalin'],['noradrenaline','norepinephrine'],
+['oestrogen','estrogen'],['thyroxine','t4','thyroxin'],['auxin','iaa','indoleacetic acid'],['gibberellin','gibberellic acid'],['ethene gas'],
+['trachea','windpipe','wind pipe'],['oesophagus','gullet','food pipe','esophagus','foodpipe'],['larynx','voice box','voicebox'],['pharynx','throat'],['alveolus','air sac','alveoli'],
+['bronchus','bronchi'],['bronchiole','bronchioles'],['diaphragm'],['intercostal muscle','intercostals','rib muscle'],['ribcage','rib cage','ribs'],['lung','lungs'],
+['villus','villi'],['microvillus','microvilli'],['stoma','stomata','stomate','leaf pore'],['guard cell'],['nucleus','nuclei'],['fungus','fungi'],['bacterium','bacteria','bacterial cell'],
+['mitochondrion','mitochondria','mitochondrium'],['ribosome'],['chloroplast','chloroplasts'],['cell membrane','plasma membrane','cell surface membrane'],['cell wall','cellulose cell wall'],
+['vacuole','sap vacuole','permanent vacuole'],['cytoplasm','cytosol'],['photosynthesis','photosynthesising'],['aerobic respiration','respiring aerobically'],['anaerobic respiration','respiring anaerobically'],
+['glucose','c6h12o6','dextrose','blood sugar'],['amino acid'],['fatty acid'],['glycerol','glycerine','glycerin'],['carbohydrate','carbs','carb'],['protein'],['lipid','fat','fats and oils'],
+['vitamin c','ascorbic acid'],['vitamin d','calciferol'],['dietary fibre','fibre','roughage'],['amylase','salivary amylase'],['protease','proteinase'],['lipase'],['carbohydrase'],
+['bile','bile juice'],['gall bladder','gallbladder'],['small intestine','ileum and duodenum'],['large intestine','colon'],['rectum'],['anus'],['stomach'],['pancreas'],['liver'],
+['heart attack','myocardial infarction'],['coronary heart disease','chd','coronary artery disease'],['blood pressure','bp'],['high blood pressure','hypertension'],
+['body mass index','bmi'],['sexually transmitted infection','sti','std','sexually transmitted disease'],['human immunodeficiency virus','hiv'],['acquired immunodeficiency syndrome','aids'],
+['tuberculosis','tb','consumption'],['influenza','flu'],['gonorrhoea','gonorrhea','the clap'],['salmonella','salmonella food poisoning','salmonellosis'],['cholera'],['malaria'],['measles'],
+['tobacco mosaic virus','tmv'],['rose black spot','black spot'],['monoclonal antibody','monoclonal antibodies','mab'],['in vitro fertilisation','ivf','in vitro fertilization','test tube baby'],
+['genetic engineering','genetic modification','genetically modified','gm','gmo','genetically modified organism','genetically engineered'],['polymerase chain reaction','pcr'],
+['central nervous system','cns'],['peripheral nervous system','pns'],['neurone','neuron','nerve cell'],['sensory neurone','sensory neuron','sensory nerve cell','afferent neurone'],
+['motor neurone','motor neuron','motor nerve cell','efferent neurone'],['relay neurone','relay neuron','interneurone','interneuron','connector neurone','intermediate neurone'],
+['reflex arc'],['reflex','reflex action'],['synapse','synaptic gap','synaptic cleft'],['neurotransmitter','transmitter substance','chemical transmitter'],
+['xylem','xylem vessel','xylem tissue'],['phloem','phloem tissue','phloem vessel','sieve tube'],['root hair cell','root hair'],['transpiration','transpiring'],['translocation'],
+['atrium','atria','auricle'],['ventricle'],['vena cava'],['pulmonary artery'],['pulmonary vein'],['aorta'],['capillary'],['coronary artery'],['valve','heart valve'],
+['natural selection','survival of the fittest'],['selective breeding','artificial selection'],['tissue culture','micropropagation'],['cloning','clone'],['asexual reproduction','asexual'],['sexual reproduction','sexual'],
+['restriction enzyme','restriction endonuclease'],['ligase','dna ligase'],['plasmid'],['vector'],['allele','alleles','gene variant'],['homozygous'],['heterozygous'],['genotype'],['phenotype'],
+['punnett square','punnet square','punnett grid','genetic diagram'],['dominant','dominant allele'],['recessive','recessive allele'],['mutation','genetic mutation','gene mutation'],
+['meiosis','reduction division'],['mitosis'],['gamete','sex cell','reproductive cell'],['zygote','fertilised egg','fertilized egg'],['embryo'],['foetus','fetus'],['sperm','sperm cell','spermatozoon'],
+['egg','egg cell','ovum','ova'],['ovary','ovaries'],['testis','testes','testicle'],['uterus','womb'],['oviduct','fallopian tube','egg tube'],['menstrual cycle','menstruation','monthly cycle'],
+['decomposer','saprophyte','saprotroph','saprobiont'],['producer','autotroph'],['consumer','heterotroph'],['herbivore','plant eater'],['carnivore','meat eater'],['omnivore'],
+['food chain'],['food web'],['trophic level','feeding level'],['pyramid of biomass','biomass pyramid'],['pyramid of number','number pyramid'],['quadrat','quadrant'],['transect','line transect','belt transect'],
+['biodiversity','biological diversity'],['eutrophication'],['deforestation','tree felling','clearing forest','cutting down trees','cutting down forest','chopping down trees','cutting down rainforest','logging'],['fertiliser','fertilizer'],['herbicide','weedkiller','weed killer'],['pesticide'],
+['water cycle','hydrological cycle'],['carbon cycle'],['nitrogen cycle'],['nitrogen fixing bacteria','nitrogen fixer','nitrogen fixing bacterium'],['nitrifying bacteria','nitrifier'],['denitrifying bacteria','denitrifier'],
+['homeostasis'],['thermoregulation','temperature regulation','temperature control'],['osmoregulation','water regulation'],['negative feedback'],['type 1 diabetes','type one diabetes'],['type 2 diabetes','type two diabetes'],
+['osmosis'],['active transport'],['diffusion'],['enzyme','biological catalyst'],['active site'],['denature','denatured','denaturing','denaturation'],['substrate'],
+['chlorophyll','green pigment'],['leaf','leaves'],['root'],['stem'],['flower'],['petal'],['stamen'],['anther'],['filament'],['carpel','pistil'],['stigma'],['style'],['ovule'],['pollen','pollen grain'],
+['seed'],['germination','germinating','germinate'],['phototropism','phototropic'],['geotropism','gravitropism','geotropic'],['tropism'],['cuticle','waxy cuticle','waxy layer'],
+['palisade mesophyll','palisade layer','palisade cell','palisade'],['spongy mesophyll','spongy layer','spongy'],['epidermis','epidermal cell'],
+['iris'],['pupil'],['retina'],['cornea'],['lens'],['optic nerve'],['ciliary muscle'],['suspensory ligament'],['rod cell','rod'],['cone cell','cone'],['blind spot'],['fovea','yellow spot'],
+['kidney'],['nephron','kidney tubule'],['urea'],['urine','wee','pee'],['bladder','urinary bladder'],['ureter'],['urethra'],['dialysis','kidney dialysis'],['kidney transplant'],
+['skin'],['sweat','perspiration','sweating'],['shivering','shiver'],['vasoconstriction'],['vasodilation','vasodilatation'],['pituitary gland','pituitary'],['thyroid gland','thyroid'],['adrenal gland','adrenals','adrenal'],
+['insulin'],['glucagon'],['glycogen','animal starch'],['starch'],['cellulose'],['sucrose','table sugar','cane sugar'],['lactose','milk sugar'],['maltose','malt sugar'],['fructose','fruit sugar'],
+['yeast'],['lactic acid','lactate'],['oxygen debt','oxygen deficit','epoc'],['breathing rate','ventilation rate','respiratory rate'],['heart rate','pulse rate','pulse'],
+['antibiotic','antibacterial'],['penicillin'],['vaccination','vaccine','immunisation','immunization','jab'],['herd immunity'],['placebo','dummy pill'],['double blind trial','double blind'],
+];
+// short symbols and units that only count when they're the entire answer (so they never change words inside a longer answer)
+const SCI_WHOLE=[
+['joule','j'],['watt','w'],['volt','v'],['ampere','a','amp','amps'],['newton','n'],['kilogram','kg','kilo'],['gram','g','gramme'],['metre','m'],['second','s','sec'],['hertz','hz'],['pascal','pa'],['coulomb','c'],
+['ohm','ohms'],['kelvin','k'],['kilowatt','kw'],['megawatt','mw'],['kilojoule','kj'],['megajoule','mj'],['milliampere','ma','milliamp'],['kilometre','km'],['centimetre','cm'],['millimetre','mm'],
+['metre per second','m/s','mps','meters per second'],['metre per second squared','m/s2','m/s/s'],['newton per kilogram','n/kg'],['kilogram per metre cubed','kg/m3'],['gram per centimetre cubed','g/cm3'],
+['joule per kilogram','j/kg'],['joule per kilogram degree celsius','j/kg c','j/kgc','j/kg/c'],['newton metre','nm'],['kilogram metre per second','kg m/s','kgm/s'],['newton per metre','n/m'],
+['degree celsius','c','celsius','degrees c','centigrade'],['kilowatt hour','kwh'],['electron volt','ev'],['light year','ly'],['astronomical unit','au'],['decibel','db'],
+['hydrogen','h'],['helium','he'],['lithium','li'],['beryllium','be'],['boron','b'],['carbon','c'],['nitrogen','n'],['oxygen','o'],['fluorine','f'],['neon','ne'],['sodium','na'],['magnesium','mg'],
+['aluminium','al'],['silicon','si'],['phosphorus','p'],['sulfur','s'],['chlorine','cl'],['argon','ar'],['potassium','k'],['calcium','ca'],['scandium','sc'],['titanium','ti'],['vanadium','v'],
+['chromium','cr'],['manganese','mn'],['iron','fe'],['cobalt','co'],['nickel','ni'],['copper','cu'],['zinc','zn'],['gallium','ga'],['germanium','ge'],['arsenic','as'],['selenium','se'],['bromine','br'],
+['krypton','kr'],['rubidium','rb'],['strontium','sr'],['silver','ag'],['tin','sn'],['iodine','i'],['xenon','xe'],['caesium','cs'],['barium','ba'],['tungsten','w'],['platinum','pt'],['gold','au'],
+['mercury','hg'],['lead','pb'],['radon','rn'],['radium','ra'],['uranium','u'],['plutonium','pu'],['francium','fr'],['astatine','at'],['palladium','pd'],['cadmium','cd'],['lanthanum','la'],
+['nitrogen monoxide','no'],['nitric oxide','no'],['carbon monoxide','co'],['relative atomic mass','ar'],['relative formula mass','mr'],['solid','s'],['liquid','l'],['gas','g'],['aqueous','aq'],
+];
+// odd plurals, and spellings that the singular-maker gets wrong
+const SCI_PLURAL={viruse:'virus',nuclei:'nucleus',alveoli:'alveolus',bronchi:'bronchus',villi:'villus',microvilli:'microvillus',stomata:'stoma',fungi:'fungus',bacteria:'bacterium',mitochondria:'mitochondrion',
+ cilia:'cilium',ova:'ovum',phyla:'phylum',genera:'genus',spectra:'spectrum',media:'medium',leave:'leaf',teeth:'tooth',feet:'foot',mice:'mouse',geese:'goose',children:'child',women:'woman',men:'man',
+ people:'person',larvae:'larva',algae:'alga',vertebrae:'vertebra',teste:'testis',gase:'gas',lense:'lens',buse:'bus',atria:'atrium',criteria:'criterion',phenomena:'phenomenon',indice:'index',
+ matrice:'matrix',vertice:'vertex',axe:'axis',hypothese:'hypothesis',analyse:'analysis',synthese:'synthesis',nucleuse:'nucleus',cactuse:'cactus',fungie:'fungus',specie:'species',
+ one:'1',two:'2',three:'3',four:'4',five:'5',six:'6',seven:'7',eight:'8',nine:'9',ten:'10',zero:'0'};
+
 {
 // ---------- pixel sprites ----------
 const PAL={K:'#10131f',R:'#e8495f',r:'#b52d45',L:'#ff8a8f',Y:'#ffd36b',P:'#c73a52',S:'#4a3352',W:'#fffbe6',B:'#5fd8ff',b:'#2d7fa8',G:'#8a95b4',g:'#b6f36b',X:'#ff4f7a',V:'#c79bff',O:'#ff9a3c',N:'#8b5a2b'};
@@ -2242,16 +2374,77 @@ for(const k in SUBJ){const S0=SUBJ[k],m=new Map();S0.P.forEach(p=>p.a.forEach(x=
 {const P=SUBJ.physics.P,su=P.find(p=>p.q==='Name an SI base unit');if(su){const seen=new Set(su.a.flatMap(a=>a.al));P.filter(p=>p.t==='U'&&p!==su).forEach(p=>p.a.forEach(a=>{if(!a.ox&&!a.al.some(x=>seen.has(x))){a.al.forEach(x=>seen.add(x));su.a.push({...a,tier:Math.min(6,a.tier)})}}))}}
 for(const k in SUBJ)for(const p of SUBJ[k].P){p.key=p.q;const r=typeof RENAME!=='undefined'&&RENAME[p.q];if(r){p.q=r[0];p.hint=r[1]}}
 const lev=(a,b)=>{const m=a.length,n=b.length,d=[];for(let i=0;i<=m;i++){d[i]=[i];for(let j=1;j<=n;j++)d[i][j]=i?0:j}for(let i=1;i<=m;i++)for(let j=1;j<=n;j++){const c=a[i-1]===b[j-1]?0:1;d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+c);if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1)}return d[m][n]};
-const hit=(n,al,fz)=>{const ns=n.replace(/ /g,''),as=al.replace(/ /g,'');if(ns===as)return 3;if(al.length>=3&&(' '+n+' ').includes(' '+al+' '))return 2;
- if(fz&&as.length>=5&&ns[0]===as[0]&&Math.abs(ns.length-as.length)<=2&&lev(ns,as)<=(as.length>=9?2:1))return 1;return 0};
+// ---------- answer matching ----------
+// Layer 1: equivalents (science dictionary + everyday synonyms), applied to both sides.
+// Layer 2: instant accepts (same words in any order, filler words ignored, answer inside a longer phrase).
+// Layer 3: "did you mean" suggestions for typos, sound-alike spellings, unfinished words and other word endings.
+//          These always need the player to confirm.
+const FILL2=new Set([...FILLER,'reaction','vessel','tissue','gland','organ','cell']);
+const CANON=new Map(),WHOLE=new Map();let CMAXW=1;
+const plur=t=>t.split(' ').map(w=>SCI_PLURAL[w]||w).join(' ');
+const canonPhrase=(toks)=>{const out=[];for(let i=0;i<toks.length;){let hit=0;for(let L=Math.min(CMAXW,toks.length-i);L>=1;L--){const ph=toks.slice(i,i+L).join(' '),c=CANON.get(ph);if(c!==undefined){if(c)out.push(c);i+=L;hit=1;break}}if(!hit){out.push(toks[i]);i++}}return out.join(' ')};
+const canon=n=>{const t=plur(n);if(!t)return t;let c=canonPhrase(t.split(' '));const c2=canonPhrase(c.split(' '));return c2};
+(()=>{
+ const add=(g,whole)=>{const k0=plur(norm(g[0]));if(!k0)return;for(const w of g){const k=plur(norm(w));if(!k||k===k0)continue;
+  if(whole){if(!WHOLE.has(k))WHOLE.set(k,[]);WHOLE.get(k).push(k0)}else{if(!CANON.has(k))CANON.set(k,k0);CMAXW=Math.max(CMAXW,k.split(' ').length)}}};
+ for(const g of (typeof SCI_SYN!=='undefined'?SCI_SYN:[]))add(g,false);
+ for(const g of SYN)add(g,false);
+ for(const g of (typeof SCI_WHOLE!=='undefined'?SCI_WHOLE:[]))add(g,true);
+})();
+const sq=s=>s.replace(/ /g,'');
+const coreOf=s=>s.split(' ').filter(w=>!FILL2.has(w)).sort().join(' ');
+const STEMS=[['isation','is'],['ization','is'],['ational','ate'],['ation','ate'],['ition','it'],['ing','e'],['ed','e'],['er','e'],['ers','e'],['ism','is'],['ist','is'],['ly',''],['ness',''],['ment',''],['ive','e'],['ical','ic'],['ally',''],['al',''],['ous',''],['ity',''],['ic',''],['ion','e'],['e','']];
+const stem=w=>{if(w.length<=4)return w;for(const [a,b] of STEMS)if(w.endsWith(a)&&w.length-a.length>=3){w=w.slice(0,-a.length)+b;break}return w.replace(/e$/,'')};
+const stemSeq=s=>s.split(' ').filter(w=>!FILL2.has(w)).map(stem).sort().join(' ');
+// sound-alike spelling: ph/f, c/k/s, y/i, z/s, silent letters, doubled letters (vowels are kept, so different words stay different)
+const phon=s=>s.replace(/ph/g,'f').replace(/ck/g,'k').replace(/c(?=[eiy])/g,'s').replace(/[cq]/g,'k').replace(/x/g,'ks').replace(/y/g,'i').replace(/z/g,'s').replace(/wh/g,'w').replace(/gh/g,'g').replace(/kn/g,'n').replace(/rh/g,'r').replace(/(.)\1+/g,'$1').replace(/ou/g,'u').replace(/ae|oe/g,'e');
+const featCache=new Map();
+const feat=s=>{let f=featCache.get(s);if(f)return f;const c=canon(s);f={raw:s,sq:sq(s),can:c,csq:sq(c),core:coreOf(c),stem:stemSeq(c),ph:phon(sq(c)),phr:phon(sq(s)),toks:c.split(' ').filter(w=>!FILL2.has(w))};if(featCache.size>60000)featCache.clear();featCache.set(s,f);return f};
+const inPhrase=(hay,needle)=>needle.length>=3&&(' '+hay+' ').includes(' '+needle+' ');
+const allow=L=>L<=3?0:L<=5?1:L<=8?2:L<=12?3:4;
+// exact-level score: 5 raw, 4.5 equivalent, 4 same core words, 3.5 contains it (only filler around it), 2 contains it plus other words (ask)
+function exactScore(I,A){
+ if(I.sq===A.sq)return 5;
+ if(I.csq===A.csq)return 4.5;
+ if(I.core&&I.core===A.core&&sq(I.core).length>=4)return 4;
+ const inside=inPhrase(I.raw,A.raw)?A.raw:inPhrase(I.can,A.can)?A.can:null;
+ if(inside){const used=new Set(inside.split(' '));return I.can.split(' ').concat(I.raw.split(' ')).some(w=>!used.has(w)&&!FILL2.has(w))?2:3.5}
+ return 0;
+}
+// how close a near-miss is (0 = not close, up to ~0.95)
+function nearPair(b,a,pb,pa){
+ const L=Math.max(a.length,b.length),al=allow(L);let s=0;
+ if(Math.abs(a.length-b.length)<=al){const d=lev(b,a);if(d<=al){const firstOk=a[0]===b[0]||pa[0]===pb[0];if(firstOk||(d<=1&&L>=6))s=Math.max(s,1-d/L-(firstOk?0:.15))}}
+ if(pa.length>=4&&pa[0]===pb[0]&&Math.abs(pa.length-pb.length)<=2){const d=lev(pb,pa),ap=Math.max(0,allow(pa.length)-1);if(d<=ap)s=Math.max(s,.86-d*.08)}
+ if(b.length>=4&&a.startsWith(b)&&b.length>=.5*a.length)s=Math.max(s,.55+.35*b.length/a.length);
+ return s;
+}
+function nearScore(I,A){
+ if(!A.csq||!I.csq)return 0;
+ let s=Math.max(nearPair(I.csq,A.csq,I.ph,A.ph),A.sq!==A.csq||I.sq!==I.csq?nearPair(I.sq,A.sq,I.phr,A.phr):0);
+ if(I.stem&&I.stem===A.stem)s=Math.max(s,.9);
+ if(A.toks.length>1&&A.toks.length===I.toks.length){const used=new Set();let ok=true;for(const t of A.toks){const k=I.toks.findIndex((u,j)=>!used.has(j)&&(u===t||(Math.abs(u.length-t.length)<=allow(t.length)&&lev(u,t)<=allow(t.length))));if(k<0){ok=false;break}used.add(k)}if(ok)s=Math.max(s,.8)}
+ return s;
+}
 function judge(p,input){
  const n=norm(input);if(!n)return{ok:false};
- let best=null,bs=0,bl=0,bal='';
- for(const a of p.a)for(const al of a.al){const s=hit(n,al,true);if(s>bs||(s===bs&&s&&al.length>bl)){best=a;bs=s;bl=al.length;bal=al}}
- for(const x of p.x)for(const al of x.al){const s=hit(n,al,false);if(s&&s>=bs)return{ok:false,note:x.note}}
- if(!best)return{ok:false};
- if(bs===2){const used=new Set(bal.split(' '));const extra=n.split(' ').filter(w=>!used.has(w));if(extra.some(w=>!FILLER.has(w)))return{ok:false,fix:true,a:best,kind:'part'}}
- return bs===1?{ok:false,fix:true,a:best,kind:'typo'}:{ok:true,a:best};
+ const forms=[n,...(WHOLE.get(plur(n))||[])].map(feat);
+ let best=null,bs=0,bl=0;const near=new Map();
+ for(const a of p.a)for(const al of a.al){const A=feat(al);
+  for(const I of forms){const s=exactScore(I,A);if(s>bs||(s===bs&&s&&al.length>bl)){best=a;bs=s;bl=al.length}}
+ }
+ // "not valid" notes beat anything except a straight match
+ let xs=0,xn=null;for(const x of p.x)for(const al of x.al){const A=feat(al);for(const I of forms){const s=exactScore(I,A);if(s>xs){xs=s;xn=x.note}}}
+ if(xs>=3.5&&xs>=bs&&bs<5)return{ok:false,note:xn};
+ if(bs>=3.5)return{ok:true,a:best};
+ // near misses: rank the closest answers
+ const I=forms[0];
+ for(const a of p.a){if(a.ox)continue;let m=0;for(const al of a.al){const s=nearScore(I,feat(al));if(s>m)m=s}if(m>=.6)near.set(a,m)}
+ if(xs>=2&&!near.size&&bs<2)return{ok:false,note:xn};
+ const cands=[...near.entries()].sort((x,y)=>y[1]-x[1]).map(e=>e[0]);
+ if(bs===2&&best){const i=cands.indexOf(best);if(i>=0)cands.splice(i,1);cands.unshift(best)}
+ if(!cands.length)return{ok:false};
+ return{ok:false,fix:true,a:cands[0],cands:cands.slice(0,3),kind:bs===2&&cands[0]===best?'part':'typo'};
 }
 // ---------- storage ----------
 const KEY='gcsellion-v2';
@@ -2578,7 +2771,8 @@ function showPack(info,onDone){
 const CL_ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const CL_OPT={lives:[1,2,3,5],max:[2,4,8,16,30],time:[10,15,20,30],qs:[10,20,0]};
 let CL=null;
-const clTab=(()=>{try{let k=sessionStorage.getItem('gcs-tab');if(!k){k=Math.random().toString(36).slice(2,10);sessionStorage.setItem('gcs-tab',k)}return k}catch(e){return Math.random().toString(36).slice(2,10)}})();
+let clTab='';            // a fresh id for every connection, so a quick leave-and-rejoin never clashes with the old one
+let clLeaving=Promise.resolve();
 const clName=()=>ACC.state==='in'?ACC.name:(store.clName||'');
 const clCode=()=>Array.from({length:4},()=>CL_ABC[Math.floor(Math.random()*CL_ABC.length)]).join('');
 const clDefSet=()=>({lives:3,max:8,time:15,qs:10,subs:[store.subject],tops:{},play:true});
@@ -2590,13 +2784,13 @@ const clSend=(event,payload)=>{if(CL&&CL.ch)try{CL.ch.send({type:'broadcast',eve
 // important messages go twice, in case one gets lost on a bad connection (repeats are ignored)
 const clSend2=(event,payload)=>{clSend(event,payload);const c=CL;setTimeout(()=>{if(CL===c)clSend(event,payload)},650)};
 const clMeta=()=>({n:clName(),h:!!(CL&&CL.host),at:CL?CL.at:Date.now(),u:ACC.state==='in'?ACC.id:null,...(CL&&CL.host?{set:CL.set,ph:CL.phase}:{})});
-const clTrack=()=>{if(CL&&CL.ch&&CL.ready)CL.ch.track(clMeta()).catch(()=>{})};
+const clTrack=(now)=>{if(!CL||!CL.ch||!CL.ready)return;clearTimeout(CL.trk);const c=CL;const go=()=>{if(CL===c)c.ch.track(clMeta()).catch(()=>{})};if(now)go();else CL.trk=setTimeout(go,1200)};
 const clPlayers=()=>Object.entries((CL&&CL.ps)||{}).map(([k,m])=>({k,...m})).sort((a,b)=>a.at-b.at||(a.k<b.k?-1:1));
 const clClear=()=>{if(!CL)return;clearInterval(CL.tm);clearInterval(CL.rs)};
 const clHostClear=()=>{if(!CL)return;clearTimeout(CL.to);clearTimeout(CL.to2)};
 function clLeave(){
- if(!CL)return;const c=CL;clClear();clHostClear();CL=null;
- try{c.ch.untrack()}catch(e){}try{sb.removeChannel(c.ch)}catch(e){}
+ if(!CL)return;const c=CL;clClear();clHostClear();clearInterval(c.hw);clearInterval(c.hb);clearTimeout(c.trk);CL=null;
+ clLeaving=(async()=>{try{await c.ch.untrack()}catch(e){}try{await sb.removeChannel(c.ch)}catch(e){}})();
 }
 const clConfirmLeave=()=>{if(!CL)return true;if(CL.phase==='play'&&!confirm('Leave the Classroom game?'))return false;clLeave();return true};
 
@@ -2625,15 +2819,22 @@ function classroom(pre,msg){
 function clBusy(t){stage.innerHTML=`<div class="clwait"><p class="lbl">${esc(t)}</p></div>`}
 
 // ---------- connecting ----------
-function clConnect(code,host){
+async function clConnect(code,host){
+ await Promise.race([clLeaving,new Promise(r=>setTimeout(r,2500))]);
+ // drop any old connection to this room that's still hanging around
+ for(const c of sb.getChannels?sb.getChannels():[])if(c.topic==='realtime:gcsellion-room-'+code){try{await sb.removeChannel(c)}catch(e){}}
+ clTab=Math.random().toString(36).slice(2,10);
  return new Promise((res,rej)=>{
-  CL={code,host,at:Date.now(),ps:{},phase:'lobby',set:host?clDefSet():null,ready:false,sawHost:false,game:null,round:null};
+  CL={hostSeen:0,code,host,at:Date.now(),ps:{},phase:'lobby',set:host?clDefSet():null,ready:false,sawHost:false,game:null,round:null};
   const me=CL;
   const ch=sb.channel('gcsellion-room-'+code,{config:{broadcast:{self:true},presence:{key:clTab}}});me.ch=ch;
   ch.on('presence',{event:'sync'},()=>{if(CL!==me)return;const st=ch.presenceState(),ps={};for(const k in st){const m=st[k]&&st[k][st[k].length-1];if(m)ps[k]=m}me.ps=ps;clOnPresence()});
-  for(const ev of ['start','q','ans','got','res','end','lobby'])ch.on('broadcast',{event:ev},({payload})=>{if(CL===me)clOn(ev,payload||{})});
+  for(const ev of ['start','q','ans','got','res','end','lobby','hb'])ch.on('broadcast',{event:ev},({payload})=>{if(CL===me)clOn(ev,payload||{})});
   const t=setTimeout(()=>rej(new Error('timeout')),9000);
-  ch.subscribe(async st=>{if(st==='SUBSCRIBED'){clearTimeout(t);me.ready=true;try{await ch.track(clMeta())}catch(e){}res()}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'){clearTimeout(t);rej(new Error(st))}});
+  ch.subscribe(async st=>{if(st==='SUBSCRIBED'){if(me.ready)return;clearTimeout(t);me.ready=true;try{await ch.track(clMeta())}catch(e){}
+    if(host)me.hb=setInterval(()=>{if(CL===me)clSend('hb',clSnap())},2000);
+    else me.hw=setInterval(()=>{if(CL!==me||!me.sawHost)return;if(Date.now()-me.hostSeen>(me.phase==='lobby'?8000:12000)){clLeave();classroom('','The host left, so the room closed.')}},1000);
+    res()}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'){clearTimeout(t);rej(new Error(st))}});
  });
 }
 async function clCreate(){
@@ -2658,6 +2859,7 @@ function clOnPresence(){
  const ps=clPlayers(),hostP=ps.find(p=>p.h);
  if(!CL.host){
   if(hostP){
+   CL.hostSeen=Date.now();
    if(!CL.sawHost){
     CL.sawHost=true;
     if(hostP.ph==='play'){const c=CL.code;clLeave();classroom(c,'That room is already in the middle of a game. Wait for it to finish, then join again.');return}
@@ -2666,14 +2868,14 @@ function clOnPresence(){
    CL.set=hostP.set||CL.set;
    // first come, first served: if the room is over its limit, the latest joiners leave
    if(CL.phase==='lobby'&&CL.set){const idx=ps.findIndex(p=>p.k===clTab);if(idx>=CL.set.max+(CL.set.play?0:1)){const c=CL.code;clLeave();classroom(c,'That room is full.');return}}
-  }else if(CL.sawHost){clLeave();classroom('','The host left, so the room closed.');return}
+  }
  }else if(CL.game&&CL.phase==='play'){
   // players who drop out mid-game are out
   const here=new Set(ps.map(p=>p.k));let ch=false;
   for(const k of CL.game.order)if(!here.has(k)&&CL.game.lives[k]>0){CL.game.lives[k]=0;CL.game.outAt[k]=CL.game.r;CL.game.left[k]=1;ch=true}
   if(ch)clHostCheckRound();
  }
- if(CL&&CL.phase==='lobby')clRender();
+ if(CL&&CL.phase==='lobby'&&(CL.host||CL.sawHost))clRender();
  else if(CL&&CL.phase==='play')clStrip();
 }
 
@@ -2708,7 +2910,7 @@ function clRender(){
  stage.querySelector('#lv').onclick=()=>{clLeave();classroom()};
  stage.querySelector('#cpi').onclick=async e=>{const url=location.origin+location.pathname+'?room='+CL.code;try{await navigator.clipboard.writeText(url);e.target.textContent='COPIED'}catch(err){e.target.textContent=url}};
  if(host){
-  const upd=()=>{ensureAudio();tone(150,.09,'triangle',.08,0,-50);clTrack();clRender()};
+  const upd=()=>{ensureAudio();tone(150,.09,'triangle',.08,0,-50);clSend('hb',{set:CL.set,ph:CL.phase});clTrack();clRender()};
   stage.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{set[b.dataset.k]=Number(b.dataset.v);upd()});
   stage.querySelectorAll('[data-sub]').forEach(b=>b.onclick=()=>{const k=b.dataset.sub,i=set.subs.indexOf(k);if(i>=0){if(set.subs.length>1)set.subs.splice(i,1)}else{set.subs.push(k);delete set.tops[k]}upd()});
   stage.querySelectorAll('[data-tk]').forEach(b=>b.onclick=()=>{const s=b.dataset.ts,k=b.dataset.tk,cur=new Set(clTops(set,s));if(cur.has(k)){if(cur.size>1)cur.delete(k)}else cur.add(k);set.tops[s]=[...cur];if(set.tops[s].length===Object.keys(SUBJ[s].packs).length)delete set.tops[s];upd()});
@@ -2726,7 +2928,7 @@ function clHostStart(){
  for(const p of ps)names[p.k]=p.n||'Player';for(const k of order){lives[k]=set.lives;score[k]=0}
  const pool=shuffle(clPool(set));
  CL.game={order,names,lives,score,outAt,left:{},r:0,pool,ans:{},set:JSON.parse(JSON.stringify(set))};
- CL.phase='play';clTrack();
+ CL.phase='play';clTrack(true);
  CL.game.gid=Math.random().toString(36).slice(2,8);clSend2('start',{gid:CL.game.gid,order,names,lives,set:CL.game.set});
  CL.to=setTimeout(clHostNext,3200);
 }
@@ -2735,7 +2937,7 @@ function clHostNext(){
  const g=CL&&CL.game;if(!g)return;
  g.r++;g.ans={};g.ended=false;
  const q=g.pool[(g.r-1)%g.pool.length];
- const msg={r:g.r,s:q.s,id:q.id,dur:g.set.time,total:g.set.qs};
+ const msg={r:g.r,s:q.s,id:q.id,dur:g.set.time,total:g.set.qs};g.cur={s:q.s,id:q.id};g.qAt=Date.now();
  clSend('q',msg);clearTimeout(CL.to2);CL.to2=setTimeout(()=>{if(CL&&CL.game===g&&g.r===msg.r&&!g.ended)clSend('q',msg)},700);
  clearTimeout(CL.to);CL.to=setTimeout(()=>clHostEndRound(msg.r),g.set.time*1000+1200);
 }
@@ -2749,24 +2951,38 @@ function clHostEndRound(r){
  for(const k of g.order){if(g.lives[k]<=0&&!g.ans[k]){continue}
   const a=g.ans[k];if(a){res[k]=a;g.score[k]+=TIERS[a.t].p}else{g.lives[k]--;res[k]={t:0};if(g.lives[k]<=0)g.outAt[k]=r}}
  const alive=clAlive(g),over=(g.order.length>1&&alive.length<=1)||alive.length===0||(g.set.qs&&r>=g.set.qs);
- clSend2('res',{r,res,lives:g.lives,score:g.score,over:!!over});
+ g.lastRes={r,res,lives:{...g.lives},score:{...g.score},over:!!over};clSend2('res',g.lastRes);
  clearTimeout(CL.to);
- CL.to=setTimeout(()=>{if(!CL||CL.game!==g)return;if(over){clSend2('end',{order:g.order,names:g.names,lives:g.lives,score:g.score,outAt:g.outAt,r})}else clHostNext()},over?2600:3600);
+ CL.to=setTimeout(()=>{if(!CL||CL.game!==g)return;if(over){g.endMsg={order:g.order,names:g.names,lives:g.lives,score:g.score,outAt:g.outAt,r};clSend2('end',g.endMsg)}else clHostNext()},over?2600:3600);
 }
-function clHostAgain(){clHostClear();CL.phase='lobby';CL.game=null;clTrack();clSend2('lobby',{});}
+// everything a player needs to catch up if they missed a message
+function clSnap(){const g=CL.game,o={set:CL.set,ph:CL.phase};if(!g||CL.phase==='lobby')return o;
+ Object.assign(o,{gid:g.gid,order:g.order,names:g.names,lives:g.lives,score:g.score,gset:g.set});
+ if(g.cur)Object.assign(o,{r:g.r,q:g.cur,dur:g.set.time,total:g.set.qs,el:Date.now()-g.qAt});
+ if(g.lastRes&&g.lastRes.r===g.r)o.res=g.lastRes;if(g.endMsg)o.end=g.endMsg;return o}
+function clHostAgain(){clHostClear();CL.phase='lobby';CL.game=null;clTrack(true);clSend2('lobby',{});}
 
 // ---------- everyone: incoming events ----------
 function clOn(ev,m){
  const host=CL.host;
+ if(ev!=='ans')CL.hostSeen=Date.now();   // any message from the host proves it's still here
  if(ev==='start'){if(CL.g&&CL.g.gid===m.gid)return;CL.phase='play';CL.g={gid:m.gid,order:m.order,names:m.names,lives:m.lives,score:Object.fromEntries(m.order.map(k=>[k,0])),set:m.set,got:new Set(),res:null};
   CL.round=null;clCountdown();return}
+ if(ev==='hb'){if(host)return;
+  if(m.set&&JSON.stringify(m.set)!==JSON.stringify(CL.set)){CL.set=m.set;if(CL.phase==='lobby'&&CL.sawHost)clRender()}
+  if(m.ph==='lobby'||!m.gid)return;
+  if(!CL.g||CL.g.gid!==m.gid){if(!CL.sawHost)return;CL.phase='play';CL.round=null;CL.g={gid:m.gid,order:m.order,names:m.names,lives:m.lives,score:m.score,set:m.gset,got:new Set(),res:null}}
+  if(m.r&&m.q&&(!CL.round||CL.round.r<m.r)&&!(m.res&&m.res.r===m.r&&m.res.over)&&m.el<m.dur*1000)clOn('q',{r:m.r,s:m.q.s,id:m.q.id,dur:m.dur,total:m.total,el:m.el});
+  if(m.res&&CL.round&&CL.round.r===m.res.r&&!CL.g.res)clOn('res',m.res);
+  if(m.end&&CL.phase!=='done')clOn('end',m.end);
+  return}
  if(ev==='lobby'){if(CL.phase==='lobby'&&!CL.g)return;if(!host){CL.phase='lobby';CL.g=null;CL.round=null}clClear();clRender();return}
  if(!CL.g)return;
- if(ev==='q'){if(CL.round&&CL.round.r>=m.r)return;CL.g.got=new Set();CL.g.res=null;CL.round={r:m.r,q:{s:m.s,id:m.id},dur:m.dur,total:m.total,t0:Date.now(),locked:null,tries:[]};clAsk();return}
+ if(ev==='q'){if(CL.round&&CL.round.r>=m.r)return;CL.g.got=new Set();CL.g.res=null;CL.round={r:m.r,q:{s:m.s,id:m.id},dur:m.dur,total:m.total,t0:Date.now()-(m.el||0),locked:null,tries:[]};clAsk();return}
  if(ev==='ans'){if(host&&CL.game&&m.r===CL.game.r&&!CL.game.ended&&CL.game.lives[m.k]>0&&!CL.game.ans[m.k]&&TIERS[m.t]){CL.game.ans[m.k]={t:m.t,a:String(m.a||'').slice(0,60)};clHostGot();clHostCheckRound()}return}
  if(ev==='got'){if(CL.round&&m.r===CL.round.r){CL.g.got=new Set(m.ks||[]);if(CL.g.got.has(clTab))clearInterval(CL.rs);clStrip()}return}
  if(ev==='res'){if(!CL.round||m.r!==CL.round.r||CL.g.res)return;clearInterval(CL.rs);clearInterval(CL.tm);Object.assign(CL.g,{lives:m.lives,score:m.score,res:m.res});clReveal(m);return}
- if(ev==='end'){if(CL.phase==='done')return;CL.phase='done';if(host)clTrack();clEnd(m);return}
+ if(ev==='end'){if(CL.phase==='done')return;CL.phase='done';if(host)clTrack(true);clEnd(m);return}
 }
 function clCountdown(){
  clClear();view='class';let n=3;
@@ -2807,7 +3023,7 @@ function clAsk(){
    const nn=[392,440,523,587,659,784,988];tone(nn[t-1],.1,'square',.05);tone(nn[t-1]*1.5,.14,'square',.05,.08);if(t>=6)tone(nn[t-1]*2,.2,'triangle',.04,.18);
    const send=()=>clSend('ans',{r:R.r,k:clTab,t,a:R.locked.a});send();clearInterval(CL.rs);CL.rs=setInterval(()=>{if(!CL||CL.round!==R||CL.g.res)return clearInterval(CL.rs);send()},1500);return}
   if(j.fix){const fixed=cap(j.a.name);inp.value=fixed;inp.classList.add('fixed');shake();inp.setSelectionRange(fixed.length,fixed.length);
-   fb.innerHTML=`<p class="fixmsg">DID YOU MEAN “${esc(fixed)}”?</p><p class="why">Press LOCK IT to confirm, or change it.</p>`;return}
+   fb.innerHTML=dymHtml(j,v,'LOCK IT');wireDym(fb,j,inp,stage.querySelector('#f'));return}
   R.tries.push(v);inp.value='';inp.classList.remove('fixed');shake();SFX.wrong();
   fb.innerHTML=`<p class="bad">✕ NOT VALID: “${esc(v)}”. TRY AGAIN</p>${j.note?`<p class="why">${esc(j.note)}</p>`:''}`};
 }
@@ -3273,11 +3489,14 @@ function ask(){
  stage.querySelector('#f').onsubmit=e=>{e.preventDefault();const v=inp.value.trim();if(!v)return;ensureAudio();const j=judge(p,v);
   if(j.ok){finish(j);return}
   if(j.fix){const fixed=cap(j.a.name);inp.value=fixed;inp.classList.add('fixed');shake();inp.setSelectionRange(fixed.length,fixed.length);
-   fb.innerHTML=`<p class="fixmsg">DID YOU MEAN “${esc(fixed)}”?</p><p class="why">${j.kind==='part'?`“${esc(v)}” isn’t on the list, but it contains “${esc(fixed)}”, which is.`:`Looks like a typo of “${esc(fixed)}”.`} Press DROP IT to confirm, or change it.</p>${tries.length?`<p class="tried">Tried: ${tries.map(esc).join(', ')}</p>`:''}`;return}
+   fb.innerHTML=dymHtml(j,v,'DROP IT')+(tries.length?`<p class="tried">Tried: ${tries.map(esc).join(', ')}</p>`:'');wireDym(fb,j,inp,stage.querySelector('#f'));return}
   tries.push(v);inp.value='';inp.classList.remove('fixed');shake();SFX.wrong();
   fb.innerHTML=`<p class="bad">✕ NOT VALID: “${esc(v)}”. TRY AGAIN</p>${j.note?`<p class="why">${esc(j.note)}</p>`:''}<p class="tried">Tried: ${tries.map(esc).join(', ')}</p>`};
  stage.querySelector('#pass').onclick=()=>finish(null);
 }
+// "did you mean": up to three tappable suggestions; nothing counts until the player picks one
+const dymHtml=(j,v,btn)=>{const c=j.cands||[j.a];return `<p class="fixmsg">DID YOU MEAN…</p><div class="dym">${c.map((a,i)=>`<button type="button" class="dyb${i?'':' on'}" data-dym="${i}">${esc(cap(a.name))}</button>`).join('')}</div><p class="why">${j.kind==='part'?`“${esc(v)}” isn’t on the list, but it contains “${esc(cap(c[0].name))}”, which is.`:`“${esc(v)}” isn’t on the list as typed.`} Tap one to confirm, press ${btn} for the first, or keep typing.</p>`};
+const wireDym=(root,j,inp,form)=>root.querySelectorAll('[data-dym]').forEach(b=>b.onclick=()=>{inp.value=cap((j.cands||[j.a])[+b.dataset.dym].name);if(form.requestSubmit)form.requestSubmit();else form.dispatchEvent(new Event('submit',{cancelable:true}))});
 function junkFor(k){return ''}
 // ---------- sound (made in the browser, no files) ----------
 let AC=null;
