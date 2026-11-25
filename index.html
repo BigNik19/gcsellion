@@ -419,6 +419,11 @@ tr.me td{color:var(--gold)}
 .clpp{display:flex;align-items:center;gap:10px;background:#0b0f1d;box-shadow:0 0 0 2px var(--line);padding:8px 12px 8px 8px;font-size:22px}
 .clpp i{font:12px var(--px);font-style:normal;width:30px;height:30px;display:grid;place-items:center;background:var(--cyan);color:#10131f}
 .clpp em{font:9px var(--px);font-style:normal;color:var(--gold);letter-spacing:.08em}.clpp em.yt{color:var(--cyan);background:none}.clpp.me{box-shadow:0 0 0 2px var(--cyan)}
+.clpp.bot i{background:#59648a;color:var(--ink)}.clpp em.bt{color:var(--dim)}
+.clx{margin-left:auto;background:none;border:0;color:var(--dim);font:22px/1 var(--vt);cursor:pointer;padding:0 4px}.clx:hover{color:var(--pink)}
+.clpub{margin-top:6px}.clpubh{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.clpubr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;width:100%;text-align:left;background:#0b0f1d;border:0;box-shadow:0 0 0 2px var(--line);padding:10px 14px;margin-top:8px;cursor:pointer;color:var(--ink);font:20px var(--vt)}
+.clpubr:hover{box-shadow:0 0 0 2px var(--pink)}.clpubr b{font:13px var(--px);color:var(--gold);letter-spacing:.12em}.clpubr span{color:var(--muted)}.clpubr em{font-style:normal;color:var(--cyan)}
 .clset{display:grid;gap:14px}.srow2{display:grid;gap:8px}
 .seg{display:flex;flex-wrap:wrap;gap:8px}
 .sg{border:0;cursor:pointer;min-width:56px;min-height:46px;padding:8px 14px;font:20px var(--vt);color:var(--muted);background:#0b0f1d;box-shadow:0 0 0 2px var(--line)}
@@ -1329,6 +1334,10 @@ function pushAll(){
    await syncDown();
    const body=JSON.parse(JSON.stringify(store)),row=scoreRow();
    let r=await sb.from('progress').upsert({user_id:ACC.id,data:body,updated_at:new Date().toISOString()});if(r.error)throw r.error;
+   // never drop what's already on today's leaderboard (another device may have saved something this one hasn't seen yet)
+   try{const cur=(await sb.from('scores').select('day,daily,best').eq('user_id',ACC.id).maybeSingle()).data;
+    if(cur){if(cur.day===row.day&&cur.daily){row.daily={...cur.daily,...row.daily};msAdopt(cur.daily.mk)}
+     if(cur.best)for(const k in cur.best)if(typeof cur.best[k]==='number'&&!(row.best[k]>=cur.best[k]))row.best[k]=cur.best[k]}}catch(e){}
    r=await sb.from('scores').upsert(row);if(r.error&&/stats/.test(r.error.message||'')){delete row.stats;r=await sb.from('scores').upsert(row)}if(r.error)throw r.error;
    if(log.length){r=await sb.from('answers').upsert(log.map(x=>({...x,user_id:ACC.id})),{onConflict:'user_id,subject,prompt,answer',ignoreDuplicates:true});if(r.error)console.warn(r.error)}
    if(runs.length){r=await sb.from('runs').insert(runs.map(x=>({...x,user_id:ACC.id})));if(r.error)console.warn(r.error)}
@@ -1552,7 +1561,43 @@ let clTab='';            // a fresh id for every connection, so a quick leave-an
 let clLeaving=Promise.resolve();
 const clName=()=>ACC.state==='in'?ACC.name:(store.clName||'');
 const clCode=()=>Array.from({length:4},()=>CL_ABC[Math.floor(Math.random()*CL_ABC.length)]).join('');
-const clDefSet=()=>({lives:3,max:30,time:15,qs:10,subs:[store.subject],tops:{},play:true});
+const clDefSet=()=>({lives:3,max:30,time:15,qs:10,subs:[store.subject],tops:{},play:true,pub:false});
+// bots: run by the host, answering with real answers from the game at a speed and rarity that fits their level
+const CL_BOT={e:{n:'Easy',miss:.3,w:{1:50,2:30,3:15,4:5},d:[.45,.9]},m:{n:'Medium',miss:.14,w:{1:18,2:30,3:28,4:17,5:7},d:[.3,.8]},
+ h:{n:'Hard',miss:.06,w:{2:12,3:24,4:30,5:26,6:8},d:[.2,.65]},x:{n:'Genius',miss:.02,w:{3:8,4:20,5:40,6:32},d:[.12,.5]}};
+const CL_BOTN=['Newton','Curie','Darwin','Faraday','Franklin','Mendel','Hooke','Dalton','Bohr','Pasteur','Kelvin','Galileo','Hawking','Fleming','Boyle','Joule','Ohm','Volta','Tesla','Lister','Watt','Maxwell','Rutherford','Hodgkin','Meitner','Turing','Avogadro','Mendeleev','Harvey','Jenner'];
+function clAddBot(lv){if(!CL||!CL.host)return;const used=new Set(clPlayers().map(p=>p.n)),free=CL_BOTN.filter(n=>!used.has(n));
+ const n=free.length?free[Math.floor(Math.random()*free.length)]:'Bot '+(clPlayers().length+1),k='bot'+Math.random().toString(36).slice(2,8);
+ CL.roster.set(k,{k,n,b:lv,at:Date.now(),seen:Date.now()})}
+function clBotPick(P,B){const tw=Object.entries(B.w);let x=Math.random()*tw.reduce((a,[,w])=>a+w,0),tier=+tw[0][0];for(const [t,w] of tw){if((x-=w)<=0){tier=+t;break}}
+ const ok=P.a.filter(a=>!a.ox),at=t=>ok.filter(a=>liveTier(P,a)===t);
+ for(let d=0;d<6;d++)for(const t of [tier-d,tier+d]){const l=at(t);if(t>=1&&t<=6&&l.length)return{a:l[Math.floor(Math.random()*l.length)],t}}return null}
+function clBotsRound(g,r){const P=clPrompt(g.cur);
+ for(const k of clAlive(g)){const p=CL.roster.get(k);if(!p||!p.b)continue;const B=CL_BOT[p.b],dur=g.set.time*1000,wait=dur*(B.d[0]+Math.random()*(B.d[1]-B.d[0]));
+  setTimeout(()=>{if(!CL||CL.game!==g||g.r!==r||g.ended)return;
+   if(Math.random()<B.miss){g.bm[k]=1;clHostCheckRound();return}   // this bot didn't know it
+   const c=clBotPick(P,B);if(!c){g.bm[k]=1;clHostCheckRound();return}clOnHost('ans',{k,r,t:c.t,a:cap(c.a.name)})},wait)}}
+// public rooms: hosts announce open public rooms on a shared channel; anyone on the Classroom screen can see and join them
+let clPub=null;const clPubRooms=new Map();
+function clPubCh(){if(clPub||!sb)return clPub;clPub=sb.channel('gcsellion-public',{config:{broadcast:{self:false}}});
+ clPub.on('broadcast',{event:'room'},({payload:m})=>{if(m&&m.code){clPubRooms.set(m.code,{...m,seen:Date.now()});clPubDraw()}});
+ clPub.on('broadcast',{event:'gone'},({payload:m})=>{if(m&&m.code){clPubRooms.delete(m.code);clPubDraw()}});
+ try{clPub.subscribe()}catch(e){}return clPub}
+const clPubList=()=>[...clPubRooms.values()].filter(r=>Date.now()-r.seen<11000&&r.n<r.max&&!(CL&&r.code===CL.code)).sort((a,b)=>b.n-a.n||a.at-b.at);
+function clPubDraw(){const el=document.getElementById('clpubl');if(!el)return;const l=clPubList();
+ el.innerHTML=l.length?l.map(r=>`<button class="clpubr" data-code="${esc(r.code)}"><b>${esc(r.code)}</b><span>${esc(r.host||'Someone')}’s room · ${(r.subs||[]).map(x=>SUBJ[x]?SUBJ[x].n:'').filter(Boolean).join(', ')}${r.bots?` · ${r.bots} bot${r.bots>1?'s':''}`:''}</span><em>${r.n}/${r.max}${r.auto!=null?' · starts in '+r.auto+'s':''}</em></button>`).join('')
+  :'<p class="note-s">No public games open right now. Quick play will start one for you.</p>';
+ el.querySelectorAll('[data-code]').forEach(b=>b.onclick=()=>{if(CL_NAMEOK())clJoin(b.dataset.code)})}
+let CL_NAMEOK=()=>true;
+function clBeacon(me){if(!me||CL!==me||!me.host||!me.set)return;const ch=clPubCh();if(!ch)return;
+ const open=me.set.pub&&me.phase==='lobby',ps=clPlayers().filter(p=>!(p.h&&!me.set.play));
+ try{if(open){ch.send({type:'broadcast',event:'room',payload:{code:me.code,n:ps.length,max:me.set.max,subs:me.set.subs,host:clName(),bots:ps.filter(p=>p.b).length,at:me.at,auto:me.autoAt?Math.max(0,Math.round((me.autoAt-Date.now())/1000)):null}});me.pubOn=true}
+  else if(me.pubOn){ch.send({type:'broadcast',event:'gone',payload:{code:me.code}});me.pubOn=false}}catch(e){}}
+// public rooms start by themselves 30s after a second real person joins, so nobody waits on an absent host
+function clAuto(me){if(CL!==me||!me.host)return;
+ const humans=clPlayers().filter(p=>!p.b&&!(p.h&&!me.set.play)).length,ps=clPlayers().filter(p=>!(p.h&&!me.set.play)).length;
+ if(me.phase==='lobby'&&me.set.pub&&humans>=2&&ps>=2&&clPool(me.set).length>=3){if(!me.autoAt){me.autoAt=Date.now()+30000;clHb();clBeacon(me)}else if(Date.now()>=me.autoAt){me.autoAt=null;clHostStart()}}
+ else if(me.autoAt){me.autoAt=null;clHb()}}
 const clTops=(set,s)=>set.tops&&set.tops[s]?set.tops[s]:Object.keys(SUBJ[s].packs);
 function clPool(set){const out=[];for(const s of set.subs){const on=new Set(clTops(set,s));for(const p of SUBJ[s].P)if(on.has(p.t)&&!isGen(p))out.push({s,id:p.id})}return out}
 const clPrompt=q=>SUBJ[q.s].P[q.id];
@@ -1570,7 +1615,9 @@ const clPlayers=()=>[...((CL&&CL.roster)||new Map()).values()].sort((a,b)=>a.at-
 const clClear=()=>{if(!CL)return;clearInterval(CL.tm);clearInterval(CL.rs)};
 const clHostClear=()=>{if(!CL)return;clearTimeout(CL.to);clearTimeout(CL.to2)};
 function clLeave(){
- if(!CL)return;const c=CL;clClear();clHostClear();clearInterval(c.hw);clearInterval(c.hb);clearInterval(c.pg);clearInterval(c.hi);clearInterval(c.sw);CL=null;
+ if(!CL)return;const c=CL;clClear();clHostClear();clearInterval(c.hw);clearInterval(c.hb);clearInterval(c.pg);clearInterval(c.hi);clearInterval(c.sw);clearInterval(c.pb);clearInterval(c.au);clearInterval(c.ac);
+ if(c.pubOn&&clPub)try{clPub.send({type:'broadcast',event:'gone',payload:{code:c.code}})}catch(e){}
+ CL=null;
  if(!c.host&&c.hch)try{const r=c.hch.httpSend?c.hch.httpSend('bye',{k:clTab}):c.hch.send({type:'broadcast',event:'bye',payload:{k:clTab}});if(r&&r.catch)r.catch(()=>{})}catch(e){}
  clLeaving=(async()=>{for(const ch of [c.ch,c.hch])if(ch)try{await sb.removeChannel(ch)}catch(e){}})();
 }
@@ -1588,12 +1635,19 @@ function classroom(pre,msg){
   <section class="card px" style="--c:var(--gold)"><p class="lbl" style="color:var(--gold)">Host</p><p>Make a room, pick the rules, then share the code.</p><button class="btn gold" id="mk" style="margin-top:16px">CREATE A ROOM</button></section>
   <section class="card px" style="--c:var(--cyan)"><p class="lbl" style="color:var(--cyan)">Join</p><p>Got a code? Type it in.</p>
    <form class="cljoin" id="jf" autocomplete="off"><input id="jc" maxlength="4" autocapitalize="characters" spellcheck="false" placeholder="CODE" value="${esc(pre||'')}" aria-label="Room code"><button class="btn">JOIN</button></form></section>
- </div>`;
+ </div>
+ <div class="rule"><span class="lbl">Public games</span></div>
+ <section class="card px clpub" style="--c:var(--pink)"><div class="clpubh"><p>Play with anyone who’s online, or fill a room with bots.</p><button class="btn" id="qp">QUICK PLAY</button></div><div id="clpubl"><p class="note-s">Looking for open games…</p></div></section>`;
  stage.querySelector('#hm').onclick=home;
+ clPubCh();clPubDraw();const pubT=setInterval(()=>{if(view!=='class'||CL||!document.getElementById('clpubl'))return clearInterval(pubT);clPubDraw()},2000);
  const nameOk=()=>{if(!guest)return true;const el=stage.querySelector('#cln'),v=el.value.trim(),pr=v?usernameProblem(v).replace('Usernames','Names').replace('username','name'):'Pick a name first.';
   const er=stage.querySelector('#clnerr');if(pr){er.textContent=pr;er.className='bad';er.style.animation='none';el.focus();return false}store.clName=v;saveLocal();return true};
  const jc=stage.querySelector('#jc');jc.oninput=()=>{jc.value=jc.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,4)};
+ CL_NAMEOK=nameOk;
  stage.querySelector('#mk').onclick=()=>{if(nameOk())clCreate()};
+ stage.querySelector('#qp').onclick=async()=>{if(!nameOk())return;clBusy('Looking for a public game…');const t0=Date.now();
+  while(Date.now()-t0<2500){const l=clPubList();if(l.length){clJoin(l[0].code);return}await new Promise(r=>setTimeout(r,250))}
+  if(view!=='class'||CL)return;clCreate('No public games were open, so you’re hosting one. Anyone on Quick play will join you, or add a bot and start now.',{pub:true})};
  stage.querySelector('#jf').onsubmit=e=>{e.preventDefault();const c=jc.value.trim();if(c.length!==4){jc.focus();return}if(nameOk())clJoin(c)};
  scrollTo(0,0);
 }
@@ -1616,21 +1670,24 @@ async function clConnect(code,host){
  else await sub(me.ch);
  if(CL!==me)throw new Error('left');
  me.ready=true;
+ me.ac=setInterval(()=>{const el=document.getElementById('clauto');if(!el||CL!==me)return;const t=me.host?me.autoAt:me.autoAtC;el.textContent=t?`Starting automatically in ${Math.max(0,Math.ceil((t-Date.now())/1000))}s`:''},500);
  if(host){
   const beat=()=>{if(CL!==me)return;clSend('hb',clSnap());me.hb=setTimeout(beat,clHbGap())};me.hb=setTimeout(beat,600);
   me.sw=setInterval(()=>clSweep(me),3000);
+  me.pb=setInterval(()=>clBeacon(me),3000);me.au=setInterval(()=>clAuto(me),1000);
  }else{
   const hi=()=>{if(CL===me&&!me.inRoom)clToHost('hi',{k:clTab,n:clName(),u:ACC.state==='in'?ACC.id:null,at:me.at})};hi();me.hi=setInterval(hi,2000);
   me.pg=setInterval(()=>{if(CL===me&&me.inRoom)clToHost('ping',{k:clTab})},5000);
   me.hw=setInterval(()=>{if(CL!==me||!me.sawHost)return;if(Date.now()-me.hostSeen>(me.phase==='lobby'?9000:13000)){clLeave();classroom('','The host left, so the room closed.')}},1000);
  }
 }
-async function clCreate(note){
+async function clCreate(note,opt){
  clBusy('Making a room…');
  try{await clConnect(clCode(),true)}catch(e){clLeave();classroom('','Couldn’t reach the Classroom server. Check your connection and try again.');return}
- SFX_cl.join();clRender();if(note)clNote(note);clHb();
+ if(opt&&opt.pub)CL.set.pub=true;
+ SFX_cl.join();clRender();if(note)clNote(note);clHb();clBeacon(CL);
  // in the background, make sure nobody else is already using this code (very rare); if they are, quietly move to a new one
- const me=CL;me.clash=false;setTimeout(()=>{if(CL===me&&me.clash&&me.roster.size<=1&&me.phase==='lobby'){clLeave();clCreate('That code was taken, so your room has a new one.')}},2500);
+ const me=CL;me.clash=false;setTimeout(()=>{if(CL===me&&me.clash&&me.roster.size<=1&&me.phase==='lobby'){const pub=me.set.pub;clLeave();clCreate('That code was taken, so your room has a new one.',{pub})}},2500);
 }
 function clNote(t){const el=document.createElement('p');el.className='why';el.style.color='var(--gold)';el.textContent=t;const c=stage.querySelector('.clcode');if(c)c.appendChild(el)}
 async function clJoin(code){
@@ -1657,7 +1714,7 @@ function clOnHost(ev,m){
 function clDropped(k){const g=CL.game;if(g&&CL.phase==='play'&&g.lives[k]>0){g.lives[k]=0;g.outAt[k]=g.r;g.left[k]=1;clHostCheckRound()}}
 // host: anyone silent for too long has gone
 function clSweep(me){if(CL!==me)return;const now=Date.now();let ch=false;
- for(const p of [...me.roster.values()]){if(p.h)continue;if(now-p.seen>(me.phase==='lobby'?16000:22000)){me.roster.delete(p.k);clDropped(p.k);ch=true}}
+ for(const p of [...me.roster.values()]){if(p.h||p.b)continue;if(now-p.seen>(me.phase==='lobby'?16000:22000)){me.roster.delete(p.k);clDropped(p.k);ch=true}}
  if(ch){clHb();if(me.phase==='lobby')clRender()}}
 // host: when lowering the player limit, the latest joiners have to leave
 function clTrim(){const ps=clPlayers().filter(p=>!(p.h&&!CL.set.play));for(const p of ps.slice(CL.set.max)){if(p.h)continue;CL.roster.delete(p.k);clSend('full',{k:p.k})}}
@@ -1666,7 +1723,7 @@ function clTrim(){const ps=clPlayers().filter(p=>!(p.h&&!CL.set.play));for(const
 function clSetText(set){
  if(!set)return '';
  const subs=set.subs.map(s=>{const all=Object.keys(SUBJ[s].packs).length,n=clTops(set,s).length;return SUBJ[s].n+(n<all?` (${n} topic${n>1?'s':''})`:'')}).join(', ');
- return `${set.lives} ${set.lives>1?'lives':'life'} · ${set.time}s per question · ${set.qs?set.qs+' questions':'until one is left'} · up to ${set.max} players · ${subs}`;
+ return `${set.pub?'Public · ':''}${set.lives} ${set.lives>1?'lives':'life'} · ${set.time}s per question · ${set.qs?set.qs+' questions':'until one is left'} · up to ${set.max} players · ${subs}`;
 }
 function clRender(){
  if(!CL)return;view='class';
@@ -1677,17 +1734,20 @@ function clRender(){
  const keep=document.activeElement&&document.activeElement.dataset?document.activeElement.dataset.k+'|'+document.activeElement.dataset.v:null,y=scrollY;
  stage.innerHTML=`<div class="hud"><span class="lbl pk">Classroom · ${host?'your room':'lobby'}</span><button class="link" id="lv">Leave room</button></div>
  <section class="card px clcode" style="--c:var(--gold)"><p class="lbl">Room code</p><div class="code">${CL.code.split('').map(c=>`<b>${c}</b>`).join('')}</div>
-  <p>${host?'Share this code so people can join.':'Waiting for the host to start…'}</p><div class="clbtns"><button class="btn alt" id="cpi">COPY INVITE LINK</button></div></section>
+  <p>${host?(set.pub?'Public room: people on Quick play can find it, or share the code.':'Share this code so people can join.'):'Waiting for the host to start…'}</p><div class="clbtns"><button class="btn alt" id="cpi">COPY INVITE LINK</button></div></section>
  <div class="rule"><span class="lbl">Players · ${n}${set?' / '+set.max:''}</span></div>
- <div class="clpl">${ps.map(p=>`<div class="clpp ${p.k===clTab?'me':''}"><i>${esc((p.n||'?').charAt(0).toUpperCase())}</i><span>${esc(p.n||'Player')}</span>${p.h?`<em>${set&&!set.play?'HOST · WATCHING':'HOST'}</em>`:''}${p.k===clTab?'<em class="yt">YOU</em>':''}</div>`).join('')}</div>
+ <div class="clpl">${ps.map(p=>`<div class="clpp ${p.k===clTab?'me':''} ${p.b?'bot':''}"><i>${p.b?'⚙':esc((p.n||'?').charAt(0).toUpperCase())}</i><span>${esc(p.n||'Player')}</span>${p.b&&CL_BOT[p.b]?`<em class="bt">BOT · ${CL_BOT[p.b].n.toUpperCase()}</em>`:''}${p.h?`<em>${set&&!set.play?'HOST · WATCHING':'HOST'}</em>`:''}${p.k===clTab?'<em class="yt">YOU</em>':''}${host&&p.b?`<button class="clx" data-rmbot="${p.k}" aria-label="Remove ${esc(p.n)}">×</button>`:''}</div>`).join('')}</div>
+ <p class="why" id="clauto" style="color:var(--gold)"></p>
  <div class="rule"><span class="lbl">Rules</span></div>
  ${host?`<div class="clset">
   ${seg('lives',CL_OPT.lives,'Lives')}${seg('time',CL_OPT.time,'Time')}${seg('qs',CL_OPT.qs,'Questions')}${seg('max',CL_OPT.max,'Max players')}
   <div class="srow2"><span class="lbl">Subjects</span><div class="seg">${Object.entries(SUBJ).map(([k,s])=>`<button class="sg ${set.subs.includes(k)?'on':''}" data-sub="${k}">${s.n}</button>`).join('')}</div></div>
   ${set.subs.map(s=>{const on=new Set(clTops(set,s));return `<div class="srow2 tops"><span class="lbl">${SUBJ[s].n} topics</span><div class="topics">${Object.entries(SUBJ[s].packs).map(([k,v])=>`<button class="chip ${on.has(k)?'on':''}" data-ts="${s}" data-tk="${k}">${v}</button>`).join('')}</div></div>`}).join('')}
   <div class="srow2"><span class="lbl">You</span><div class="seg"><button class="sg ${set.play?'on':''}" data-play="1">I’m playing</button><button class="sg ${!set.play?'on':''}" data-play="0">Just hosting</button></div></div>
+  <div class="srow2"><span class="lbl">Room</span><div class="seg"><button class="sg ${!set.pub?'on':''}" data-pub="0">Private · code only</button><button class="sg ${set.pub?'on':''}" data-pub="1">Public · anyone can join</button></div></div>
+  <div class="srow2"><span class="lbl">Add a bot</span><div class="seg">${Object.entries(CL_BOT).map(([k,b])=>`<button class="sg" data-bot="${k}" ${n>=set.max?'disabled':''}>+ ${b.n}</button>`).join('')}</div></div>
  </div>
- <p class="why">${pool} questions match these rules.${n<2?' You need at least 2 players to start.':''}</p>
+ <p class="why">${pool} questions match these rules.${n<2?' You need at least 2 players to start. On your own? Add a bot.':''}</p>
  <button class="btn gold clstart" id="go" ${canStart?'':'disabled'}>START${n>=2?` · ${n} PLAYERS`:''}</button>`
  :`<p class="why clsum">${esc(clSetText(set))||'Waiting for the host…'}</p>`}`;
  stage.querySelector('#lv').onclick=()=>{clLeave();classroom()};
@@ -1698,6 +1758,9 @@ function clRender(){
   stage.querySelectorAll('[data-sub]').forEach(b=>b.onclick=()=>{const k=b.dataset.sub,i=set.subs.indexOf(k);if(i>=0){if(set.subs.length>1)set.subs.splice(i,1)}else{set.subs.push(k);delete set.tops[k]}upd()});
   stage.querySelectorAll('[data-tk]').forEach(b=>b.onclick=()=>{const s=b.dataset.ts,k=b.dataset.tk,cur=new Set(clTops(set,s));if(cur.has(k)){if(cur.size>1)cur.delete(k)}else cur.add(k);set.tops[s]=[...cur];if(set.tops[s].length===Object.keys(SUBJ[s].packs).length)delete set.tops[s];upd()});
   stage.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>{set.play=b.dataset.play==='1';upd()});
+  stage.querySelectorAll('[data-pub]').forEach(b=>b.onclick=()=>{set.pub=b.dataset.pub==='1';upd();clBeacon(CL)});
+  stage.querySelectorAll('[data-bot]').forEach(b=>b.onclick=()=>{clAddBot(b.dataset.bot);SFX_cl.join();upd();clBeacon(CL)});
+  stage.querySelectorAll('[data-rmbot]').forEach(b=>b.onclick=()=>{CL.roster.delete(b.dataset.rmbot);upd();clBeacon(CL)});
   stage.querySelector('#go').onclick=clHostStart;
  }
  scrollTo(0,y);
@@ -1711,23 +1774,24 @@ function clHostStart(){
  for(const p of ps)names[p.k]=p.n||'Player';for(const k of order){lives[k]=set.lives;score[k]=0}
  const pool=shuffle(clPool(set));
  CL.game={order,names,lives,score,outAt,left:{},r:0,pool,ans:{},set:JSON.parse(JSON.stringify(set))};
- CL.phase='play';
+ CL.phase='play';CL.autoAt=null;clBeacon(CL);
  CL.game.gid=Math.random().toString(36).slice(2,8);clSend('start',{gid:CL.game.gid,order,names,lives,set:CL.game.set});clHb();
  CL.to=setTimeout(clHostNext,3200);
 }
 const clAlive=g=>g.order.filter(k=>g.lives[k]>0);
 function clHostNext(){
  const g=CL&&CL.game;if(!g)return;
- g.r++;g.ans={};g.ended=false;
+ g.r++;g.ans={};g.bm={};g.ended=false;
  const q=g.pool[(g.r-1)%g.pool.length];
  const msg={r:g.r,s:q.s,id:q.id,dur:g.set.time,total:g.set.qs};g.cur={s:q.s,id:q.id};g.qAt=Date.now();
  clSend('q',msg);clearTimeout(CL.to2);CL.to2=setTimeout(()=>{if(CL&&CL.game===g&&g.r===msg.r&&!g.ended)clSend('q',msg)},700);
  clearTimeout(CL.to);CL.to=setTimeout(()=>clHostEndRound(msg.r),g.set.time*1000+1200);
+ clBotsRound(g,msg.r);
 }
 let clGotAt=0,clGotT=null;
 function clHostGot(){const g=CL.game;const send=()=>{clGotAt=Date.now();clGotT=null;if(CL&&CL.game===g)clSend('got',{r:g.r,ks:Object.keys(g.ans)})};
  const gap=Math.max(600,clSize()*45);if(Date.now()-clGotAt>gap)send();else if(!clGotT)clGotT=setTimeout(send,gap-(Date.now()-clGotAt))}
-function clHostCheckRound(){const g=CL.game;if(!g||g.ended)return;if(clAlive(g).every(k=>g.ans[k])){clearTimeout(CL.to);CL.to=setTimeout(()=>clHostEndRound(g.r),700)}}
+function clHostCheckRound(){const g=CL.game;if(!g||g.ended)return;if(clAlive(g).every(k=>g.ans[k]||(g.bm&&g.bm[k]))){clearTimeout(CL.to);CL.to=setTimeout(()=>clHostEndRound(g.r),700)}}
 function clHostEndRound(r){
  const g=CL&&CL.game;if(!g||g.r!==r||g.ended)return;g.ended=true;
  const res={};
@@ -1739,7 +1803,7 @@ function clHostEndRound(r){
  CL.to=setTimeout(()=>{if(!CL||CL.game!==g)return;if(over){g.endMsg={order:g.order,names:g.names,lives:g.lives,score:g.score,outAt:g.outAt,r};clSend('end',g.endMsg)}else clHostNext()},over?2600:3600);
 }
 // everything a player needs to catch up if they missed a message
-function clSnap(){const g=CL.game,o={hk:clTab,set:CL.set,ph:CL.phase,roster:clPlayers().map(p=>({k:p.k,n:p.n,h:!!p.h,u:p.u||null}))};if(!g||CL.phase==='lobby')return o;
+function clSnap(){const g=CL.game,o={hk:clTab,set:CL.set,ph:CL.phase,roster:clPlayers().map(p=>({k:p.k,n:p.n,h:!!p.h,u:p.u||null,b:p.b||null})),auto:CL.autoAt?CL.autoAt-Date.now():null};if(!g||CL.phase==='lobby')return o;
  Object.assign(o,{gid:g.gid,order:g.order,names:g.names,lives:g.lives,score:g.score,gset:g.set});
  if(g.cur)Object.assign(o,{r:g.r,q:g.cur,dur:g.set.time,total:g.set.qs,el:Date.now()-g.qAt});
  if(g.lastRes&&g.lastRes.r===g.r)o.res=g.lastRes;if(g.endMsg)o.end=g.endMsg;return o}
@@ -1756,7 +1820,7 @@ function clOn(ev,m){
  if(ev==='hb'){if(host){if(m.hk&&m.hk!==clTab)CL.clash=true;return}
   if(!m.roster)return;
   const sig=JSON.stringify([m.roster,m.set]),changed=sig!==CL.sig;CL.sig=sig;
-  CL.roster=new Map(m.roster.map((p,i)=>[p.k,{...p,at:i}]));CL.set=m.set||CL.set;CL.sawHost=true;
+  CL.roster=new Map(m.roster.map((p,i)=>[p.k,{...p,at:i}]));CL.set=m.set||CL.set;CL.sawHost=true;CL.autoAtC=m.auto!=null?Date.now()+m.auto:null;
   if(!CL.inRoom&&CL.roster.has(clTab)){CL.inRoom=true;clearInterval(CL.hi);SFX_cl.join();if(CL.phase==='lobby')clRender()}
   else if(changed&&CL.inRoom&&CL.phase==='lobby')clRender();
   if(CL.phase==='play'&&changed)clStrip();
@@ -2595,6 +2659,9 @@ function msResume(){const st=(store.mk||{})[today()];if(!st||st.ms!=null||st.run
 document.addEventListener('visibilitychange',()=>{if(document.hidden)msPause();else if(view==='ms'&&document.querySelector('#mst'))msResume()});
 addEventListener('pagehide',msPause);
 let msTimer=null;
+// a Mark Scheme finished on another device counts here too
+function msAdopt(mk){if(!mk||typeof mk.t!=='number')return;store.mk=store.mk||{};const l=store.mk[today()];if(l&&l.ms!=null)return;
+ store.mk[today()]={ms:mk.t,h:mk.h||0,el:mk.t,run:null,got:msQ(today()).pts.map(()=>1),hs:[]};saveLocal();setTimeout(()=>{if(view==='home'&&document.getElementById('msm'))home();else if(view==='ms'&&!document.querySelector('#mst'))markScheme()},60)}
 function markScheme(){
  view='ms';navSubj();clearInterval(timer);G=null;scrollTo(0,0);
  const q=msQ(today()),st=msState(),no=msDay(today())+1;
@@ -2821,14 +2888,16 @@ document.getElementById('home').onclick=()=>{if(!clConfirmLeave())return;confirm
 navRender();home();
 setTimeout(initAccount,0);
 // keep a copy on the phone so the game opens instantly next time
-const BUILD='0e3a34ecf8';
+const BUILD='70bce0944a';let UPD_READY=false;
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
  navigator.serviceWorker.register('/sw.js').catch(()=>{});
  // a few seconds in, check whether a newer version has been published; if so, offer it
  const check=async()=>{try{const r=await fetch('/?v='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);
   if(!m||m[1]===BUILD||m[1]==='__BUILD__'||document.getElementById('upd'))return;
   const c=await caches.open('gcsellion-v1');await c.put('/',new Response(t,{headers:{'Content-Type':'text/html; charset=utf-8'}}));
-  const u=document.createElement('button');u.id='upd';u.className='updt px';u.innerHTML='<b>UPDATE READY</b>Tap to load the newest version';u.onclick=()=>location.reload();document.body.appendChild(u)}catch(e){}};
+  const u=document.createElement('button');u.id='upd';u.className='updt px';u.innerHTML='<b>UPDATE READY</b>Tap to load the newest version';u.onclick=()=>location.reload();document.body.appendChild(u);UPD_READY=true}catch(e){}};
+ // once a new version is ready, load it the next time the app comes back to the front, as long as nobody is mid-game
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&UPD_READY&&['home','locker','profile','stickers'].includes(view)&&!CL)location.reload()});
  setTimeout(check,3000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')check()});
 }
 {const rc=new URLSearchParams(location.search).get('room');if(rc&&/^[A-Za-z0-9]{4}$/.test(rc)){history.replaceState(null,'',location.pathname);setTimeout(()=>classroom(rc.toUpperCase()),50)}}
