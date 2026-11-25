@@ -408,6 +408,15 @@ tr.me td{color:var(--gold)}
 .clwin{text-align:center;margin-top:20px}.fin .clr .nm{flex:1 1 auto}.fin .clr .an{flex:none;white-space:nowrap;font-size:18px}
 .lbmore{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}.lbmore .note-s{margin:0}
 tr.flash td{animation:rowflash 1.6s ease-out}@keyframes rowflash{0%,40%{background:rgba(255,211,107,.35)}100%{background:transparent}}
+.rep{display:block;margin:14px auto 0;font-size:18px;color:var(--dim)}.rep:hover{color:var(--ink)}
+.repc{background:var(--panel);box-shadow:0 0 0 3px var(--gold),8px 8px 0 rgba(0,0,0,.4);padding:22px;width:min(520px,92vw);max-height:88vh;overflow:auto;display:grid;gap:12px;text-align:left}
+.repc .rq{font-size:21px;line-height:1.35;margin:0;color:var(--ink)}.repc textarea,.repc input{width:100%;font:20px var(--vt);background:#0b0f1d;color:var(--ink);border:0;box-shadow:0 0 0 2px var(--line);padding:10px 12px;resize:vertical;user-select:text;-webkit-user-select:text}
+.repc textarea:focus,.repc input:focus{outline:none;box-shadow:0 0 0 2px var(--cyan)}.repc .rk .sg{font-size:19px;text-align:left}.repc .clbtns{justify-content:flex-start;margin-top:4px}
+.htc{text-align:center}.htc h2{font:clamp(18px,4.5vw,24px) var(--px);color:var(--ink);margin:4px 0 0}.htc .clbtns{justify-content:center}.htc .rq{font-size:22px}
+.hart{display:flex;justify-content:center;padding:8px 0}.htd{display:flex;gap:8px;width:100%;max-width:340px}.htin{flex:1;font:24px var(--vt);background:#0b0f1d;box-shadow:0 0 0 2px var(--cyan);padding:8px 12px;text-align:left}
+.htbtn{font:11px var(--px);background:var(--cyan);color:#10131f;padding:12px 10px;display:flex;align-items:center}
+.htl{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}.hl{display:flex;align-items:center;gap:6px;font-size:18px;color:var(--c);box-shadow:0 0 0 2px var(--c);padding:4px 8px}.hl svg{width:20px;height:20px}
+.hart .tline{width:100%;max-width:340px}.htdots{display:flex;gap:8px;justify-content:center}.htdots i{width:10px;height:10px;background:var(--line)}.htdots i.on{background:var(--gold)}
 @keyframes quake{20%{transform:translate(0,6px)}40%{transform:translate(-4px,-3px)}60%{transform:translate(3px,2px)}80%{transform:translate(-1px,-1px)}}
 .out .card{margin-top:18px}
 .hint2{color:var(--muted);font-size:24px;margin:-12px 0 20px}
@@ -1043,7 +1052,7 @@ function mergeInto(remote){
  {const a=store.topAns,b=remote.topAns;if(b&&(!a||b.t>a.t||(b.t===a.t&&b.p>a.p)))store.topAns=b}
  store.stkDay=store.stkDay||{};for(const d in remote.stkDay||{}){const r=remote.stkDay[d],l=store.stkDay[d];
   if(l!==undefined&&l!==r&&d.split('~').length<3&&!store.stkDay[d+'~'+l])store.stkDay[d+'~'+l]=l;store.stkDay[d]=r}
- store.stkSeen=store.stkSeen||{};Object.assign(store.stkSeen,remote.stkSeen||{});
+ store.stkSeen=store.stkSeen||{};Object.assign(store.stkSeen,remote.stkSeen||{});if(remote.tut)store.tut=1;
  const seen=new Set(store.hist.map(h=>h.t));for(const h of remote.hist||[])if(!seen.has(h.t))store.hist.push(h);
  store.hist.sort((x,y)=>y.t-x.t);store.hist=store.hist.slice(0,60);
 }
@@ -1563,7 +1572,8 @@ function clReveal(m){
  const rows=list.map(k=>{const r=m.res[k],T=r.t?TIERS[r.t]:null;
   return `<div class="clr ${k===clTab?'me':''}" style="--c:${T?T.c:'#59648a'}"><span class="nm">${esc(g.names[k]||'Player')}</span><span class="an">${T?`${spr(ICON[T.i])}${esc(r.a)}`:'No answer'}</span><span class="pt">${T?'+'+T.p:(g.lives[k]>0?'−1 ♥':'OUT')}</span></div>`}).join('');
  const el=document.getElementById('clrev');
- if(el){el.innerHTML=`<div class="rule"><span class="lbl">Everyone’s answers</span></div><div class="clrows">${rows}</div>${extra}${m.over?'<p class="why">That’s the game…</p>':'<p class="why">Next question coming up…</p>'}`;el.scrollIntoView({behavior:reduced?'auto':'smooth',block:'nearest'})}
+ if(el){el.innerHTML=`<div class="rule"><span class="lbl">Everyone’s answers</span></div><div class="clrows">${rows}</div>${extra}${m.over?'<p class="why">That’s the game…</p>':'<p class="why">Next question coming up…</p>'}<button class="link rep" id="repq">⚑ Report this question</button>`;
+  el.querySelector('#repq').onclick=()=>reportQ(R.q.s,clPrompt(R.q),{tries:R.tries,answer:R.locked&&R.locked.a});el.scrollIntoView({behavior:reduced?'auto':'smooth',block:'nearest'})}
 }
 function clEnd(m){
  clClear();view='class';
@@ -1581,6 +1591,60 @@ function clEnd(m){
  scrollTo(0,0);
 }
 const SFX_cl={join(){ensureAudio();tone(523,.08,'square',.04);tone(784,.12,'square',.04,.08)}};
+
+// ---------- report a question ----------
+const REP_KINDS=[['wording','Confusing wording'],['should_count','My answer should count'],['shouldnt_count','An answer counted that shouldn’t'],['other','Something else']];
+function sendReports(){
+ if(!sb)return;let q=[];try{q=JSON.parse(localStorage.getItem('gcs-reports')||'[]')}catch(e){}
+ if(!q.length)return;const left=[];
+ Promise.all(q.map(r=>{try{return Promise.resolve(sb.from('reports').insert(r)).then(res=>{if(!res||res.error)left.push(r)},()=>left.push(r))}catch(e){left.push(r);return null}})).then(()=>{try{localStorage.setItem('gcs-reports',JSON.stringify(left.slice(-30)))}catch(e){}});
+}
+function reportQ(sk,p,ctx){
+ if(document.getElementById('rep'))return;
+ const tries=(ctx&&ctx.tries)||[],given=ctx&&ctx.answer;
+ const z=document.createElement('div');z.id='rep';z.className='zoom';
+ z.innerHTML=`<div class="repc px" role="dialog" aria-modal="true" aria-label="Report this question">
+  <p class="lbl" style="color:var(--gold)">Report this question</p><p class="rq">${esc(p.q)}</p>
+  <div class="seg rk">${REP_KINDS.map(([k,t],i)=>`<button class="sg${i?'':' on'}" data-k="${k}">${t}</button>`).join('')}</div>
+  <label class="lbl" for="repa" id="repal" style="display:none">Which answer?</label>
+  <input id="repa" maxlength="120" autocomplete="off" autocapitalize="off" spellcheck="false" style="display:none" placeholder="type the answer">
+  <label class="lbl" for="repn">Anything else? <span style="color:var(--dim)">(optional)</span></label>
+  <textarea id="repn" maxlength="400" rows="3" placeholder="e.g. the question could mean two things"></textarea>
+  <div class="clbtns"><button class="btn gold" id="repgo">SEND</button><button class="btn alt" id="repx">CANCEL</button></div></div>`;
+ document.body.appendChild(z);
+ let kind='wording';const a=z.querySelector('#repa'),al=z.querySelector('#repal');
+ const pick=k=>{kind=k;z.querySelectorAll('[data-k]').forEach(b=>b.classList.toggle('on',b.dataset.k===k));const need=k==='should_count'||k==='shouldnt_count';a.style.display=al.style.display=need?'':'none';
+  if(need&&!a.value)a.value=k==='should_count'?(tries[tries.length-1]||''):(given||'');if(need)a.focus()};
+ z.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>pick(b.dataset.k));
+ const close=()=>z.remove();z.querySelector('#repx').onclick=close;z.onclick=e=>{if(e.target===z)close()};
+ z.querySelector('#repgo').onclick=()=>{
+  const r={subject:sk,prompt:(p.key||p.q).slice(0,200),kind,answer:(a.style.display===''?a.value.trim():'').slice(0,200)||null,note:z.querySelector('#repn').value.trim().slice(0,500)||null};
+  let q=[];try{q=JSON.parse(localStorage.getItem('gcs-reports')||'[]')}catch(e){}q.push(r);try{localStorage.setItem('gcs-reports',JSON.stringify(q.slice(-30)))}catch(e){}
+  ensureAudio();tone(660,.08,'square',.04);tone(880,.1,'square',.04,.07);setTimeout(sendReports,0);
+  z.querySelector('.repc').innerHTML='<p class="lbl" style="color:var(--gold)">Thanks!</p><p class="rq">Your report has been sent. It helps make the questions better.</p><div class="clbtns"><button class="btn" id="repok">OK</button></div>';
+  z.querySelector('#repok').onclick=close;setTimeout(close,2200)};
+}
+setTimeout(sendReports,4000);   // anything that couldn't be sent last time
+
+// ---------- how to play (shown once to new players, and from the home screen) ----------
+function howTo(){
+ if(document.getElementById('howto-o'))return;
+ const ladder=TIERS.slice(1,7).map(t=>`<span class="hl" style="--c:${t.c}">${spr(ICON[t.i])}${t.n}</span>`).join('');
+ const P=[
+  ['NAME IT','Every prompt asks you to name something from the IGCSE science spec, like <b>“Name a vector quantity”</b>.<br><br>Type an answer and press DROP IT. Wrong answers bounce out, so keep trying.',`<div class="htd"><span class="htin">velocity</span><span class="htbtn">DROP IT</span></div>`],
+  ['RARER = DEEPER','Your answer drops into the bag. The fewer people who think of it, the deeper it sinks and the more points you get.',`<div class="htl">${ladder}</div>`],
+  ['BEAT THE CLOCK','You get <b>25 seconds</b> per prompt. The timer is always at the top of the screen. Seven prompts make a pack.<br><br>Finish your first pack each day to open a sticker pack.',`<div class="tline" style="margin:0"><div class="timer" style="grid-template-columns:repeat(10,1fr)">${'<i></i>'.repeat(7)+'<i class="off"></i>'.repeat(3)}</div><span class="tsec">18s</span></div>`]];
+ let i=0;const z=document.createElement('div');z.id='howto-o';z.className='zoom';document.body.appendChild(z);
+ const done=()=>{store.tut=1;saveLocal();pushAll();z.remove()};
+ const draw=()=>{const [h,t,art]=P[i];
+  z.innerHTML=`<div class="repc htc px" role="dialog" aria-modal="true" aria-label="How to play"><p class="lbl" style="color:var(--gold)">How to play · ${i+1}/${P.length}</p><h2>${h}</h2><div class="hart">${art}</div><p class="rq">${t}</p>
+   <div class="htdots">${P.map((_,k)=>`<i class="${k===i?'on':''}"></i>`).join('')}</div>
+   <div class="clbtns">${i?'<button class="btn alt" id="htb">BACK</button>':''}<button class="btn gold" id="htn">${i<P.length-1?'NEXT':'LET’S PLAY'}</button></div>${i<P.length-1?'<button class="link" id="hts">Skip</button>':''}</div>`;
+  z.querySelector('#htn').onclick=()=>{ensureAudio();tone(523+i*120,.08,'square',.04);if(i<P.length-1){i++;draw()}else done()};
+  const b=z.querySelector('#htb');if(b)b.onclick=()=>{i--;draw()};const sk=z.querySelector('#hts');if(sk)sk.onclick=done;
+  z.querySelector('#htn').focus({preventScroll:true})};
+ draw();
+}
 // ---------- sticker book: a real book ----------
 let bookFin=null,bookAnims=[],bookPage=0,bookBusy=false,bookBack='home',bookWide=null,bookResize=null;
 const RM=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1979,7 +2043,7 @@ function home(){
  {const nw=pendingSticker();if(nw.length){popQ.push(...nw);saveLocal();pushAll()}}
  if(popQ.length)setTimeout(()=>{if(view==='home'&&popQ.length)showPack(popQ[0],book=>{popDone();navRender();if(!book&&popQ.length&&view==='home')home()})},350);
  stage.innerHTML=`<div class="banner px">${banner}</div>
- <section class="hero">${spr(BAG,'bagart')}<div><p class="lbl pk">${sj.n} · ${sj.code} · day #${dayNo()}</p><h1 style="margin-top:12px">THE DAILY PACK</h1><p class="sub">7 prompts · 25 seconds each · rarer answers sink deeper into the bag</p></div></section>
+ <section class="hero">${spr(BAG,'bagart')}<div><p class="lbl pk">${sj.n} · ${sj.code} · day #${dayNo()}</p><h1 style="margin-top:12px">THE DAILY PACK</h1><p class="sub">7 prompts · 25 seconds each · rarer answers sink deeper into the bag</p><button class="link" id="howto">How to play</button></div></section>
  <div class="modes"><button class="mode px main" id="daily"><b>DAILY PACK</b><span>${d!=null?`Today: ${d} pts · ${rankOf(d)[1]}. Replay for practice.`:`Same seven ${sj.n} prompts for everyone today.`}</span></button>
  <button class="mode px" id="unl"><b>UNLIMITED</b><span>A fresh random pack from ${pool().length} prompts.</span></button>
  <button class="mode px clmode" id="cls"><b>CLASSROOM <i class="newt">NEW</i></b><span>Live rooms with a 4-letter code. 1v1 your friends or take on the whole class.</span></button></div>
@@ -1992,6 +2056,8 @@ function home(){
  const bl=stage.querySelector('#bLock');if(bl)bl.onclick=locker;
  stage.querySelector('#daily').onclick=()=>start('daily',pickSeven(pool(),rng(store.subject+today())));
  stage.querySelector('#unl').onclick=()=>start('unlimited',pickSeven(pool()));
+ stage.querySelector('#howto').onclick=howTo;
+ if(!store.tut&&!popQ.length&&Object.values(store.subj).every(x=>!x.dives))setTimeout(()=>{if(view==='home'&&!store.tut)howTo()},500);
  stage.querySelector('#cls').onclick=()=>classroom();
  stage.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>start('topic',topicPick(b.dataset.t),b.dataset.t));
  const p2=stage.querySelector('#p2');if(p2)p2.onchange=e=>{store.p2=e.target.checked;saveLocal();home()};
@@ -2117,11 +2183,13 @@ function reveal(p,j,tries,timedOut){
   ${j?`<p class="why">${tier.d}</p>${liveNote(p,j.a)}`:''}
   ${tries.length?`<p class="tried">Bounced out: ${tries.map(esc).join(', ')}</p>`:''}
   <div class="sbtns"><button class="btn" id="nx">${last?'EMPTY THE BAG':'NEXT PROMPT'}</button><button class="btn alt" id="all">SEE EVERY ANSWER (${shown})</button></div>
+  <button class="link rep" id="repq">⚑ Report this question</button>
   <div class="sall" id="sall"><div class="alist">${groups.map(listHtml).join('')}</div></div>
  </div></div>`;
  const dive=stage.querySelector('#dive'),note=stage.querySelector('#note'),ly=stage.querySelector('#ly'),layers=[...ly.children],stamp=stage.querySelector('#dstamp'),depthc=stage.querySelector('#depthc'),dm=stage.querySelector('#dm'),skip=stage.querySelector('#skip'),sheet=stage.querySelector('#sheet');
  const go=()=>{G.i++;G.i<G.list.length?ask():end()};
  stage.querySelector('#nx').onclick=go;
+ stage.querySelector('#repq').onclick=()=>reportQ(store.subject,p,{tries,answer:j?j.a.name:null});
  stage.querySelector('#all').onclick=e=>{sheet.classList.toggle('open');e.target.textContent=sheet.classList.contains('open')?'HIDE ANSWERS':`SEE EVERY ANSWER (${shown})`};
  const openSheet=()=>{sheet.classList.add('show');skip.remove();if(j){const ct=stage.querySelector('#ct');let v=0;const step=()=>{v=Math.min(pts,v+Math.ceil(pts/24));ct.textContent=v;if(v<pts)requestAnimationFrame(step)};reduced?ct.textContent=pts:step()}stage.querySelector('#nx').focus({preventScroll:true})};
  const absTop=el=>el.getBoundingClientRect().top+window.scrollY;
