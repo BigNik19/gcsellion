@@ -225,6 +225,9 @@ button{font-family:inherit;color:inherit}
 .pip{width:18px;height:10px;background:var(--line)}
 .pip.d{background:var(--cyan)}.pip.n{background:var(--pink)}
 .score{font:14px var(--px);color:var(--gold)}
+.playbar{position:sticky;top:0;z-index:20;background:rgba(13,17,32,.94);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:8px 0 6px;margin:0 -2px 6px}
+.playbar .hud{margin:0}.tline{display:flex;align-items:center;gap:10px;margin-top:10px}.tline .timer{flex:1;margin:0}
+.tsec{font:12px var(--px);color:var(--cyan);min-width:3.2em;text-align:right}.tsec.low{color:var(--pink);animation:blink .5s steps(2) infinite}
 .timer{display:grid;grid-template-columns:repeat(25,minmax(0,1fr));gap:3px;margin:16px 0 6px;height:12px}
 .timer i{background:var(--cyan)}
 .timer i.off{background:var(--line)}
@@ -1519,7 +1522,7 @@ function clAsk(){
  clClear();view='class';
  const R=CL.round,p=clPrompt(R.q),sj=SUBJ[R.q.s],g=CL.g,playing=clIn();
  stage.innerHTML=`<div class="hud"><span class="lbl pk">Classroom · ${CL.code}</span><span class="lbl">Question ${R.r}${R.total?'/'+R.total:''}</span></div>
- <div class="timer" id="tm" style="grid-template-columns:repeat(${R.dur},minmax(0,1fr))">${'<i></i>'.repeat(R.dur)}</div>
+ <div class="playbar cl"><div class="tline"><div class="timer" id="tm" style="grid-template-columns:repeat(${R.dur},minmax(0,1fr))">${'<i></i>'.repeat(R.dur)}</div><span class="tsec" id="tsec">${R.dur}s</span></div></div>
  <div class="clstrip" id="clstrip">${clStripHtml()}</div>
  <section class="qcard px"><p class="spec">${sj.n.toUpperCase()} · ${esc((sj.packs[p.t]||'').toUpperCase())}</p>
  <h2 class="q" style="font:inherit;font-size:clamp(28px,4.6vw,42px)">${esc(p.q)}</h2>${p.hint?`<p class="hint2">${esc(p.hint)}</p>`:''}
@@ -1528,7 +1531,8 @@ function clAsk(){
  :`<div class="fb"><p class="why">${g.order.includes(clTab)?'You’re out, so you’re watching this one.':'You’re hosting, so you’re watching.'}</p></div>`}</section>
  <div id="clrev"></div>`;
  const tm=stage.querySelector('#tm'),segs=[...tm.children];
- CL.tm=setInterval(()=>{const left=R.dur-(Date.now()-R.t0)/1000;const on=Math.max(0,Math.ceil(left));segs.forEach((s,k)=>s.classList.toggle('off',k>=on));tm.classList.toggle('low',left<5);
+ const tsec=stage.querySelector('#tsec');
+ CL.tm=setInterval(()=>{const left=R.dur-(Date.now()-R.t0)/1000;const on=Math.max(0,Math.ceil(left));segs.forEach((s,k)=>s.classList.toggle('off',k>=on));tm.classList.toggle('low',left<5);if(tsec){tsec.textContent=on+'s';tsec.classList.toggle('low',left<5)}
   if(left<=0){clearInterval(CL.tm);const f=stage.querySelector('#f');if(f&&!R.locked){f.querySelector('input').disabled=true;f.querySelector('button').disabled=true;stage.querySelector('#fb').innerHTML='<p class="bad" style="animation:none">TIME’S UP</p>'}}},100);
  if(!playing)return;
  const inp=stage.querySelector('#in'),fb=stage.querySelector('#fb');inp.focus({preventScroll:true});
@@ -1997,20 +2001,21 @@ function start(mode,list,topic){if(!list.length)return;view='play';G={mode,list,
 const hud=()=>`<div class="hud"><div class="pips">${G.list.map((_,k)=>`<span class="pip ${k<G.i?'d':k===G.i?'n':''}"></span>`).join('')}</div><span class="lbl">Prompt ${G.i+1}/${G.list.length}</span><span class="score">${G.score} PTS</span></div>`;
 function ask(){
  const p=G.list[G.i],tries=[];const t0=Date.now();fetchCounts(G.subject,p);
- stage.innerHTML=`${hud()}<div class="timer" id="tm">${'<i></i>'.repeat(25)}</div>
+ stage.innerHTML=`<div class="playbar">${hud()}<div class="tline"><div class="timer" id="tm">${'<i></i>'.repeat(25)}</div><span class="tsec" id="tsec">25s</span></div></div>
  <section class="qcard px"><p class="spec">${S().n.toUpperCase()} · ${esc((S().packs[p.t]||'').toUpperCase())} · ${specTxt(p)}${p.p2?' · PAPER 2':''}</p>
  <h2 class="q" style="font:inherit;font-size:clamp(30px,5vw,46px)">${esc(p.q)}</h2>${p.hint?`<p class="hint2">${esc(p.hint)}</p>`:''}
  <form class="ans" id="f" autocomplete="off"><input id="in" autocapitalize="off" spellcheck="false" placeholder="type an answer…" aria-label="Your answer"><button class="btn">DROP IT</button></form>
  <div class="fb" id="fb"><p class="why">One answer goes in the bag. Wrong ones bounce out, so keep trying until time runs out.</p></div>
  <button class="link" id="pass">Pass</button></section>`;
  const inp=stage.querySelector('#in'),fb=stage.querySelector('#fb'),tm=stage.querySelector('#tm'),segs=[...tm.children];
- inp.focus();
- const shake=()=>{inp.classList.remove('shake');void inp.offsetWidth;inp.classList.add('shake');inp.focus()};
+ inp.focus({preventScroll:true});
+ const shake=()=>{inp.classList.remove('shake');void inp.offsetWidth;inp.classList.add('shake');inp.focus({preventScroll:true})};
  const finish=(j,out)=>{clearInterval(timer);reveal(p,j,tries,out)};
  let asked=null;   // the text we last offered suggestions for: sending it again means "no, I meant what I typed"
  inp.oninput=()=>inp.classList.remove('fixed');
  clearInterval(timer);
- timer=setInterval(()=>{const left=25-(Date.now()-t0)/1000;if(left<=0){finish(null,true);return}const on=Math.ceil(left);segs.forEach((s,k)=>s.classList.toggle('off',k>=on));tm.classList.toggle('low',left<8)},100);
+ const tsec=stage.querySelector('#tsec');
+ timer=setInterval(()=>{const left=25-(Date.now()-t0)/1000;if(left<=0){finish(null,true);return}const on=Math.ceil(left);segs.forEach((s,k)=>s.classList.toggle('off',k>=on));tm.classList.toggle('low',left<8);tsec.textContent=on+'s';tsec.classList.toggle('low',left<8)},100);
  stage.querySelector('#f').onsubmit=e=>{e.preventDefault();const v=inp.value.trim();if(!v)return;ensureAudio();const j=judge(p,v);
   if(j.ok){finish(j);return}
   if(j.fix&&norm(v)!==asked){asked=norm(v);inp.classList.add('fixed');shake();
