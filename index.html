@@ -44,6 +44,8 @@ img,svg{-webkit-user-drag:none}
 .book.single{grid-template-columns:1fr;height:640px;padding:10px 10px 10px 16px}
 .book.closed{transform:translateX(-25%);background:transparent;box-shadow:none}
 .book.closed .bk-l,.book.closed .bk-r,.book.closed .bk-spine{visibility:hidden}
+.book.opening{background:linear-gradient(90deg,transparent 50%,#7a2534 50%);box-shadow:none}
+.book.opening .bk-l,.book.opening .bk-spine{visibility:hidden}
 .book.closed .bk-flip.cover{filter:drop-shadow(10px 12px 0 rgba(0,0,0,.35))}
 .bk-pg{position:relative;overflow:hidden}
 .bk-spine{position:absolute;left:50%;top:12px;bottom:12px;width:28px;transform:translateX(-50%);background:linear-gradient(90deg,rgba(0,0,0,0),rgba(60,30,20,.28) 45%,rgba(60,30,20,.28) 55%,rgba(0,0,0,0));pointer-events:none;z-index:2}
@@ -421,6 +423,10 @@ tr.flash td{animation:rowflash 1.6s ease-out}@keyframes rowflash{0%,40%{backgrou
 .bootbag{width:56px;height:56px;margin:0 auto;background:var(--pink);box-shadow:inset 0 -14px 0 #b8325a,0 -8px 0 -2px var(--gold);animation:pbob 1.2s ease-in-out infinite}
 .updt{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:300;border:0;cursor:pointer;background:var(--gold);color:#10131f;font:20px/1.2 var(--vt);padding:12px 18px;box-shadow:0 0 0 3px #10131f,6px 6px 0 rgba(0,0,0,.4);text-align:left;max-width:92vw}
 .updt b{display:block;font:11px var(--px);letter-spacing:.08em;margin-bottom:4px}
+.stktip{position:absolute;z-index:120;width:min(300px,86vw);background:var(--gold);color:#10131f;font:20px/1.25 var(--vt);padding:12px 14px 10px;box-shadow:0 0 0 3px #10131f,6px 6px 0 rgba(0,0,0,.4);animation:tipin .3s cubic-bezier(.2,1.4,.4,1)}
+.stktip::before{content:'';position:absolute;top:-12px;left:calc(var(--ax,28px) - 10px);border:10px solid transparent;border-top:0;border-bottom:12px solid var(--gold)}
+.stktip b{display:block;font:10px var(--px);letter-spacing:.08em;margin-bottom:5px}.stktip .link{display:block;margin-top:6px;color:#10131f;font-size:18px}
+.stktip.out{opacity:0;transform:translateY(-6px);transition:.25s}@keyframes tipin{from{opacity:0;transform:translateY(8px) scale(.95)}}
 @keyframes quake{20%{transform:translate(0,6px)}40%{transform:translate(-4px,-3px)}60%{transform:translate(3px,2px)}80%{transform:translate(-1px,-1px)}}
 .out .card{margin-top:18px}
 .hint2{color:var(--muted);font-size:24px;margin:-12px 0 20px}
@@ -1056,7 +1062,7 @@ function mergeInto(remote){
  {const a=store.topAns,b=remote.topAns;if(b&&(!a||b.t>a.t||(b.t===a.t&&b.p>a.p)))store.topAns=b}
  store.stkDay=store.stkDay||{};for(const d in remote.stkDay||{}){const r=remote.stkDay[d],l=store.stkDay[d];
   if(l!==undefined&&l!==r&&d.split('~').length<3&&!store.stkDay[d+'~'+l])store.stkDay[d+'~'+l]=l;store.stkDay[d]=r}
- store.stkSeen=store.stkSeen||{};Object.assign(store.stkSeen,remote.stkSeen||{});if(remote.tut)store.tut=1;
+ store.stkSeen=store.stkSeen||{};Object.assign(store.stkSeen,remote.stkSeen||{});if(remote.tut)store.tut=1;if(remote.tipStk)store.tipStk=1;
  const seen=new Set(store.hist.map(h=>h.t));for(const h of remote.hist||[])if(!seen.has(h.t))store.hist.push(h);
  store.hist.sort((x,y)=>y.t-x.t);store.hist=store.hist.slice(0,60);
 }
@@ -1237,6 +1243,7 @@ const PACKMAP=["g.g.g.g.g.g.g.","gggggggggggggg","gddddddddddddg","gpppppppppppp
 const PACKPAL={g:'#ffd36b',d:'#b8892e',p:'#3a2f6b',W:'#fffbe6'};
 const packSvg=(from,to)=>{const rows=PACKMAP.slice(from,to);return `<svg viewBox="0 0 14 ${rows.length}" shape-rendering="crispEdges" aria-hidden="true">${rows.map((r,y)=>[...r].map((c,x)=>c==='.'?'':`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${PACKPAL[c]}"/>`).join('')).join('')}</svg>`};
 function showPack(info,onDone){
+ const done0=onDone;onDone=book=>{if(done0)done0(book);if(!book)setTimeout(stkTip,400)};
  if(document.getElementById('mpack'))return;
  const s=info.s,r=RAR[s.r],R=s.r,rm=RM();
  const z=document.createElement('div');z.id='mpack';z.className='zoom';
@@ -1649,6 +1656,21 @@ function howTo(){
   z.querySelector('#htn').focus({preventScroll:true})};
  draw();
 }
+
+// one-time tip: the apple opens your sticker book and shows your streak
+function stkTip(){
+ if(store.tipStk||document.getElementById('stktip'))return;
+ const a=document.getElementById('stk');if(!a||document.querySelector('.zoom'))return;
+ store.tipStk=1;saveLocal();pushAll();
+ const t=document.createElement('div');t.id='stktip';t.className='stktip px';t.setAttribute('role','status');
+ t.innerHTML='<b>YOUR STICKER BOOK</b>Tap the apple any time to see your stickers and your day streak.<button class="link" id="stkok">Got it</button>';
+ document.body.appendChild(t);
+ const place=()=>{const r=a.getBoundingClientRect();t.style.left=Math.max(10,Math.min(innerWidth-t.offsetWidth-10,r.left+r.width/2-28))+'px';t.style.top=(r.bottom+scrollY+14)+'px';t.style.setProperty('--ax',(r.left+r.width/2-parseFloat(t.style.left))+'px')};
+ place();addEventListener('resize',place);
+ const bye=()=>{removeEventListener('resize',place);t.classList.add('out');setTimeout(()=>t.remove(),250)};
+ t.querySelector('#stkok').onclick=bye;a.addEventListener('click',bye,{once:true});setTimeout(()=>{if(document.body.contains(t))bye()},12000);
+ a.classList.add('bump');
+}
 // ---------- sticker book: a real book ----------
 let bookFin=null,bookAnims=[],bookPage=0,bookBusy=false,bookBack='home',bookWide=null,bookResize=null;
 const RM=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1707,16 +1729,17 @@ function drawBook(withCover){
    const cv=document.createElement('div');cv.className='bk-flip cover r';
    cv.innerHTML=`<div class="face front">${bookCover()}</div><div class="face back">${P[0]}</div>`;
    book.appendChild(cv);book.classList.add('closed');
-   setTimeout(()=>{book.classList.remove('closed');SFX_book('open');
+   // the left side stays empty until the cover swings over and becomes it, like a real book
+   setTimeout(()=>{book.classList.remove('closed');book.classList.add('opening');SFX_book('open');
     const a=cv.animate([{transform:'rotateY(0deg)'},{transform:'rotateY(-180deg)'}],{duration:750,easing:'cubic-bezier(.5,.05,.3,1)',fill:'forwards'});
-    a.onfinish=()=>{L.innerHTML=P[0];cv.remove();bookBusy=false}},300);
+    a.onfinish=()=>{L.innerHTML=P[0];book.classList.remove('opening');cv.remove();bookBusy=false}},150);
   }else{
    const cv=document.createElement('div');cv.className='bk-flip cover r single';
    cv.innerHTML=`<div class="face front">${bookCover()}</div><div class="face back">${BLANK}</div>`;
    book.appendChild(cv);
    setTimeout(()=>{SFX_book('open');
     const a=cv.animate([{transform:'rotateY(0deg)',opacity:1},{transform:'rotateY(-100deg)',opacity:1,offset:.8},{transform:'rotateY(-120deg)',opacity:0}],{duration:700,easing:'cubic-bezier(.5,.05,.3,1)',fill:'forwards'});
-    a.onfinish=()=>{cv.remove();bookBusy=false}},300);
+    a.onfinish=()=>{cv.remove();bookBusy=false}},150);
   }
  }
  clearTimeout(bookResize);
@@ -2062,6 +2085,7 @@ function home(){
  stage.querySelector('#unl').onclick=()=>start('unlimited',pickSeven(pool()));
  stage.querySelector('#howto').onclick=howTo;
  if(!store.tut&&!popQ.length&&Object.values(store.subj).every(x=>!x.dives))setTimeout(()=>{if(view==='home'&&!store.tut)howTo()},500);
+ else if(!store.tipStk&&!popQ.length&&Object.keys(store.stkDay||{}).length)setTimeout(()=>{if(view==='home'&&!popQ.length)stkTip()},900);
  stage.querySelector('#cls').onclick=()=>classroom();
  stage.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>start('topic',topicPick(b.dataset.t),b.dataset.t));
  const p2=stage.querySelector('#p2');if(p2)p2.onchange=e=>{store.p2=e.target.checked;saveLocal();home()};
@@ -2412,7 +2436,7 @@ document.getElementById('home').onclick=()=>{if(!clConfirmLeave())return;confirm
 navRender();home();
 setTimeout(initAccount,0);
 // keep a copy on the phone so the game opens instantly next time
-const BUILD='b786e17823';
+const BUILD='916959d134';
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
  navigator.serviceWorker.register('/sw.js').catch(()=>{});
  // a few seconds in, check whether a newer version has been published; if so, offer it
