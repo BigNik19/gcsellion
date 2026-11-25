@@ -990,6 +990,19 @@ const S=()=>SUBJ[store.subject];
 const pool=()=>S().P.filter(p=>!S().p2||store.p2||!p.p2);
 const isGen=p=>/^Name (a word used in|any word from)/.test(p.key||p.q);
 function pickSeven(list,r){const s=shuffle(list,r),out=[],used=new Set();const add=p=>{out.push(p);used.add(p.t)};for(const p of s)if(isGen(p)&&out.filter(isGen).length<2&&!used.has(p.t))add(p);for(const p of s)if(out.length<7&&!isGen(p)&&!used.has(p.t))add(p);for(const p of s)if(out.length<7&&!out.includes(p))out.push(p);return shuffle(out,r)}
+const NEWDAILY='2026-11-26';
+function dailyList(){
+ // a question can't come back until every other question has had its turn in a daily pack
+ const P=pool(),sk=store.subject,t=today(),W=Math.max(1,Math.floor(P.length/7)-1),hist=[];
+ if(t<NEWDAILY)return pickSeven(P,rng(sk+t));
+ for(let d='2026-11-23';d<NEWDAILY;d=shiftDay(d,1))hist.push(pickSeven(P,rng(sk+d)));   // packs from before the switch
+ for(let d=NEWDAILY;;d=shiftDay(d,1)){
+  const recent=new Set(hist.slice(-W).flat());
+  const out=pickSeven(P.filter(p=>!recent.has(p)),rng(sk+d));
+  if(d>=t)return out;
+  hist.push(out);
+ }
+}
 const topicPick=t=>{const l=shuffle(pool().filter(p=>p.t===t));const g=l.filter(isGen),o=l.filter(p=>!isGen(p));return shuffle(g.concat(o).slice(0,7))};
 const rankOf=s=>{let r=RANKS[0];for(const x of RANKS)if(s>=x[0])r=x;return r};
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1113,12 +1126,15 @@ async function initAccount(){
  catch(e){clearTimeout(slow);ACC.state='out';navRender();rerender()}
 }
 const rerender=()=>view==='class'?(CL?null:classroom()):view==='locker'?locker():view==='home'?home():view==='stickers'?stickers(true):view==='profile'?profile(profUid):null;
+const OFF_SUBJ=['locker','profile','stickers'];
+const subjOn=k=>k===store.subject&&!OFF_SUBJ.includes(view);
+const navSubj=()=>document.querySelectorAll('#nav [data-s]').forEach(b=>{const on=subjOn(b.dataset.s);b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
 function navRender(){
  const ini=ACC.state==='in'?esc((ACC.name||'?').trim().charAt(0).toUpperCase()):'?';
  const sk=streakInfo();
- document.getElementById('nav').innerHTML=`<button class="stk ${sk.todayDone?'on':''}" id="stk" title="${sk.cur} day streak · sticker book" aria-label="${sk.cur} day streak, open sticker book">${spr(STICK.apple)}${sk.cur}</button>`+Object.entries(SUBJ).map(([k,s])=>`<button class="tag ${k===store.subject?'on':''}" data-s="${k}" aria-pressed="${k===store.subject}">${s.n.toUpperCase()}</button>`).join('')+
+ document.getElementById('nav').innerHTML=`<button class="stk ${sk.todayDone?'on':''}" id="stk" title="${sk.cur} day streak · sticker book" aria-label="${sk.cur} day streak, open sticker book">${spr(STICK.apple)}${sk.cur}</button>`+Object.entries(SUBJ).map(([k,s])=>`<button class="tag ${subjOn(k)?'on':''}" data-s="${k}" aria-pressed="${subjOn(k)}">${s.n.toUpperCase()}</button>`).join('')+
  `<button class="tag" id="sndBtn" aria-pressed="${sfxOn()}">SOUND ${sfxOn()?'ON':'OFF'}</button>`+`<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='in'?'LOCKER':ACC.state==='checking'?'…':'LOG IN'}${ACC.state==='in'&&ACC.reqs?`<b class="rdot" title="${ACC.reqs} friend request${ACC.reqs>1?'s':''}">${ACC.reqs}</b>`:''}</button>`;
- document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(G&&!confirmLeave())return;if(!clConfirmLeave())return;store.subject=b.dataset.s;saveLocal();navRender();view==='locker'?locker():home()});
+ document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(G&&!confirmLeave())return;if(!clConfirmLeave())return;store.subject=b.dataset.s;saveLocal();home()});
  document.getElementById('sndBtn').onclick=()=>{store.sound=!sfxOn();saveLocal();navRender();if(sfxOn()){ensureAudio();tone(660,.12,'square',.05)}};
  document.getElementById('stk').onclick=()=>{if(!clConfirmLeave())return;stickers()};
  document.getElementById('lockBtn').onclick=()=>{if(G&&!confirmLeave())return;if(!clConfirmLeave())return;locker()};
@@ -1699,7 +1715,7 @@ function bookCover(){
 function stickers(skipCover){
  if(G&&!confirmLeave())return;
  if(view!=='stickers')bookBack=view;
- view='stickers';clearInterval(timer);G=null;
+ view='stickers';navSubj();clearInterval(timer);G=null;
  const own=stkCounts(),got=STK.filter(s=>own[s.id]).length;
  stage.innerHTML=`<div class="hud"><span class="lbl pk">Sticker book</span><span class="lbl">${got} / ${STK.length} collected</span><button class="link" id="bkX">Close book ✕</button></div>
  <div class="bookwrap" id="bookwrap"></div>
@@ -1905,7 +1921,7 @@ async function profile(uid,isBack){
  if(view!=='profile'){profBack=view;profHist=[]}else if(!isBack&&profCur!==(uid||ACC.id))profHist.push(profCur);
  if(!uid&&ACC.state!=='in'){locker();return}
  uid=uid||ACC.id;const me=uid===ACC.id,seq=++profSeq;profUid=me?null:uid;profCur=uid;
- view='profile';clearInterval(timer);G=null;
+ view='profile';navSubj();clearInterval(timer);G=null;
  const back=`<button class="link" id="back">← Back</button>`;
  if(me){
   const d=myProfileData(),own=stkCounts(),mine=STK.filter(s=>own[s.id]).sort((a,b)=>b.r-a.r);
@@ -2064,7 +2080,7 @@ document.addEventListener('touchmove',e=>{if(e.touches&&e.touches.length>1)e.pre
 document.addEventListener('dblclick',e=>{if(!e.target.closest('input,textarea'))e.preventDefault()},{passive:false});
 // ---------- screens ----------
 function home(){
- clLeave();view='home';clearInterval(timer);G=null;
+ clLeave();view='home';navSubj();clearInterval(timer);G=null;
  const sj=S(),st=store.subj[store.subject],d=st.daily[today()];
  const counts={};for(const p of pool())counts[p.t]=(counts[p.t]||0)+1;
  const banner=ACC.state==='in'?`<p>Signed in as <b>${esc(ACC.name)}</b>. Progress saves to your account.</p><button class="btn alt" id="bLock">LOCKER</button>`
@@ -2083,7 +2099,7 @@ function home(){
  <div class="rule"><span class="lbl">Your ${sj.n} record</span></div>
  <div class="stats"><div><strong>${st.dives}</strong>packs played</div><div><strong>${st.best}</strong>best score</div><div><strong>${st.g10}</strong>Grade 10 answers</div><div><strong>${rankOf(st.best)[1]}</strong>best rank</div></div>`;
  const bl=stage.querySelector('#bLock');if(bl)bl.onclick=locker;
- stage.querySelector('#daily').onclick=()=>start('daily',pickSeven(pool(),rng(store.subject+today())));
+ stage.querySelector('#daily').onclick=()=>start('daily',dailyList());
  stage.querySelector('#unl').onclick=()=>start('unlimited',pickSeven(pool()));
  stage.querySelector('#howto').onclick=howTo;
  if(!store.tut&&!popQ.length&&Object.values(store.subj).every(x=>!x.dives))setTimeout(()=>{if(view==='home'&&!store.tut)howTo()},500);
@@ -2386,7 +2402,7 @@ function bindAuth(){
  };
 }
 async function locker(){
- view='locker';clearInterval(timer);G=null;
+ view='locker';navSubj();clearInterval(timer);G=null;
  const days=[...Array(14)].map((_,i)=>shiftDay(today(),-i));
  const head=ACC.state==='in'?`<div class="who">${avatar(ACC.name,'avatar')}<div><p class="lbl">Logged in</p><h2 style="margin-top:6px">${esc(ACC.name)}</h2></div></div>
   <p>Your progress, high scores and daily packs save to your account, so they follow you to any device you log in on.</p>${ACC.err?`<p style="color:var(--pink)">${esc(ACC.err)}</p>`:''}<div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:12px"><button class="btn gold" id="myprof" data-n="${ACC.reqs||''}">MY PROFILE</button><button class="btn alt" id="logout">LOG OUT</button></div>`
@@ -2438,7 +2454,7 @@ document.getElementById('home').onclick=()=>{if(!clConfirmLeave())return;confirm
 navRender();home();
 setTimeout(initAccount,0);
 // keep a copy on the phone so the game opens instantly next time
-const BUILD='ed82502032';
+const BUILD='7739948810';
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
  navigator.serviceWorker.register('/sw.js').catch(()=>{});
  // a few seconds in, check whether a newer version has been published; if so, offer it
