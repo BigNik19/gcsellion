@@ -1335,6 +1335,8 @@ function pushAll(){
  const log=answerLog.splice(0),runs=runLog.splice(0);
  writing=writing.then(async()=>{
   try{
+   // a phone or iPad that's been asleep may have an expired login: renew it first, or the database refuses the save
+   try{const ss=(await sb.auth.getSession()).data.session;if(!ss||(ss.expires_at&&ss.expires_at*1000<Date.now()+60000))await sb.auth.refreshSession()}catch(e){}
    await syncDown();
    const body=JSON.parse(JSON.stringify(store)),row=scoreRow();
    let r=await sb.from('progress').upsert({user_id:ACC.id,data:body,updated_at:new Date().toISOString()});if(r.error)throw r.error;
@@ -1343,8 +1345,11 @@ function pushAll(){
     if(cur){if(cur.day===row.day&&cur.daily){row.daily={...cur.daily,...row.daily};msAdopt(cur.daily.mk)}
      if(cur.best)for(const k in cur.best)if(typeof cur.best[k]==='number'&&!(row.best[k]>=cur.best[k]))row.best[k]=cur.best[k]}}catch(e){}
    r=await sb.from('scores').upsert(row);if(r.error&&/stats/.test(r.error.message||'')){delete row.stats;r=await sb.from('scores').upsert(row)}if(r.error)throw r.error;
-   if(log.length){r=await sb.from('answers').upsert(log.map(x=>({...x,user_id:ACC.id})),{onConflict:'user_id,subject,prompt,answer',ignoreDuplicates:true});if(r.error)console.warn(r.error)}
-   if(runs.length){r=await sb.from('runs').insert(runs.map(x=>({...x,user_id:ACC.id})));if(r.error)console.warn(r.error)}
+   // answers and runs: if refused, renew the login and try once more; if it still fails, keep them for next time instead of losing them
+   const keep=(arr,back)=>{back.unshift(...arr);if(back.length>300)back.splice(300)};
+   const put=async(arr,send)=>{let x=await send(arr);if(x.error){try{await sb.auth.refreshSession()}catch(e){}x=await send(arr)}return x};
+   if(log.length){r=await put(log,a=>sb.from('answers').upsert(a.map(x=>({...x,user_id:ACC.id})),{onConflict:'user_id,subject,prompt,answer',ignoreDuplicates:true}));if(r.error){console.warn(r.error);keep(log,answerLog)}}
+   if(runs.length){r=await put(runs,a=>sb.from('runs').insert(a.map(x=>({...x,user_id:ACC.id}))));if(r.error){console.warn(r.error);keep(runs,runLog)}}
    ACC.err='';
   }catch(e){ACC.err=(e&&e.message)||'Could not save';console.warn(e);if(view==='locker')locker()}
  });return writing;
@@ -2894,7 +2899,7 @@ document.getElementById('home').onclick=()=>{if(!clConfirmLeave())return;confirm
 navRender();home();
 setTimeout(initAccount,0);
 // keep a copy on the phone so the game opens instantly next time
-const BUILD='c893d29e0f';let UPD_READY=false;
+const BUILD='0ac42f47c7';let UPD_READY=false;
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
  navigator.serviceWorker.register('/sw.js').catch(()=>{});
  // a few seconds in, check whether a newer version has been published; if so, offer it
