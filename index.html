@@ -288,6 +288,20 @@ form.ans input.fixed{box-shadow:0 0 0 3px var(--gold);color:var(--gold)}
 .gain small{font:22px var(--vt);color:var(--muted);margin-left:10px}
 .alist .ar{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:21px;color:var(--muted)}
 .alist svg{width:22px;height:22px;margin-top:2px}
+.alist .arb{width:100%;text-align:left;background:none;border:0;border-bottom:1px dashed var(--line);font:inherit;font-size:21px;cursor:pointer;grid-template-columns:28px minmax(0,1fr) 18px}
+.arv{color:var(--dim);font-size:18px;transition:transform .15s}.arb[aria-expanded=true] .arv{transform:rotate(180deg);color:var(--ink)}
+.abx{padding:8px 0 14px 38px;border-bottom:1px dashed var(--line);animation:abin .18s ease-out}
+@keyframes abin{from{opacity:0;transform:translateY(-4px)}}
+.abchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.abc{font:inherit;font-size:18px;color:var(--c,var(--ink));background:none;border:0;box-shadow:inset 0 0 0 1px var(--line);padding:3px 9px;cursor:pointer}
+.abc i{font-style:normal;color:var(--dim)}.abc.on{box-shadow:inset 0 0 0 1px var(--c,var(--ink));background:rgba(255,255,255,.04)}
+.absr{width:100%;font:inherit;font-size:20px;color:var(--ink);background:var(--panel);border:0;box-shadow:inset 0 0 0 1px var(--line);padding:6px 10px;margin-bottom:6px}
+.absr:focus{outline:none;box-shadow:inset 0 0 0 1px var(--cyan)}
+.abl{max-height:300px;overflow:auto;overscroll-behavior:contain}
+.abr{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:8px;align-items:center;padding:4px 2px;font-size:20px;color:var(--ink)}
+.abr svg{width:16px;height:16px;margin:0}.abr b{font-weight:normal;color:var(--c);font-size:18px}.abr small{color:var(--dim);font-size:16px}
+.abr.you{background:rgba(255,211,107,.08);box-shadow:inset 2px 0 0 var(--gold)}
+.abf{color:var(--dim);font-size:17px;margin-top:6px}
 .alist em{font-style:normal;color:var(--c);display:block;font-size:20px}
 .you{background:var(--gold);color:#0d1120;padding:0 5px}
 details.more summary{cursor:pointer;color:var(--cyan);font-size:21px;padding:8px 0;min-height:44px}
@@ -2338,6 +2352,20 @@ async function drawCurve(subject,mode,score){
  <p class="cpct">Better than <b>${pct}%</b> of ${isDaily?'today’s daily players':'recent packs'}${real?` · ${total} packs`:''}</p>
  ${real?'':'<p class="note-s">Estimated curve. It switches to real scores once 10 or more packs have been played.</p>'}`;
 }
+// every answer for one prompt: tier filters, a search box and a short scrolling list
+function ansBrowser(p,j){
+ const all=p.a.filter(a=>!a.ox||(j&&a===j.a)).map(a=>({a,t:j&&a===j.a?j.t:liveTier(p,a),n:cap(a.name)})).sort((x,y)=>y.t-x.t||x.n.localeCompare(y.n));
+ const cnt={};all.forEach(x=>cnt[x.t]=(cnt[x.t]||0)+1);
+ const el=document.createElement('div');el.className='abx';let tf=0,q='';
+ el.innerHTML=`<div class="abchips"><button class="abc on" data-t="0">All <i>${all.length}</i></button>${[7,6,5,4,3,2,1].filter(t=>cnt[t]).map(t=>`<button class="abc" data-t="${t}" style="--c:${TIERS[t].c}">${TIERS[t].n} <i>${cnt[t]}</i></button>`).join('')}</div>
+  <input class="absr" type="search" placeholder="Search all answers…" aria-label="Search all answers" autocomplete="off" autocorrect="off" spellcheck="false"><div class="abl"></div><p class="abf"></p>`;
+ const list=el.querySelector('.abl'),foot=el.querySelector('.abf');
+ const draw=()=>{const nq=norm(q);const l=all.filter(x=>(!tf||x.t===tf)&&(!nq||norm(x.a.name).includes(nq)||x.a.al.some(a=>a.includes(nq))));
+  list.innerHTML=l.map(x=>`<div class="abr${j&&x.a===j.a?' you':''}" style="--c:${TIERS[x.t].c}">${spr(ICON[TIERS[x.t].i])}<span>${esc(x.n)}${j&&x.a===j.a?' <small>(you)</small>':''}</span><b>+${TIERS[x.t].p}</b></div>`).join('')||'<p class="note-s">No answers match that.</p>';
+  foot.textContent=l.length===all.length?`${all.length} answers${l.length>8?' · scroll for more':''}`:`${l.length} of ${all.length} answers`};
+ el.querySelector('.abchips').onclick=e=>{const b=e.target.closest('.abc');if(!b)return;tf=+b.dataset.t;el.querySelectorAll('.abc').forEach(c=>c.classList.toggle('on',c===b));draw()};
+ el.querySelector('.absr').oninput=e=>{q=e.target.value;draw()};
+ draw();return el}
 function end(){
  view='end';
  const s=G.score,r=rankOf(s),st=store.subj[G.subject];
@@ -2361,13 +2389,16 @@ function end(){
  <div class="log">${TIERS.slice(1,7).map((t,k)=>`<div class="gl" style="top:${(k+.5)/6*100}%"><span>${t.n}</span></div>`).join('')}
  ${G.res.map((x,k)=>{const left=(k+.5)/n*100,top=x.j?Math.min(100,(Math.min(x.j.t,6)-.5)/6*100+(x.j.t===7?8:0)):3,c=x.j?TIERS[x.j.t].c:'#59648a';return `<div class="col" style="left:${left}%;height:${top}%;--c:${c}"><i style="height:100%"></i>${spr(ICON[x.j?TIERS[x.j.t].i:'miss'])}</div><span class="x" style="left:${left}%">${k+1}</span>`}).join('')}</div>
  <div style="height:30px"></div>
- <div class="rule"><span class="lbl">Your prompts</span></div>
- <div class="alist">${G.res.map(x=>`<div class="ar" style="--c:${x.j?TIERS[x.j.t].c:'#59648a'}">${spr(ICON[x.j?TIERS[x.j.t].i:'miss'])}<div><em>${x.j?TIERS[x.j.t].n+' · +'+x.pts:'Miss · +0'}</em>${esc(x.p.q)}: <span style="color:var(--ink)">${x.j?esc(cap(x.j.a.name)):'no answer'}</span></div></div>`).join('')}</div>
+ <div class="rule"><span class="lbl">Your prompts</span><span class="lbl" style="color:var(--dim)">tap one to see every answer</span></div>
+ <div class="alist" id="yp">${G.res.map((x,k)=>`<button class="ar arb" data-k="${k}" aria-expanded="false" style="--c:${x.j?TIERS[x.j.t].c:'#59648a'}">${spr(ICON[x.j?TIERS[x.j.t].i:'miss'])}<div><em>${x.j?TIERS[x.j.t].n+' · +'+x.pts:'Miss · +0'}</em>${esc(x.p.q)}: <span style="color:var(--ink)">${x.j?esc(cap(x.j.a.name)):'no answer'}</span></div><span class="arv">▾</span></button>`).join('')}</div>
  <div class="rule"><span class="lbl">The grading</span></div>
  ${RANKS.map((g,k)=>`<div class="trow ${g===r?'me':''}" style="--c:${g===r?'var(--gold)':'var(--dim)'}"><span class="pts">G${g[2]}</span><span class="pts">${g[0]}–${k<RANKS.length-1?RANKS[k+1][0]-1:700}</span><span class="txt"><b>${g[1]}</b></span></div>`).join('')}
  <div style="margin-top:26px;display:flex;flex-wrap:wrap;gap:12px"><button class="btn" id="cp">COPY RESULT</button><button class="btn alt" id="again">PLAY AGAIN</button><button class="btn alt" id="lk">LOCKER</button><button class="btn alt" id="hm">HOME</button></div><div id="sb"></div>`;
  stage.querySelector('#cp').onclick=async e=>{try{await navigator.clipboard.writeText(share);e.target.textContent='COPIED'}catch(err){stage.querySelector('#sb').innerHTML=`<textarea class="share" readonly>${esc(share)}</textarea>`;stage.querySelector('textarea').select()}};
- const mode=G.mode,topic=G.topic;
+ const mode=G.mode,topic=G.topic,res=G.res;
+ stage.querySelector('#yp').onclick=e=>{const b=e.target.closest('.arb');if(!b)return;const open=b.nextElementSibling&&b.nextElementSibling.classList.contains('abx');
+  stage.querySelectorAll('#yp .abx').forEach(x=>x.remove());stage.querySelectorAll('#yp .arb').forEach(x=>x.setAttribute('aria-expanded','false'));
+  if(open)return;const x=res[+b.dataset.k];b.setAttribute('aria-expanded','true');b.insertAdjacentElement('afterend',ansBrowser(x.p,x.j))};
  drawCurve(G.subject,G.mode,s);
  stage.querySelector('#again').onclick=()=>mode==='topic'?start('topic',topicPick(topic),topic):start('unlimited',pickSeven(pool()));
  stage.querySelector('#hm').onclick=home;stage.querySelector('#lk').onclick=locker;{const gn=stage.querySelector('#gn');if(gn)gn.onclick=locker}
@@ -2468,7 +2499,7 @@ document.getElementById('home').onclick=()=>{if(!clConfirmLeave())return;confirm
 navRender();home();
 setTimeout(initAccount,0);
 // keep a copy on the phone so the game opens instantly next time
-const BUILD='72b2087973';
+const BUILD='433d1824bc';
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
  navigator.serviceWorker.register('/sw.js').catch(()=>{});
  // a few seconds in, check whether a newer version has been published; if so, offer it
