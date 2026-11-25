@@ -180,6 +180,17 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
 .lbsubj{margin-bottom:8px}.lbsubj .tag.on{background:var(--gold);box-shadow:0 0 0 2px var(--gold)}
 .tag.lock{color:var(--gold);box-shadow:0 0 0 2px var(--gold);display:flex;gap:8px;align-items:center}
 .tag.lock i{font-style:normal;width:18px;height:18px;display:grid;place-items:center;background:var(--gold);color:#0d1120;font-size:9px}
+/* top bar: ticket tabs */
+.nav{gap:10px;flex-wrap:nowrap}
+.nav .tag{font:21px/1 var(--vt);letter-spacing:.14em;color:#1a2034;background:#fff6e3;border-radius:10px;padding:10px 16px 11px;min-height:0;box-shadow:0 4px 0 rgba(0,0,0,.28);outline:2px dashed rgba(26,32,52,.2);outline-offset:-6px;transition:transform .12s,background .2s;white-space:nowrap}
+.nav .tag:hover{transform:translateY(-1px)}.nav .tag:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.28)}
+.nav .tag.on{background:var(--cyan);color:#0d1120;outline-color:rgba(13,17,32,.28)}
+.nav .tag.lock{display:flex;align-items:center;gap:9px;padding:7px 14px 8px 8px;background:#ffe9a8;color:#3a2a06;outline-color:rgba(58,42,6,.25)}
+.nav .lkav{width:28px;height:28px;border-radius:7px;box-shadow:none;font:13px/28px var(--px);font-style:normal;text-align:center;flex:none;display:grid;place-items:center}
+.nav .lkq{background:#3a2a06;color:#ffe9a8}
+.sndi{flex:none;width:42px;height:42px;display:grid;place-items:center;border-radius:10px;border:0;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 2px var(--line);color:var(--dim);cursor:pointer;margin-left:4px}
+.sndi svg{width:22px;height:22px}.sndi.on{color:var(--cyan);box-shadow:inset 0 0 0 2px rgba(95,216,255,.45)}.sndi:hover{color:var(--ink)}
+@media(max-width:760px){.nav{flex-wrap:wrap;gap:8px}.nav .tag{font-size:18px;padding:8px 12px 9px;letter-spacing:.1em}.nav .tag.lock{padding:6px 11px 7px 6px}.nav .lkav{width:24px;height:24px;font-size:11px}.sndi{width:38px;height:38px}}
 .lbl{font:10px/1.6 var(--px);letter-spacing:.18em;color:var(--cyan);text-transform:uppercase}
 .lbl.pk{color:var(--pink)}
 .rule{display:flex;align-items:center;gap:12px;margin:34px 0 14px}
@@ -565,8 +576,8 @@ html:has(.dv){overflow:hidden}
 .bagout::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.035) 0 2px,transparent 2px 7px),repeating-linear-gradient(-45deg,rgba(80,0,20,.04) 0 2px,transparent 2px 7px)}
 .bagout::after{content:"";position:absolute;left:max(2.4vw,9px);right:max(2.4vw,9px);top:0;bottom:30px;border:2px dashed rgba(255,255,255,.22);border-top:0;border-radius:0 0 18px 18px;pointer-events:none}
 .bagout .handle{position:absolute;top:-56px;left:50%;transform:translateX(-50%);width:min(380px,64vw);height:150px;border:18px solid #b52f4a;border-bottom:0;border-radius:200px 200px 0 0;box-shadow:inset 0 5px 0 rgba(255,255,255,.12),0 6px 0 rgba(90,10,30,.25)}
-.tag{position:relative;z-index:1;max-width:min(700px,84vw);background:#fff6e3;color:#1a2034;border-radius:12px;padding:12px 22px 14px;text-align:center;font:clamp(21px,3.2vw,29px)/1.15 var(--vt);box-shadow:0 10px 26px rgba(90,10,30,.35);outline:2px dashed rgba(26,32,52,.2);outline-offset:-7px}
-.tag small{display:block;font:9px/1.7 var(--px);letter-spacing:.14em;color:#c23a56;margin-bottom:4px}
+.qtag{position:relative;z-index:1;max-width:min(700px,84vw);background:#fff6e3;color:#1a2034;border-radius:12px;padding:12px 22px 14px;text-align:center;font:clamp(21px,3.2vw,29px)/1.15 var(--vt);box-shadow:0 10px 26px rgba(90,10,30,.35);outline:2px dashed rgba(26,32,52,.2);outline-offset:-7px}
+.qtag small{display:block;font:9px/1.7 var(--px);letter-spacing:.14em;color:#c23a56;margin-bottom:4px}
 .zip{position:absolute;left:0;right:0;height:0;z-index:2}
 .zpt,.zpb{position:absolute;left:0;right:0;height:26px;background:linear-gradient(180deg,#352c46,#261f34)}
 .zpt{bottom:0;box-shadow:0 -3px 8px rgba(90,10,30,.25)}.zpb{top:0;box-shadow:0 6px 14px rgba(0,0,0,.45)}
@@ -598,9 +609,9 @@ html:has(.dv){overflow:hidden}
 .tk{position:absolute;right:0;width:7px;height:0;border-top:1px solid rgba(255,255,255,.12)}
 .tk.m{width:14px;border-top-color:rgba(255,255,255,.24)}
 .tk span{position:absolute;right:20px;top:-6px;font:9px/1 var(--px);color:rgba(255,255,255,.24);white-space:nowrap}
-.pd{position:absolute;opacity:.2;filter:saturate(.45) blur(.6px);transform:rotate(var(--r));animation:pdrift 8s ease-in-out infinite alternate}
+.pd{position:absolute;opacity:.5;filter:saturate(.8);image-rendering:pixelated;transform:rotate(var(--r));animation:pdrift 8s ease-in-out infinite alternate}
 @keyframes pdrift{to{transform:rotate(calc(var(--r) + 8deg)) translateY(-16px)}}
-.pgr{position:absolute;font-family:var(--px);color:#ffd36b;opacity:.14;transform:rotate(var(--r));animation:pdrift 9s ease-in-out infinite alternate}
+.pgr{position:absolute;font-family:var(--px);color:#ffd36b;opacity:.22;transform:rotate(var(--r));animation:pdrift 9s ease-in-out infinite alternate}
 .mote{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(220,230,255,.4);animation:mote 9s ease-in-out infinite alternate}
 @keyframes mote{to{transform:translate(16px,-46px);opacity:.08}}
 .trail{position:absolute;z-index:4;border-radius:50%;border:1.5px solid rgba(255,255,255,.45);pointer-events:none}
@@ -616,7 +627,7 @@ html:has(.dv){overflow:hidden}
 .depthc{left:max(3vw,12px);right:auto;transform:none;background:rgba(10,12,26,.82);border-radius:12px;padding:10px 14px;box-shadow:none;align-items:flex-start;transition:box-shadow .5s}
 .depthc.landed{box-shadow:0 0 0 1px var(--c),0 0 24px color-mix(in srgb,var(--c) 35%,transparent)}
 .dv~.depthc,.depthc{bottom:auto}
-@media(max-width:560px){.depthc{padding:8px 11px}.depthc b{font-size:20px}.depthc em{font-size:15px;max-width:150px}.zcap{font-size:17px;top:12px}.zlab{right:56px;font-size:9px;padding:2px 8px}.tag{padding:10px 14px 12px}.ruler{width:44px}.tk span{right:14px;font-size:8px}}
+@media(max-width:560px){.depthc{padding:8px 11px}.depthc b{font-size:20px}.depthc em{font-size:15px;max-width:150px}.zcap{font-size:17px;top:12px}.zlab{right:56px;font-size:9px;padding:2px 8px}.qtag{padding:10px 14px 12px}.ruler{width:44px}.tk span{right:14px;font-size:8px}}
 .depthc b{font-size:clamp(18px,3vw,28px)}.depthc em{text-align:left;font-size:18px}
 .dv.quake{animation:quake .45s}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -1455,7 +1466,8 @@ function navRender(){
  const ini=ACC.state==='in'?esc((ACC.name||'?').trim().charAt(0).toUpperCase()):'?';
  const sk=streakInfo();
  document.getElementById('nav').innerHTML=`<button class="stk ${sk.todayDone?'on':''}" id="stk" title="${sk.cur} day streak · sticker book" aria-label="${sk.cur} day streak, open sticker book">${spr(STICK.apple)}${sk.cur}</button>`+Object.entries(SUBJ).map(([k,s])=>`<button class="tag ${subjOn(k)?'on':''}" data-s="${k}" aria-pressed="${subjOn(k)}">${s.n.toUpperCase()}</button>`).join('')+
- `<button class="tag" id="sndBtn" aria-pressed="${sfxOn()}">SOUND ${sfxOn()?'ON':'OFF'}</button>`+`<button class="tag lock" id="lockBtn"><i>${ini}</i>${ACC.state==='in'?'LOCKER':ACC.state==='checking'?'…':'LOG IN'}${ACC.state==='in'&&ACC.reqs?`<b class="rdot" title="${ACC.reqs} friend request${ACC.reqs>1?'s':''}">${ACC.reqs}</b>`:''}</button>`;
+ `<button class="tag lock" id="lockBtn">${ACC.state==='in'?avatar(ACC.name||'?','pav lkav'):`<i class="lkav lkq">?</i>`}${ACC.state==='in'?'LOCKER':ACC.state==='checking'?'…':'LOG IN'}${ACC.state==='in'&&ACC.reqs?`<b class="rdot" title="${ACC.reqs} friend request${ACC.reqs>1?'s':''}">${ACC.reqs}</b>`:''}</button>`+
+ `<button class="sndi ${sfxOn()?'on':''}" id="sndBtn" aria-pressed="${sfxOn()}" aria-label="Sound ${sfxOn()?'on':'off'}" title="Sound ${sfxOn()?'on':'off'}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/>${sfxOn()?'<path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>':'<path d="M16.5 9.5l5 5m0-5l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'}</svg></button>`;
  document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{if(G&&!confirmLeave())return;if(!clConfirmLeave())return;store.subject=b.dataset.s;saveLocal();home()});
  document.getElementById('sndBtn').onclick=()=>{store.sound=!sfxOn();saveLocal();navRender();if(sfxOn()){ensureAudio();tone(660,.12,'square',.05)}};
  document.getElementById('stk').onclick=()=>{if(!clConfirmLeave())return;stickers()};
@@ -2546,6 +2558,14 @@ const SPR2={
  stack:["..........","KKKKKKKKK.","KBBBBBBBKK","KKKKKKKKK.","KXXXXXXXXK","KKKKKKKKKK","KggggggggK","KKKKKKKKK."],
  spark:["..Y..",".YYY.","YYYYY",".YYY.","..Y.."]
 };
+// 16-bit background sprites for the drop (16×16, shaded), drawn once into small SVG images
+const PAL16={"k":"#1b1830","w":"#fff8ea","e":"#e6dcc6","f":"#b9ae96","r":"#e8495f","R":"#a8293f","l":"#ff8f9c","b":"#5fd8ff","B":"#2b78a3","c":"#b8f0ff","g":"#8fd36b","G":"#4a8f3a","h":"#c9f59a","y":"#ffd36b","Y":"#c4922a","z":"#fff0b8","o":"#ff9a3c","O":"#c2651b","p":"#c79bff","P":"#7f56c4","q":"#e3ccff","n":"#9a6634","N":"#5e3a1c","m":"#cf9a62","s":"#9aa3b8","S":"#5d6680","t":"#dfe4ee","x":"#ff4f7a","X":"#c2304f"};
+const SPR16={"book":["................","..kkkkkkkkkkkk..",".kBbbbbbbbbbbck.",".kBbcccccccccbk.",".kBbbbbbbbbbbbk.",".kBbbkkkkkkkbbk.",".kBbbkwwwwwkbbk.",".kBbbkwsssskbbk.",".kBbbkkkkkkkbbk.",".kBbbbbbbbbbbbk.",".kBbbbbbbbbbbbk.",".kBBBBBBBBBBBBk.",".kkkkkkkkkkkkkk.",".kwwwwwwwwwwwwk.","..kkeeeeeeeeekk.","...kkkkkkkkkkk.."],"redbook":["................",".kkkkkkkkkkkkk..",".kRrrrrrrrrrrlk.",".kRrllllllllrrk.",".kRrrrrrrrrrrrk.",".kRrrwwwwwwwrrk.",".kRrrwkkkkkwrrk.",".kRrrwwwwwwwrrk.",".kRrrrrrrrrrrrk.",".kRrrrrrrrrrrrk.",".kRrrrrrrrrrrrk.",".kRRRRRRRRRRRRkk",".kkkkkkkkkkkkkwk",".kwwwwwwwwwwwwek","..kkkkkkkkkkkkk.","................"],"cards":["................","......kkkkkkkkk.",".....kwwwwwwwwk.","....kkkkkkkkkwk.","...kwwwwwwwwkwk.","..kkkkkkkkkkwwk.",".kwwwwwwwwwwkkk.",".kwbbbbbbbbwk...",".kwwwwwwwwwwk...",".kwsssssssswk...",".kwwwwwwwwwwk...",".kwsssssswwwk...",".kwwwwwwwwwwk...",".keeeeeeeeeek...","..kkkkkkkkkk....","................"],"pencil":["............kk..","...........kllk.","..........klllk.",".........ktttk..","........kystk...",".......kyyzk....","......kyyzk.....",".....kyyzk......","....kyyzk.......","...kYyzk........","..kmYyk.........","..kmmk..........",".kmmk...........",".kSk............","kk..............","................"],"ruler":["................","................","................","................",".kkkkkkkkkkkkkk.","kyzzzzzzzzzzzzyk","kykykykykykykyyk","kykyyykyyykyyyyk","kyyyyyyyyyyyyyyk","kYYYYYYYYYYYYYYk",".kkkkkkkkkkkkkk.","................","................","................","................","................"],"calc":["..kkkkkkkkkkk...",".kSssssssssssk..",".kSkkkkkkkkksk..",".kSkcccccccksk..",".kSkbbbbbbbksk..",".kSkkkkkkkkksk..",".kStkttkttkxsk..",".kSkkkkkkkkksk..",".kStkttkttkxsk..",".kSkkkkkkkkksk..",".kStkttkttktsk..",".kSkkkkkkkkksk..",".kSSSSSSSSSSSk..","..kkkkkkkkkkk...","................","................"],"eraser":["................","................","................","................","......kkkkkkkk..",".....kllllllblk.","....kxxxxxxbbck.","...kxxxxxxbbckk.","..kxlxxxxbbck...","..kxxxxxbbckk...","..kXXXXXBBkk....","..kkkkkkkkk.....","................","................","................","................"],"apple":["................","........kk......",".......knk.kk...","......knkkkgk...","....kkkkkghk....","...krrrrkrrrk...","..krlllrrrrrrk..","..krllrrrrrrrk..","..krlrrrrrrrrk..","..krrrrrrrrrRk..","..krrrrrrrrrRk..","...krrrrrrrRk...","...kRrrrrrRRk...","....kRRkRRRk....",".....kk.kkk.....","................"],"sandwich":["................","................","................",".......kk.......","......kmmk......",".....kmzzmk.....","....kmzzzzmk....","...kmzzzzzzmk...","..kgggggggggk...","..khghghghghgk..","..kxxxxxxxxxxk..","..kyyyyyyyyyyk..","..kmzzzzzzzzmk..","..kmmmmmmmmmmk..","...kkkkkkkkkk...","................"],"juice":[".........k......","........kk......",".......kw.......","....kkkwkkk.....","...kooookook....","...kOkkkkkkk....","...kOkbbbbok....","...kOkbwwbok....","...kOkbwwbok....","...kOkbbbbok....","...kOkooooook...","...kOooggooook..","...kOoggggoook..","...kOOOOOOOOk...","....kkkkkkkk....","................"],"banana":["................","...........kk...","..........kNk...","..........kyk...",".........kyyk...",".........kyzk...","........kyyzk...","........kyzyk...",".......kyyzyk...","......kyyzyyk...",".....kyyzyyk....","...kkyyzyyYk....",".kkyyyyyyYk.....","kYyyyyyYYk......",".kkYYYYkk.......","...kkkk........."],"test":[".kkkkkkkkkkk....",".kwwwwwwwwwkk...",".kwssswwxxwkwk..",".kwwwwwxwwxkkkk.",".kwsssswxxwwwek.",".kwwwwwwwwwwwek.",".kwsssssswwwwek.",".kwwwwwwwwwxwek.",".kwssssswwxwwek.",".kwwwwwwxwxwwek.",".kwsssswwxwwwek.",".kwwwwwwwwwwwek.",".kwsssssswwwwek.",".keeeeeeeeeeeek.","..kkkkkkkkkkkkk.","................"],"crumple":["................","................","................","......kkkkk.....","....kkwwewwkk...","...kwwefwweewk..","...kwefwwwfwek..","..kwwwwwefwwwek.","..kewfwwwwweewk.","..kwwwefwfwwfek.","...kewwwwwewwk..","...kwfeewwfeek..","....kkeeffekk...","......kkkkk.....","................","................"],"sticky":["................","................","..kkkkkkkkkkk...","..kzzzzzzzzzk...","..kzyyyyyyyzk...","..kzzzzzzzzzk...","..kzyyyyyzzzk...","..kzzzzzzzzzk...","..kzyyyyyyzzk...","..kzzzzzzzzzk...","..kzzzzzzzzk....","..kzzzzzzzk.....","..kkkkkkkk......","................","................","................"],"glue":["................","......kkkk......",".....kppppk.....",".....kqppPk.....",".....kkkkkk.....",".....kwwwwk.....",".....kwppwk.....",".....kwpPwk.....",".....kwwwwk.....",".....kwbbwk.....",".....kwwwwk.....",".....kwwwwk.....",".....kwwwek.....",".....keeeek.....","......kkkk......","................"],"coin":["................","................",".....kkkkkk.....","....kyzzzzyk....","...kyzyyyyzyk...","..kyzyyYYyyzyk..","..kyzyYyyYyyyk..","..kyyyYyyyyyYk..","..kyyyYyyYyyYk..","..kyyyyYYyyyYk..","...kyyyyyyyYk...","....kYYYYYYk....",".....kkkkkk.....","................","................","................"],"key":["................","................","................","...kkkk.........","..kyyyyk........",".kyzkkyyk.......",".kyk..kyk.......",".kyk..kykkkkkkk.",".kyykkyyyyyyyyk.","..kYyyYkkkYkYk..","...kkkk...kk.k..","................","................","................","................","................"],"star":[".......k........","......kyk.......","......kyk.......",".....kyzyk......","kkkkkyzzzykkkkk.",".kyyyzzzzzyyyk..","..kyyzzzzzyyk...","...kyyzzzyyk....","...kyyyyyyyk....","..kyyykkkyyyk...","..kyykk.kkyyk...",".kyk.......kyk..",".kk.........kk..","................","................","................"]};
+const SPR16URL={};
+function spr16(name){if(SPR16URL[name])return SPR16URL[name];const rows=SPR16[name];let r='';
+ rows.forEach((row,y)=>{let x=0;while(x<row.length){const c=row[x];if(c==='.'){x++;continue}let w=1;while(row[x+w]===c)w++;r+=`<rect x="${x}" y="${y}" width="${w}" height="1" fill="${PAL16[c]}"/>`;x+=w}});
+ return SPR16URL[name]='data:image/svg+xml,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">${r}</svg>`)}
+const ZONE16=[['book','redbook','cards','book','redbook'],['pencil','ruler','calc','eraser','pencil'],['apple','sandwich','juice','banana','apple'],['test','crumple','sticky','test','crumple'],['glue','coin','key','eraser','coin'],['star']];
 const ZONES=[
  {name:'the top of the bag',bg:'linear-gradient(180deg,#22325a,#1a2645)',items:[SPR2.stack,ICON.book,SPR2.stack,ICON.card,ICON.book]},
  {name:'the pencil case',bg:'linear-gradient(180deg,#2a2f55,#1f2444)',items:[JUNK[0],JUNK[1],JUNK[2],ICON.pen,JUNK[0],JUNK[4]]},
@@ -2632,7 +2652,9 @@ function reveal(p,j,tries,timedOut){
  // middle: soft drifting odds and ends, moving a little slower than the camera
  const parY=wy=>wy*F+(1-F)*vh*.45;let ph='';
  for(let k=0;k<6;k++){const z=ZONES[k],n=vw<600?3:5;for(let i=0;i<n;i++){const left=i%2?66+Math.random()*28:4+Math.random()*26,wy=zTop(k)+Z*(.12+Math.random()*.76),sz=Math.round((vw<600?24:30)+Math.random()*22),r=(Math.random()*50-25).toFixed(0),dl=(-Math.random()*8).toFixed(1);
-  ph+=k===5?`<span class="pgr" style="left:${left.toFixed(1)}%;top:${parY(wy).toFixed(0)}px;font-size:${sz}px;--r:${r}deg;animation-delay:${dl}s">${['A*','9','A+','9','A*'][i]}</span>`:spr(z.items[Math.floor(Math.random()*z.items.length)],'pd',`style="left:${left.toFixed(1)}%;top:${parY(wy).toFixed(0)}px;width:${sz}px;height:${sz}px;--r:${r}deg;animation-delay:${dl}s"`)}}
+  const z16=ZONE16[k],big=Math.round(sz*1.55);
+  ph+=k===5?(i%2?`<img class="pd" alt="" src="${spr16('star')}" style="left:${left.toFixed(1)}%;top:${parY(wy).toFixed(0)}px;width:${Math.round(big*.8)}px;height:${Math.round(big*.8)}px;--r:${r}deg;animation-delay:${dl}s">`:`<span class="pgr" style="left:${left.toFixed(1)}%;top:${parY(wy).toFixed(0)}px;font-size:${sz}px;--r:${r}deg;animation-delay:${dl}s">${['A*','9','A+','9','A*'][i]}</span>`)
+   :`<img class="pd" alt="" src="${spr16(z16[(i+Math.floor(Math.random()*z16.length))%z16.length])}" style="left:${left.toFixed(1)}%;top:${parY(wy).toFixed(0)}px;width:${big}px;height:${big}px;--r:${r}deg;animation-delay:${dl}s">`}}
  for(let i=0,n=vw<600?28:56;i<n;i++){const wy=ZIPY+60+Math.random()*(worldH-ZIPY);ph+=`<i class="mote" style="left:${(Math.random()*100).toFixed(1)}%;top:${parY(wy).toFixed(0)}px;animation-delay:${(-Math.random()*9).toFixed(1)}s;animation-duration:${(7+Math.random()*7).toFixed(1)}s"></i>`}
  PAR.style.height=Math.round(parY(worldH))+'px';PAR.innerHTML=ph;
  // front: the bag, the zip, tier lines, the ruler and your answer
@@ -2641,7 +2663,7 @@ function reveal(p,j,tries,timedOut){
   return `<div class="zn oxl" style="top:${zTop(6)}px;height:${OXH}px;--c:${T.c}"><div class="oxsky">${stars}</div>${oxSpires()}<div class="zline"></div><div class="zlab">${spr(ICON[T.i])}<span>${T.n}</span><b>${T.p}</b></div><div class="zcap">beneath the bag · the dreaming spires</div><div class="floor" id="floor"><span>the very bottom of the bag</span></div></div>`})():'';
  let ticks='';for(let y=ZIPY+60,i=0;y<worldH-60;y+=40,i++){const maj=i%4===0;ticks+=`<i class="tk${maj?' m':''}" style="top:${y}px">${maj?`<span>${(Math.round(metres(y)/10)*10).toLocaleString('en-GB')}m</span>`:''}</i>`}
  W.style.height=worldH+'px';
- W.innerHTML=`<div class="bagout" style="height:${ZIPY}px"><div class="handle"></div><div class="tag"><small>${esc(SUBJ[G.subject].n.toUpperCase())} · PROMPT ${G.i+1} OF ${G.list.length}</small>${esc(p.q)}</div></div>
+ W.innerHTML=`<div class="bagout" style="height:${ZIPY}px"><div class="handle"></div><div class="qtag"><small>${esc(SUBJ[G.subject].n.toUpperCase())} · PROMPT ${G.i+1} OF ${G.list.length}</small>${esc(p.q)}</div></div>
   <div class="zip" style="top:${ZIPY}px"><div class="zw zwo"><div class="zop"><div class="zgap"></div><div class="zpt"></div><div class="zpb"></div></div></div><div class="zw zwc"><div class="zcl"><div class="zpt"></div><div class="zpb"></div></div></div><div class="zpull"></div></div>
   ${zoneHtml}${oxHtml}<div class="ruler">${ticks}</div>
   <div class="dnote" id="note" style="--c:${tier?tier.c:'#59648a'}">${word}</div><div class="dstamp" id="dstamp" style="--c:${tier?tier.c:'#59648a'}"></div>`;
@@ -3020,7 +3042,7 @@ document.getElementById('home').onclick=()=>{if(!clConfirmLeave())return;confirm
 navRender();home();
 setTimeout(initAccount,0);
 // keep a copy on the phone so the game opens instantly next time
-const BUILD='75354f4848';let UPD_READY=false;
+const BUILD='942565cc01';let UPD_READY=false;
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
  navigator.serviceWorker.register('/sw.js').catch(()=>{});
  // a few seconds in, check whether a newer version has been published; if so, offer it
