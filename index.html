@@ -419,7 +419,11 @@ tr.me td{color:var(--gold)}
 .clpp{display:flex;align-items:center;gap:10px;background:#0b0f1d;box-shadow:0 0 0 2px var(--line);padding:8px 12px 8px 8px;font-size:22px}
 .clpp i{font:12px var(--px);font-style:normal;width:30px;height:30px;display:grid;place-items:center;background:var(--cyan);color:#10131f}
 .clpp em{font:9px var(--px);font-style:normal;color:var(--gold);letter-spacing:.08em}.clpp em.yt{color:var(--cyan);background:none}.clpp.me{box-shadow:0 0 0 2px var(--cyan)}
-.clpp.bot i{background:#59648a;color:var(--ink)}.clpp em.bt{color:var(--dim)}
+.clpp.bot i{background:#59648a;color:var(--ink)}
+.botn{color:var(--cyan);font-weight:normal}.botc{font-style:normal;color:var(--gold);margin-left:4px}
+.sg.botflash{animation:botflash .9s ease-out}@keyframes botflash{0%,35%{background:var(--cyan);color:#10131f;box-shadow:0 0 0 3px var(--cyan)}100%{background:none}}
+.sg.botflash .botc{animation:botcf .9s ease-out}@keyframes botcf{0%,35%{color:#10131f}}
+.botmsg{color:var(--cyan)!important;margin-top:6px;animation:abin .2s ease-out}.clpp em.bt{color:var(--dim)}
 .clx{margin-left:auto;background:none;border:0;color:var(--dim);font:22px/1 var(--vt);cursor:pointer;padding:0 4px}.clx:hover{color:var(--pink)}
 .clpub{margin-top:6px}.clpubh{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
 .clpubr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;width:100%;text-align:left;background:#0b0f1d;border:0;box-shadow:0 0 0 2px var(--line);padding:10px 14px;margin-top:8px;cursor:pointer;color:var(--ink);font:20px var(--vt)}
@@ -1568,7 +1572,7 @@ const CL_BOT={e:{n:'Easy',miss:.3,w:{1:50,2:30,3:15,4:5},d:[.45,.9]},m:{n:'Mediu
 const CL_BOTN=['Newton','Curie','Darwin','Faraday','Franklin','Mendel','Hooke','Dalton','Bohr','Pasteur','Kelvin','Galileo','Hawking','Fleming','Boyle','Joule','Ohm','Volta','Tesla','Lister','Watt','Maxwell','Rutherford','Hodgkin','Meitner','Turing','Avogadro','Mendeleev','Harvey','Jenner'];
 function clAddBot(lv){if(!CL||!CL.host)return;const used=new Set(clPlayers().map(p=>p.n)),free=CL_BOTN.filter(n=>!used.has(n));
  const n=free.length?free[Math.floor(Math.random()*free.length)]:'Bot '+(clPlayers().length+1),k='bot'+Math.random().toString(36).slice(2,8);
- CL.roster.set(k,{k,n,b:lv,at:Date.now(),seen:Date.now()})}
+ CL.roster.set(k,{k,n,b:lv,at:Date.now(),seen:Date.now()});return n}
 function clBotPick(P,B){const tw=Object.entries(B.w);let x=Math.random()*tw.reduce((a,[,w])=>a+w,0),tier=+tw[0][0];for(const [t,w] of tw){if((x-=w)<=0){tier=+t;break}}
  const ok=P.a.filter(a=>!a.ox),at=t=>ok.filter(a=>liveTier(P,a)===t);
  for(let d=0;d<6;d++)for(const t of [tier-d,tier+d]){const l=at(t);if(t>=1&&t<=6&&l.length)return{a:l[Math.floor(Math.random()*l.length)],t}}return null}
@@ -1745,7 +1749,8 @@ function clRender(){
   ${set.subs.map(s=>{const on=new Set(clTops(set,s));return `<div class="srow2 tops"><span class="lbl">${SUBJ[s].n} topics</span><div class="topics">${Object.entries(SUBJ[s].packs).map(([k,v])=>`<button class="chip ${on.has(k)?'on':''}" data-ts="${s}" data-tk="${k}">${v}</button>`).join('')}</div></div>`}).join('')}
   <div class="srow2"><span class="lbl">You</span><div class="seg"><button class="sg ${set.play?'on':''}" data-play="1">I’m playing</button><button class="sg ${!set.play?'on':''}" data-play="0">Just hosting</button></div></div>
   <div class="srow2"><span class="lbl">Room</span><div class="seg"><button class="sg ${!set.pub?'on':''}" data-pub="0">Private · code only</button><button class="sg ${set.pub?'on':''}" data-pub="1">Public · anyone can join</button></div></div>
-  <div class="srow2"><span class="lbl">Add a bot</span><div class="seg">${Object.entries(CL_BOT).map(([k,b])=>`<button class="sg" data-bot="${k}" ${n>=set.max?'disabled':''}>+ ${b.n}</button>`).join('')}</div></div>
+  ${(()=>{const bots=ps.filter(p=>p.b),cnt=k=>bots.filter(p=>p.b===k).length,fl=CL.botFlash&&Date.now()-CL.botFlash.at<900?CL.botFlash:null;
+   return `<div class="srow2"><span class="lbl">Add a bot${bots.length?` <b class="botn">· ${bots.length} added</b>`:''}</span><div class="seg">${Object.entries(CL_BOT).map(([k,b])=>`<button class="sg ${fl&&fl.k===k?'botflash':''}" data-bot="${k}" ${n>=set.max?'disabled':''}>+ ${b.n}${cnt(k)?` <i class="botc">×${cnt(k)}</i>`:''}</button>`).join('')}</div>${fl?`<p class="why botmsg">Added ${esc(fl.n)} (${CL_BOT[fl.k].n})</p>`:''}</div>`})()}
  </div>
  <p class="why">${pool} questions match these rules.${n<2?' You need at least 2 players to start. On your own? Add a bot.':''}</p>
  <button class="btn gold clstart" id="go" ${canStart?'':'disabled'}>START${n>=2?` · ${n} PLAYERS`:''}</button>`
@@ -1759,7 +1764,8 @@ function clRender(){
   stage.querySelectorAll('[data-tk]').forEach(b=>b.onclick=()=>{const s=b.dataset.ts,k=b.dataset.tk,cur=new Set(clTops(set,s));if(cur.has(k)){if(cur.size>1)cur.delete(k)}else cur.add(k);set.tops[s]=[...cur];if(set.tops[s].length===Object.keys(SUBJ[s].packs).length)delete set.tops[s];upd()});
   stage.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>{set.play=b.dataset.play==='1';upd()});
   stage.querySelectorAll('[data-pub]').forEach(b=>b.onclick=()=>{set.pub=b.dataset.pub==='1';upd();clBeacon(CL)});
-  stage.querySelectorAll('[data-bot]').forEach(b=>b.onclick=()=>{clAddBot(b.dataset.bot);SFX_cl.join();upd();clBeacon(CL)});
+  stage.querySelectorAll('[data-bot]').forEach(b=>b.onclick=()=>{const k=b.dataset.bot,bn=clAddBot(k);CL.botFlash={k,n:bn||'a bot',at:Date.now()};SFX_cl.join();upd();clBeacon(CL);
+   clearTimeout(CL.bfT);CL.bfT=setTimeout(()=>{if(CL&&CL.phase==='lobby'&&CL.host){CL.botFlash=null;clRender()}},1800)});
   stage.querySelectorAll('[data-rmbot]').forEach(b=>b.onclick=()=>{CL.roster.delete(b.dataset.rmbot);upd();clBeacon(CL)});
   stage.querySelector('#go').onclick=clHostStart;
  }
@@ -2888,7 +2894,7 @@ document.getElementById('home').onclick=()=>{if(!clConfirmLeave())return;confirm
 navRender();home();
 setTimeout(initAccount,0);
 // keep a copy on the phone so the game opens instantly next time
-const BUILD='70bce0944a';let UPD_READY=false;
+const BUILD='c893d29e0f';let UPD_READY=false;
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
  navigator.serviceWorker.register('/sw.js').catch(()=>{});
  // a few seconds in, check whether a newer version has been published; if so, offer it
