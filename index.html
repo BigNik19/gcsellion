@@ -45,6 +45,7 @@ img,svg{-webkit-user-drag:none}
 .book.closed{transform:translateX(-25%);background:transparent;box-shadow:none}
 .book.closed .bk-l,.book.closed .bk-r,.book.closed .bk-spine{visibility:hidden}
 .book.opening{background:linear-gradient(90deg,transparent 50%,#7a2534 50%);box-shadow:none}
+.book.opening.half{background:#7a2534;box-shadow:0 0 0 4px #10131f,0 0 0 7px #4a1520,10px 12px 0 6px rgba(0,0,0,.35)}
 .book.opening .bk-l,.book.opening .bk-spine{visibility:hidden}
 .book.closed .bk-flip.cover{filter:drop-shadow(10px 12px 0 rgba(0,0,0,.35))}
 .bk-pg{position:relative;overflow:hidden}
@@ -1732,7 +1733,8 @@ function drawBook(withCover){
    // the left side stays empty until the cover swings over and becomes it, like a real book
    setTimeout(()=>{book.classList.remove('closed');book.classList.add('opening');SFX_book('open');
     const a=cv.animate([{transform:'rotateY(0deg)'},{transform:'rotateY(-180deg)'}],{duration:750,easing:'cubic-bezier(.5,.05,.3,1)',fill:'forwards'});
-    a.onfinish=()=>{L.innerHTML=P[0];book.classList.remove('opening');cv.remove();bookBusy=false}},150);
+    setTimeout(()=>book.classList.add('half'),300);   // the left board comes in as the cover swings over it
+    a.onfinish=()=>{L.innerHTML=P[0];book.classList.remove('opening','half');cv.remove();bookBusy=false}},150);
   }else{
    const cv=document.createElement('div');cv.className='bk-flip cover r single';
    cv.innerHTML=`<div class="face front">${bookCover()}</div><div class="face back">${BLANK}</div>`;
@@ -2436,7 +2438,7 @@ document.getElementById('home').onclick=()=>{if(!clConfirmLeave())return;confirm
 navRender();home();
 setTimeout(initAccount,0);
 // keep a copy on the phone so the game opens instantly next time
-const BUILD='916959d134';
+const BUILD='ed82502032';
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
  navigator.serviceWorker.register('/sw.js').catch(()=>{});
  // a few seconds in, check whether a newer version has been published; if so, offer it
